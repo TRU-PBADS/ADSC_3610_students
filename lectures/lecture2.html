@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Lecture 2: Introduction to MongoDB and the document model &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture2';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 3: MongoDB Atlas and connecting to MongoDB database" href="lecture3.html" />
+    <link rel="prev" title="Lecture 1: Introduction to Non-Relational Databases" href="lecture1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/TRU_Logo.png" class="logo__image only-light" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>
+    <script>document.write(`<img src="../_static/TRU_Logo.png" class="logo__image only-dark" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../syllabus.html">
+                    ADSC 3610 - Database Systems in Applied Data Science II - Syllabus
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 2: Introduction to MongoDB and the document model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/lectures/lecture2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 2: Introduction to MongoDB and the document model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#slides">Slides</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supplemental-materials">Supplemental materials</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-storage-in-mongodb">Data Storage in MongoDB</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#json-javascript-object-notation">JSON (JavaScript Object Notation)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bson-binary-json">BSON (Binary JSON)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-differences-between-json-bson">Key differences between JSON &amp; BSON</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-2-introduction-to-mongodb-and-the-document-model">
+<h1>Lecture 2: Introduction to MongoDB and the document model<a class="headerlink" href="#lecture-2-introduction-to-mongodb-and-the-document-model" title="Link to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this lecture, students should be able to:</p>
+<ul class="simple">
+<li><p>Explain the data structure of a document model and its key features</p></li>
+<li><p>Explain how data are stored in BSON format</p></li>
+<li><p>Define a collection in a document model</p></li>
+</ul>
+</section>
+<section id="slides">
+<h2>Slides<a class="headerlink" href="#slides" title="Link to this heading">#</a></h2>
+<iframe src="https://docs.google.com/presentation/d/1W_UVreGQh81MUt7aznPJgVvr5QgibIZImNZrBauY_T0/embed?start=false&loop=false&delayms=60000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Download a PDF version <a class="reference external" href="https://docs.google.com/presentation/d/1W_UVreGQh81MUt7aznPJgVvr5QgibIZImNZrBauY_T0/export/pdf">here</a></p>
+</div>
+</section>
+<section id="supplemental-materials">
+<h2>Supplemental materials<a class="headerlink" href="#supplemental-materials" title="Link to this heading">#</a></h2>
+<p>MongoDB stores data in a document-oriented model, which is quite different from the table-based model of traditional SQL databases.</p>
+<section id="data-storage-in-mongodb">
+<h3>Data Storage in MongoDB<a class="headerlink" href="#data-storage-in-mongodb" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p><strong>Documents and Collections</strong>:</p>
+<ul class="simple">
+<li><p><strong>Documents</strong>: In MongoDB, data is stored in documents, which are similar to JSON objects. Each document consists of key-value pairs, where the keys are strings, and the values can be various data types, including strings, numbers, arrays, and even nested documents.</p></li>
+<li><p><strong>Collections</strong>: Documents are grouped into collections, which are analogous to tables in SQL databases. However, unlike SQL tables, collections do not enforce a fixed schema, allowing each document to have a different structure.</p></li>
+</ul>
+<p><strong>Example</strong>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;507f1f77bcf86cd799439011&quot;</span><span class="err">)</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;age&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;street&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123 Main St&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;New York&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;zip&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10001&quot;</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="nt">&quot;hobbies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;reading&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;travelling&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In this document, the <code class="docutils literal notranslate"><span class="pre">address</span></code> field is a nested document, and the <code class="docutils literal notranslate"><span class="pre">hobbies</span></code> field is an array.</p>
+</li>
+<li><p><strong>Flexibility and Schema</strong>:</p>
+<ul class="simple">
+<li><p>MongoDB does not require a predefined schema for documents within a collection. This allows different documents in the same collection to have different fields, which provides flexibility in handling diverse data.</p></li>
+<li><p><strong>SQL</strong>: In contrast, SQL databases require a rigid schema where each row in a table must conform to the predefined structure, with all rows having the same columns.</p></li>
+</ul>
+<p><strong>Example</strong> (Different documents in the same collection):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;507f191e810c19729de860ea&quot;</span><span class="err">)</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jane Smith&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jane.smith@example.com&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Data Types and Relationships</strong>:</p>
+<ul class="simple">
+<li><p><strong>Embedded Documents</strong>: MongoDB allows embedding documents within other documents, which is a way to represent one-to-many relationships within a single document.</p></li>
+<li><p><strong>SQL</strong>: In SQL, relationships between tables (e.g., one-to-many) are typically handled using foreign keys and JOIN operations.</p></li>
+</ul>
+<p><strong>Example</strong> (One-to-many relationship in MongoDB):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;5f1f77bcf86cd799439011a&quot;</span><span class="err">)</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alice&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;orders&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;product&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Laptop&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;product&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Phone&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">800</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Comparison</strong>:</p>
+<ul class="simple">
+<li><p>In MongoDB, related data (e.g., <code class="docutils literal notranslate"><span class="pre">orders</span></code>) can be embedded within a document, avoiding the need for JOINs and making data retrieval faster in many cases.</p></li>
+<li><p>In SQL, this would typically require two tables (<code class="docutils literal notranslate"><span class="pre">Customers</span></code> and <code class="docutils literal notranslate"><span class="pre">Orders</span></code>) and a JOIN operation to retrieve related data.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="json-javascript-object-notation">
+<h3>JSON (JavaScript Object Notation)<a class="headerlink" href="#json-javascript-object-notation" title="Link to this heading">#</a></h3>
+<ul>
+<li><p><strong>Text-Based Format</strong>: JSON is a lightweight, text-based data interchange format. It’s human-readable and easy to understand, making it ideal for data exchange in web applications.</p></li>
+<li><p><strong>Data Types</strong>: JSON supports a limited set of data types, including:</p>
+<ul class="simple">
+<li><p>Strings</p></li>
+<li><p>Numbers</p></li>
+<li><p>Booleans (true/false)</p></li>
+<li><p>Arrays</p></li>
+<li><p>Objects (key-value pairs)</p></li>
+<li><p>Null</p></li>
+</ul>
+</li>
+<li><p><strong>Example</strong>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;age&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;isStudent&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;courses&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Math&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Science&quot;</span><span class="p">],</span>
+<span class="w">   </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;street&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123 Main St&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;New York&quot;</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Usage</strong>: JSON is commonly used for data exchange between a client and a server, particularly in web APIs and configurations. It’s supported by virtually all programming languages.</p></li>
+</ul>
+</section>
+<section id="bson-binary-json">
+<h3>BSON (Binary JSON)<a class="headerlink" href="#bson-binary-json" title="Link to this heading">#</a></h3>
+<ul>
+<li><p><strong>Binary Format</strong>: BSON is a binary-encoded serialization of JSON-like documents. While it retains the JSON data structure, BSON is designed to be more efficient for storage and speed in databases like MongoDB.</p></li>
+<li><p><strong>Extended Data Types</strong>: BSON supports all the JSON data types but also includes additional data types that JSON does not natively support, such as:</p>
+<ul class="simple">
+<li><p><strong>ObjectId</strong>: A unique identifier used by MongoDB.</p></li>
+<li><p><strong>Date</strong>: Represents dates and times.</p></li>
+<li><p><strong>Binary Data</strong>: Allows storage of binary data, such as images and files.</p></li>
+<li><p><strong>32-bit/64-bit integers</strong>: Specific integer types for efficient storage.</p></li>
+<li><p><strong>Min/Max Keys</strong>: Special types for internal MongoDB usage to define a minimum or maximum value.</p></li>
+</ul>
+</li>
+<li><p><strong>Example</strong>:
+In BSON, the JSON example would be stored in a more compact binary form, but let’s look at how an ObjectId and a Date might be represented:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;507f1f77bcf86cd799439011&quot;</span><span class="err">)</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;age&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;enrollmentDate&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">ISODa</span><span class="kc">te</span><span class="err">(</span><span class="s2">&quot;2024-09-02T00:00:00Z&quot;</span><span class="err">)</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;isStudent&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;courses&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Math&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Science&quot;</span><span class="p">],</span>
+<span class="w">   </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;street&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123 Main St&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;New York&quot;</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>ObjectId</strong>: The <code class="docutils literal notranslate"><span class="pre">_id</span></code> field is an ObjectId, a unique identifier used by MongoDB.</p></li>
+<li><p><strong>Date</strong>: The <code class="docutils literal notranslate"><span class="pre">enrollmentDate</span></code> field is an ISODate, which stores the date in a more precise and efficient format.</p></li>
+</ul>
+</li>
+<li><p><strong>Usage in MongoDB</strong>: BSON is used by MongoDB for internal storage because it’s more efficient to parse and manipulate at the database level than JSON. It allows MongoDB to support richer data types and enables faster read/write operations, especially with large datasets.</p></li>
+</ul>
+</section>
+<section id="key-differences-between-json-bson">
+<h3>Key differences between JSON &amp; BSON<a class="headerlink" href="#key-differences-between-json-bson" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Feature</strong></p></th>
+<th class="head"><p><strong>JSON</strong></p></th>
+<th class="head"><p><strong>BSON</strong></p></th>
+<th class="head"><p><strong>Example</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Data Format</strong></p></td>
+<td><p>Text-based, human-readable format.</p></td>
+<td><p>Binary-encoded format, efficient for storage and transport.</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Supported Data Types</strong></p></td>
+<td><p>Limited to basic types: string, number, object, array, boolean, null.</p></td>
+<td><p>Supports all JSON types and additional types like ObjectId, Date, Binary, 32-bit/64-bit integers, Min/Max Keys.</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ObjectId</strong></p></td>
+<td><p>Not natively supported.</p></td>
+<td><p>Supported as a 12-byte unique identifier.</p></td>
+<td><p><strong>JSON</strong>: N/A  <br> <strong>BSON</strong>: <code class="docutils literal notranslate"><span class="pre">ObjectId(&quot;64f68a4f8a0b8b7f5434e001&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Date</strong></p></td>
+<td><p>Not natively supported, usually represented as a string.</p></td>
+<td><p>Native support for dates with millisecond precision.</p></td>
+<td><p><strong>JSON</strong>: <code class="docutils literal notranslate"><span class="pre">&quot;1990-05-20T00:00:00Z&quot;</span></code> <br> <strong>BSON</strong>: <code class="docutils literal notranslate"><span class="pre">ISODate(&quot;1990-05-20T00:00:00Z&quot;)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Binary Data</strong></p></td>
+<td><p>Not supported, requires encoding (e.g., Base64).</p></td>
+<td><p>Native support for binary data, stored as <code class="docutils literal notranslate"><span class="pre">BinData</span></code>.</p></td>
+<td><p><strong>JSON</strong>: <code class="docutils literal notranslate"><span class="pre">&quot;Qk0oAQAAAAAAADYAAAAoAAAAEAAA...&quot;</span></code> (Base64-encoded) <br> <strong>BSON</strong>: <code class="docutils literal notranslate"><span class="pre">BinData(0,</span> <span class="pre">&quot;Qk0oAQAAAAAAADYAAAAoAAAAEAAA...&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Integers (32-bit/64-bit)</strong></p></td>
+<td><p>Only supports number (treated as a floating-point).</p></td>
+<td><p>Supports both 32-bit and 64-bit integers for efficient storage.</p></td>
+<td><p><strong>JSON</strong>: <code class="docutils literal notranslate"><span class="pre">1234567890</span></code> <br> <strong>BSON</strong>: <code class="docutils literal notranslate"><span class="pre">NumberLong(1234567890)</span></code> (64-bit)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Min/Max Keys</strong></p></td>
+<td><p>Not supported.</p></td>
+<td><p>Special types for defining minimum and maximum values, used internally by MongoDB.</p></td>
+<td><p><strong>JSON</strong>: N/A <br> <strong>BSON</strong>: <code class="docutils literal notranslate"><span class="pre">MinKey()</span></code> / <code class="docutils literal notranslate"><span class="pre">MaxKey()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Data Size</strong></p></td>
+<td><p>Larger, since it’s text-based.</p></td>
+<td><p>More compact due to binary encoding, especially for complex or large documents.</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Readability</strong></p></td>
+<td><p>Human-readable, easy to read and write.</p></td>
+<td><p>Not human-readable, designed for efficient machine processing.</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Summary</strong></p>
+<p>BSON is specifically designed for use in databases like MongoDB, where performance and storage efficiency are critical. JSON, while more universally readable and widely used in web applications, lacks the extended data types and binary efficiency of BSON. MongoDB’s use of BSON allows it to efficiently store and query complex data structures that go beyond what JSON can offer.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./lectures"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lecture1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 1: Introduction to Non-Relational Databases</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lecture3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 3: MongoDB Atlas and connecting to MongoDB database</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#slides">Slides</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supplemental-materials">Supplemental materials</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-storage-in-mongodb">Data Storage in MongoDB</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#json-javascript-object-notation">JSON (JavaScript Object Notation)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bson-binary-json">BSON (Binary JSON)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-differences-between-json-bson">Key differences between JSON &amp; BSON</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Quan Nguyen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

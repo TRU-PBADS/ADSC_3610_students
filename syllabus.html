@@ -1,0 +1,797 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADSC 3610 - Database Systems in Applied Data Science II - Syllabus &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'syllabus';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lecture 1: Introduction to Non-Relational Databases" href="lectures/lecture1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/TRU_Logo.png" class="logo__image only-light" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>
+    <script>document.write(`<img src="_static/TRU_Logo.png" class="logo__image only-dark" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    ADSC 3610 - Database Systems in Applied Data Science II - Syllabus
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="lectures/lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures/lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures/lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/syllabus.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ADSC 3610 - Database Systems in Applied Data Science II - Syllabus</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schedule-office-hours">Schedule &amp; office hours</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#communication">Communication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lectures">Lectures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assessment-overview">Assessment overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weekly-assignments">Weekly assignments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mid-terms-exam">Mid-terms &amp; exam</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attendance-late-assignments-academic-concessions-academic-accomodation">Attendance, late assignments, academic concessions, academic accomodation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attendance">Attendance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#academic-concessions">Academic concessions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#late-assignments">Late Assignments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accessbility">Accessbility</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="adsc-3610-database-systems-in-applied-data-science-ii-syllabus">
+<h1>ADSC 3610 - Database Systems in Applied Data Science II - Syllabus<a class="headerlink" href="#adsc-3610-database-systems-in-applied-data-science-ii-syllabus" title="Link to this heading">#</a></h1>
+<p>This course will introduce students to the fundamentals of non-relational databases, with a focus on MongoDB as the main platform. We will cover data modeling, CRUD operations, and advanced querying techniques using MongoDB and its integration in Python via Pymongo. The course then transitions to PySpark, covering distributed data processing, DataFrames, Spark SQL, and machine learning applications. In the final section, the focus shifts to data governance, ethics, and security, addressing key topics such as data quality management, privacy, legal compliance, and the ethical implications of AI.</p>
+<section id="learning-objectives">
+<h2>Learning objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Understand the fundamental concepts of non-relational databases and their differences from relational databases.</p></li>
+<li><p>Gain proficiency in using MongoDB for data storage, retrieval, and manipulation.</p></li>
+<li><p>Learn to design and implement efficient data models in MongoDB.</p></li>
+<li><p>Master the basics of PySpark for big data processing and analytics.</p></li>
+<li><p>Perform data wrangling and transformation tasks using PySpark.</p></li>
+<li><p>Understand the principles of distributed computing and how they apply to PySpark.</p></li>
+<li><p>Grasp the key principles of data governance, compliance, and privacy, ensuring responsible and secure data management.</p></li>
+<li><p>Explore and address the ethical implications of AI and machine learning</p></li>
+</ul>
+</section>
+<section id="schedule-office-hours">
+<h2>Schedule &amp; office hours<a class="headerlink" href="#schedule-office-hours" title="Link to this heading">#</a></h2>
+<p>Lectures every Tue, Thu, Fri from 9:30 - 10:20 AM in the computer lab at Old Main building.</p>
+<p>Office hour: Thu 11:30 AM-12:30 PM at OM 1232. Please book your timeslot <a class="reference external" href="https://calendly.com/quan3010/office-hour-with-quan">here</a></p>
+</section>
+<section id="communication">
+<h2>Communication<a class="headerlink" href="#communication" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>For any <strong>course-related questions</strong>, such as lectures, assignments, exames, course logistics, please ask them under the discussion forum in Moodle.</p></li>
+<li><p>For any <strong>individual-related questions</strong>, such as academic concession, deadline extension, personal circumstances, etc., please email me at lnguyen[at]tru[dot]ca</p></li>
+<li><p><strong>Response time</strong>: I will try our best to reply to your inquiries as soon as possible during the normal working hours (9AM-5PM Mon-Fri). If you send me a message outside of regular working hours, please expect a response on the next working day.</p></li>
+</ul>
+</section>
+<section id="lectures">
+<h2>Lectures<a class="headerlink" href="#lectures" title="Link to this heading">#</a></h2>
+<p>Please find the list of lecture, and the required readings below. This list will be updated frequently so please revisit to get the latest version.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Week no.</p></th>
+<th class="head"><p>Week day</p></th>
+<th class="head"><p>Date</p></th>
+<th class="head"><p>Topic</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Tue</p></td>
+<td><p>Sep 3</p></td>
+<td><p>Introduction to noSQL database</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Thu</p></td>
+<td><p>Sep 5</p></td>
+<td><p>Introduction to MongoDB and the document model</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Fri</p></td>
+<td><p>Sep 6</p></td>
+<td><p>Setup MongoDB Atlas &amp; connecting to a MongoDB database</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Tue</p></td>
+<td><p>Sep 10</p></td>
+<td><p>Data modelling 1: types of data relationships, MongoDB rule</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Thu</p></td>
+<td><p>Sep 12</p></td>
+<td><p>Data modelling 2: embedding, referencing, anti-schema</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Fri</p></td>
+<td><p>Sep 13</p></td>
+<td><p>MongoDB CRUD operations: Insert and Find</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Tue</p></td>
+<td><p>Sep 17</p></td>
+<td><p>MongoDB CRUD operations: Replace and Delete</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Thu</p></td>
+<td><p>Sep 19</p></td>
+<td><p>MogoDB CRUD operations: Modifying query results</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Fri</p></td>
+<td><p>Sep 20</p></td>
+<td><p>MongoDB Aggregation in Python</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Tue</p></td>
+<td><p>Sep 24</p></td>
+<td><p>MongoDB Indexes</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Thu</p></td>
+<td><p>Sep 26</p></td>
+<td><p>MongoDB Atlas search</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Fri</p></td>
+<td><p>Sep 27</p></td>
+<td><p>Atlas Vector Search for LLMs</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Tue</p></td>
+<td><p>Oct 1</p></td>
+<td><p>Part 1: MongoDB review</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>Thu</p></td>
+<td><p>Oct 3</p></td>
+<td><p>Backup lecture</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Fri</p></td>
+<td><p>Oct 4</p></td>
+<td><p>MIDTERM 1: Cover materials from week 1 - 4</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Tue</p></td>
+<td><p>Oct 8</p></td>
+<td><p>Introductino to PySpark</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>Thu</p></td>
+<td><p>Oct 10</p></td>
+<td><p>Working with RDDs</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Fri</p></td>
+<td><p>Oct 11</p></td>
+<td><p>Introductin to DataFrames in Pyspark</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Tue</p></td>
+<td><p>Oct 15</p></td>
+<td><p>Basic dataframe operations</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>Thu</p></td>
+<td><p>Oct 17</p></td>
+<td><p>Spark SQL</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Fri</p></td>
+<td><p>Oct 18</p></td>
+<td><p>Dataframe optimization techniques</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Tue</p></td>
+<td><p>Oct 22</p></td>
+<td><p>Working with structured streaming</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>Thu</p></td>
+<td><p>Oct 24</p></td>
+<td><p>Machine learning with PySpark (MLlib)</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Fri</p></td>
+<td><p>Oct 25</p></td>
+<td><p>Clustering and recommendation</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Tue</p></td>
+<td><p>Oct 29</p></td>
+<td><p>PySpark best practices and case study</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>Thu</p></td>
+<td><p>Oct 31</p></td>
+<td><p>Backup lecture</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Fri</p></td>
+<td><p>Nov 1</p></td>
+<td><p>MIDTERM 2: Cover materials from week 5 - 9</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Tue</p></td>
+<td><p>Nov 5</p></td>
+<td><p>Introduction to data governance</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>Thu</p></td>
+<td><p>Nov 7</p></td>
+<td><p>MID-TERM BREAK</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Fri</p></td>
+<td><p>Nov 8</p></td>
+<td><p>MID-TERM BREAK</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>Tue</p></td>
+<td><p>Nov 12</p></td>
+<td><p>Data quality management</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>Thu</p></td>
+<td><p>Nov 14</p></td>
+<td><p>Data privacy</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>Fri</p></td>
+<td><p>Nov 15</p></td>
+<td><p>Data security fundamentals</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>Tue</p></td>
+<td><p>Nov 19</p></td>
+<td><p>Data ethics</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>Thu</p></td>
+<td><p>Nov 21</p></td>
+<td><p>Legal and regulatory compliance</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>Fri</p></td>
+<td><p>Nov 22</p></td>
+<td><p>AI and ethics</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>Tue</p></td>
+<td><p>Nov 26</p></td>
+<td><p>Data breaches and responses</p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p>Thu</p></td>
+<td><p>Nov 28</p></td>
+<td><p>Future trends in data governance, privacy, and security</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>Fri</p></td>
+<td><p>Nov 29</p></td>
+<td><p>Course conclusion</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="assessment-overview">
+<h2>Assessment overview<a class="headerlink" href="#assessment-overview" title="Link to this heading">#</a></h2>
+<p>You are responsible for the following deliverables, which will determine your course grade:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Assignment</p></th>
+<th class="head"><p>Note</p></th>
+<th class="head"><p>Weight</p></th>
+<th class="head"><p>Date</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Weekly worksheet x 10</p></td>
+<td><p>Open-book. Release on Mondays</p></td>
+<td><p>20%</p></td>
+<td><p>Sundays 11:59PM</p></td>
+</tr>
+<tr class="row-odd"><td><p>Midterm 1</p></td>
+<td><p>Closed-book, Moodle timed-quiz, 45 minutes</p></td>
+<td><p>25%</p></td>
+<td><p>Fri, Oct 4th, 9:30AM</p></td>
+</tr>
+<tr class="row-even"><td><p>Midterm 2</p></td>
+<td><p>Closed-book, Moodle timed-quiz, 45 minutes</p></td>
+<td><p>25%</p></td>
+<td><p>Fri, Nov 1st, 9:30AM</p></td>
+</tr>
+<tr class="row-odd"><td><p>Exam</p></td>
+<td><p>Closed-book, Moodle timed-quiz, 90 minutes</p></td>
+<td><p>30%</p></td>
+<td><p>TBD</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="weekly-assignments">
+<h2>Weekly assignments<a class="headerlink" href="#weekly-assignments" title="Link to this heading">#</a></h2>
+<p>Every week, you will have a worksheet that is worth 2%. These low-stakes assignments consist of multiple choice questions and small exercises that help you consolidate your understanding of the materials and serve as a formative assessment.</p>
+<p>The worksheet will be distributed via Github classroom every Monday (except for midterms’ weeks) and the deadline for each worksheet is the same Sunday of that week at 11:59 PM.</p>
+</section>
+<section id="mid-terms-exam">
+<h2>Mid-terms &amp; exam<a class="headerlink" href="#mid-terms-exam" title="Link to this heading">#</a></h2>
+<p>There will be two midterms and one final exam in this course.</p>
+<p>The midterms are closed-book format, and they will take place on Moodle for the duration of 45 minutes. It will consist of a mix of multiple choice, fill in the blank, and open-ended questions.</p>
+<p>Midterm 1 will cover the materials from week 1-4
+Midterm 2 will cover the materials from week 5-9</p>
+<p>The final exam is closed-book format, taking place on Moodle for the duration of 90 minutes. It will consist of a mix of multiple choice, fill in the blank, and open-ended questions.</p>
+<p>The final exam will cover all the materials in the course.</p>
+</section>
+<section id="attendance-late-assignments-academic-concessions-academic-accomodation">
+<h2>Attendance, late assignments, academic concessions, academic accomodation<a class="headerlink" href="#attendance-late-assignments-academic-concessions-academic-accomodation" title="Link to this heading">#</a></h2>
+<section id="attendance">
+<h3>Attendance<a class="headerlink" href="#attendance" title="Link to this heading">#</a></h3>
+<p>Please refer to <a class="reference external" href="https://www.tru.ca/__shared/assets/Policy_ED_03-135351.pdf">TRU’s attendance policy</a>. In addition, we will take attendance during class via Moodle’s QR code</p>
+</section>
+<section id="academic-concessions">
+<h3>Academic concessions<a class="headerlink" href="#academic-concessions" title="Link to this heading">#</a></h3>
+<p>If you encounter situations that may impede your ability to meet course requirements—such as illness, family emergencies, or other significant life events—please notify the instructor <strong>at least 24 hours before deadline</strong>. Academic concessions, including extensions or alternative assessments, will be considered on a case-by-case basis. You may be required to provide documentation to support your request. Concession requests after the deadline has passed will likely be refused.</p>
+</section>
+<section id="late-assignments">
+<h3>Late Assignments<a class="headerlink" href="#late-assignments" title="Link to this heading">#</a></h3>
+<p>Assignments are expected to be submitted on time. Late submissions will incur a penalty of 25% per day, up to a maximum of 75%. After 3 days, late assignments will no longer be accepted and will receive a grade of zero. Extensions may be granted in exceptional circumstances, provided that you contact the instructor before the deadline.</p>
+</section>
+<section id="accessbility">
+<h3>Accessbility<a class="headerlink" href="#accessbility" title="Link to this heading">#</a></h3>
+<p>Students registered with the Accessibility Services who require accommodations must provide their Letter of Accommodation to the instructor as soon as possible. This letter will outline the necessary accommodations to ensure an equitable learning environment. Please ensure that this is done early in the term to facilitate timely arrangements.</p>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="lectures/lecture1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 1: Introduction to Non-Relational Databases</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schedule-office-hours">Schedule &amp; office hours</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#communication">Communication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lectures">Lectures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assessment-overview">Assessment overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weekly-assignments">Weekly assignments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mid-terms-exam">Mid-terms &amp; exam</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attendance-late-assignments-academic-concessions-academic-accomodation">Attendance, late assignments, academic concessions, academic accomodation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attendance">Attendance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#academic-concessions">Academic concessions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#late-assignments">Late Assignments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accessbility">Accessbility</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Quan Nguyen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
