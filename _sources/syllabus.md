@@ -29,9 +29,9 @@ Please find the list of lecture, and the required readings below. This list will
 
 | Week no. | Week day | Date   | Topic                                                       |
 |----------|----------|--------|-------------------------------------------------------------|
-|        1 | Tue      |  Sep 3 | Introduction to noSQL database                              |
-|        1 | Thu      |  Sep 5 | Introduction to MongoDB and the document model              |
-|        1 | Fri      |  Sep 6 | Setup MongoDB Atlas & connecting to a MongoDB database      |
+|        1 | Tue      |  Sep 3 | Introduction to noSQL database, [READINGS](https://www.mongodb.com/resources/basics/databases/nosql-explained)                              |
+|        1 | Thu      |  Sep 5 | Introduction to MongoDB and the document model, [READINGS](https://www.mongodb.com/docs/manual/introduction/)              |
+|        1 | Fri      |  Sep 6 | Setup MongoDB Atlas & connecting to a MongoDB database, [READINGS](https://www.mongodb.com/docs/atlas/getting-started/)      |
 |        2 | Tue      | Sep 10 | Data modelling 1: types of data relationships, MongoDB rule |
 |        2 | Thu      | Sep 12 | Data modelling 2: embedding, referencing, anti-schema       |
 |        2 | Fri      | Sep 13 | MongoDB CRUD operations: Insert and Find                    |
