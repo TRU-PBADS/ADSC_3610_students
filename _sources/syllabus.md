@@ -103,6 +103,9 @@ The final exam will cover all the materials in the course.
 ## Attendance, late assignments, academic concessions, academic accomodation
 
 ### Attendance
+
+A registered student who does not attend the first two events (e.g., lectures/labs/ etc.) of their course(s) and who has not made prior arrangements acceptable to the instructor(s) may, at the discretion of the instructor(s), be considered to have withdrawn from the course(s) and have their course registration(s) deleted.
+
 Please refer to [TRU's attendance policy](https://www.tru.ca/__shared/assets/Policy_ED_03-135351.pdf). In addition, we will take attendance during class via Moodle's QR code.
 
 In the CS department, you need to get **at least 70% attendance** for passing any course. 
