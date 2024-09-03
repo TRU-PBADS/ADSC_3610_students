@@ -103,7 +103,9 @@ The final exam will cover all the materials in the course.
 ## Attendance, late assignments, academic concessions, academic accomodation
 
 ### Attendance
-Please refer to [TRU's attendance policy](https://www.tru.ca/__shared/assets/Policy_ED_03-135351.pdf). In addition, we will take attendance during class via Moodle's QR code
+Please refer to [TRU's attendance policy](https://www.tru.ca/__shared/assets/Policy_ED_03-135351.pdf). In addition, we will take attendance during class via Moodle's QR code.
+
+In the CS department, you need to get **at least 70% attendance** for passing any course. 
 
 ### Academic concessions
 If you encounter situations that may impede your ability to meet course requirements—such as illness, family emergencies, or other significant life events—please notify the instructor **at least 24 hours before deadline**. Academic concessions, including extensions or alternative assessments, will be considered on a case-by-case basis. You may be required to provide documentation to support your request. Concession requests after the deadline has passed will likely be refused. 
@@ -114,3 +116,8 @@ Assignments are expected to be submitted on time. Late submissions will incur a 
 ### Accessbility
 Students registered with the Accessibility Services who require accommodations must provide their Letter of Accommodation to the instructor as soon as possible. This letter will outline the necessary accommodations to ensure an equitable learning environment. Please ensure that this is done early in the term to facilitate timely arrangements.
 
+## Policy on the use of generative AI
+
+Please refer to TRU's guideline on the use of generative AI tools such as chatGPT or Copilot in this course. 
+
+https://libguides.tru.ca/artificialintelligence
