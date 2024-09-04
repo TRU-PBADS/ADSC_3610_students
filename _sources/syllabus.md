@@ -14,7 +14,7 @@ This course will introduce students to the fundamentals of non-relational databa
 
 ## Schedule & office hours
 
-Lectures every Tue, Thu, Fri from 9:30 - 10:20 AM in the computer lab at Old Main building.
+Lectures every Tue, Thu, Fri from 9:30 - 10:20 AM in the computer lab OM 1241 at Old Main building.
 
 Office hour: Thu 11:30 AM-12:30 PM at OM 1232. Please book your timeslot [here](https://calendly.com/quan3010/office-hour-with-quan)
 
@@ -108,7 +108,7 @@ A registered student who does not attend the first two events (e.g., lectures/la
 
 Please refer to [TRU's attendance policy](https://www.tru.ca/__shared/assets/Policy_ED_03-135351.pdf). In addition, we will take attendance during class via Moodle's QR code.
 
-In the CS department, you need to get **at least 70% attendance** for passing any course. 
+In the CS department, you need to get **at least 75% attendance** for passing any course. 
 
 ### Academic concessions
 If you encounter situations that may impede your ability to meet course requirements—such as illness, family emergencies, or other significant life events—please notify the instructor **at least 24 hours before deadline**. Academic concessions, including extensions or alternative assessments, will be considered on a case-by-case basis. You may be required to provide documentation to support your request. Concession requests after the deadline has passed will likely be refused. 
