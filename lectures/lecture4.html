@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Lecture 3: MongoDB Atlas and connecting to MongoDB database &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+    <title>Lecture 4: Data modelling in MongoDB &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
   
   
   
@@ -57,11 +57,11 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture3';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture4';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation instruction for macOS" href="../installation_mac.html" />
-    <link rel="prev" title="Lecture 2: Introduction to MongoDB and the document model" href="lecture2.html" />
+    <link rel="prev" title="Lecture 3: MongoDB Atlas and connecting to MongoDB database" href="lecture3.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -183,7 +183,8 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 4: Data modelling in MongoDB</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
 <ul class="nav bd-sidenav">
@@ -243,7 +244,7 @@
       
       
       
-      <li><a href="../_sources/lectures/lecture3.ipynb" target="_blank"
+      <li><a href="../_sources/lectures/lecture4.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -327,7 +328,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Lecture 3: MongoDB Atlas and connecting to MongoDB database</h1>
+    <h1>Lecture 4: Data modelling in MongoDB</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -340,8 +341,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#slides">Slides</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supplemental-materials">Supplemental materials</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-on-mongodb-atlas">Quick start on MongoDB Atlas</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demo-of-connecting-to-a-mongdb-via-pymongo">Demo of connecting to a MongDB via pymongo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#embed-vs-reference-guideline">Embed vs reference guideline</a></li>
 </ul>
 </li>
 </ul>
@@ -355,8 +355,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="lecture-3-mongodb-atlas-and-connecting-to-mongodb-database">
-<h1>Lecture 3: MongoDB Atlas and connecting to MongoDB database<a class="headerlink" href="#lecture-3-mongodb-atlas-and-connecting-to-mongodb-database" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-4-data-modelling-in-mongodb">
+<h1>Lecture 4: Data modelling in MongoDB<a class="headerlink" href="#lecture-4-data-modelling-in-mongodb" title="Link to this heading">#</a></h1>
 <section id="learning-objectives">
 <h2>Learning objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
 <p>By the end of this lecture, students should be able to:</p>
@@ -367,144 +367,81 @@ document.write(`
 </section>
 <section id="slides">
 <h2>Slides<a class="headerlink" href="#slides" title="Link to this heading">#</a></h2>
-<iframe src="https://docs.google.com/presentation/d/11GQlTrDhc2crSwcwHtEndyJLhR8UEXvpUkAlLmDaP_Q/embed?start=false&loop=false&delayms=60000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><div class="admonition note">
+<iframe src="https://docs.google.com/presentation/d/1dCx5XMRyWK6iXPIX7r-qO4pHj-BqBXo33PmZrBh18Hs/embed?start=false&loop=false&delayms=60000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Download a PDF version <a class="reference external" href="https://docs.google.com/presentation/d/11GQlTrDhc2crSwcwHtEndyJLhR8UEXvpUkAlLmDaP_Q/export/pdf">here</a></p>
+<p>Download a PDF version <a class="reference external" href="https://docs.google.com/presentation/d/1dCx5XMRyWK6iXPIX7r-qO4pHj-BqBXo33PmZrBh18Hs/export/pdf">here</a></p>
 </div>
 </section>
 <section id="supplemental-materials">
 <h2>Supplemental materials<a class="headerlink" href="#supplemental-materials" title="Link to this heading">#</a></h2>
-<section id="quick-start-on-mongodb-atlas">
-<h3>Quick start on MongoDB Atlas<a class="headerlink" href="#quick-start-on-mongodb-atlas" title="Link to this heading">#</a></h3>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/jXgJyuBeb_o?si=70SdrYFZ9JSUiM65" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></section>
-<section id="demo-of-connecting-to-a-mongdb-via-pymongo">
-<h3>Demo of connecting to a MongDB via pymongo<a class="headerlink" href="#demo-of-connecting-to-a-mongdb-via-pymongo" title="Link to this heading">#</a></h3>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>You would need to create a separate json file to securely store your MongoDB username and password.</p>
-<p>Make sure these information are not uploaded to any public server, that means DO NOT commit this <code class="docutils literal notranslate"><span class="pre">credentials_mongodb.json</span></code> file. I have disabled the ability to commit this file by default in the .gitignore settings.</p>
-<p>The json file should follow the template below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;your_host&gt;&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">27017</span><span class="p">,</span>
-  <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;your_username&gt;&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;your_password&gt;&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-<p>If you forgot how to retrieve your host URI, please see <a class="reference external" href="https://www.mongodb.com/docs/languages/python/pymongo-driver/current/get-started/create-a-connection-string/">this tutorial</a></p>
-<p>Below is the starter code to connect to your MongoDB database, provided that you have created a <code class="docutils literal notranslate"><span class="pre">credentials_mongodb.json</span></code> file with the correct information.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span> <span class="c1"># import mongo client to connect</span>
-<span class="kn">import</span> <span class="nn">json</span> <span class="c1"># import json to load credentials</span>
-<span class="kn">import</span> <span class="nn">urllib.parse</span>
-
-<span class="c1"># load credentials from json file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;credentials_mongodb.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">login</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-<span class="c1"># assign credentials to variables</span>
-<span class="n">username</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span>
-<span class="n">password</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span>
-<span class="n">host</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;mongodb+srv://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">/?retryWrites=true&amp;w=majority&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># connect to the database</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>List all db names collections</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all databases</span>
-<span class="n">client</span><span class="o">.</span><span class="n">list_database_names</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;sample_airbnb&#39;,
- &#39;sample_analytics&#39;,
- &#39;sample_geospatial&#39;,
- &#39;sample_guides&#39;,
- &#39;sample_mflix&#39;,
- &#39;sample_restaurants&#39;,
- &#39;sample_supplies&#39;,
- &#39;sample_training&#39;,
- &#39;sample_weatherdata&#39;,
- &#39;admin&#39;,
- &#39;local&#39;]
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all collections in the sample_mflix database</span>
-<span class="n">client</span><span class="o">.</span><span class="n">sample_mflix</span><span class="o">.</span><span class="n">list_collection_names</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;comments&#39;, &#39;sessions&#39;, &#39;movies&#39;, &#39;theaters&#39;, &#39;users&#39;, &#39;embedded_movies&#39;]
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the first document</span>
-<span class="n">client</span><span class="o">.</span><span class="n">sample_mflix</span><span class="o">.</span><span class="n">movies</span><span class="o">.</span><span class="n">find_one</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;573a1390f29313caabcd50e5&#39;),
- &#39;plot&#39;: &#39;The cartoonist, Winsor McCay, brings the Dinosaurus back to life in the figure of his latest creation, Gertie the Dinosaur.&#39;,
- &#39;genres&#39;: [&#39;Animation&#39;, &#39;Short&#39;, &#39;Comedy&#39;],
- &#39;runtime&#39;: 12,
- &#39;cast&#39;: [&#39;Winsor McCay&#39;, &#39;George McManus&#39;, &#39;Roy L. McCardell&#39;],
- &#39;num_mflix_comments&#39;: 0,
- &#39;poster&#39;: &#39;https://m.media-amazon.com/images/M/MV5BMTQxNzI4ODQ3NF5BMl5BanBnXkFtZTgwNzY5NzMwMjE@._V1_SY1000_SX677_AL_.jpg&#39;,
- &#39;title&#39;: &#39;Gertie the Dinosaur&#39;,
- &#39;fullplot&#39;: &#39;Winsor Z. McCay bets another cartoonist that he can animate a dinosaur. So he draws a big friendly herbivore called Gertie. Then he get into his own picture. Gertie walks through the picture, eats a tree, meets her creator, and takes him carefully on her back for a ride.&#39;,
- &#39;languages&#39;: [&#39;English&#39;],
- &#39;released&#39;: datetime.datetime(1914, 9, 15, 0, 0),
- &#39;directors&#39;: [&#39;Winsor McCay&#39;],
- &#39;writers&#39;: [&#39;Winsor McCay&#39;],
- &#39;awards&#39;: {&#39;wins&#39;: 1, &#39;nominations&#39;: 0, &#39;text&#39;: &#39;1 win.&#39;},
- &#39;lastupdated&#39;: &#39;2015-08-18 01:03:15.313000000&#39;,
- &#39;year&#39;: 1914,
- &#39;imdb&#39;: {&#39;rating&#39;: 7.3, &#39;votes&#39;: 1837, &#39;id&#39;: 4008},
- &#39;countries&#39;: [&#39;USA&#39;],
- &#39;type&#39;: &#39;movie&#39;,
- &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 3.7, &#39;numReviews&#39;: 29},
-  &#39;lastUpdated&#39;: datetime.datetime(2015, 8, 10, 19, 20, 3)}}
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all keys in the first document</span>
-<span class="n">keys_all</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">sample_mflix</span><span class="o">.</span><span class="n">movies</span><span class="o">.</span><span class="n">find_one</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="n">keys_all</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;_id&#39;, &#39;plot&#39;, &#39;genres&#39;, &#39;runtime&#39;, &#39;cast&#39;, &#39;num_mflix_comments&#39;, &#39;poster&#39;, &#39;title&#39;, &#39;fullplot&#39;, &#39;languages&#39;, &#39;released&#39;, &#39;directors&#39;, &#39;writers&#39;, &#39;awards&#39;, &#39;lastupdated&#39;, &#39;year&#39;, &#39;imdb&#39;, &#39;countries&#39;, &#39;type&#39;, &#39;tomatoes&#39;])
-</pre></div>
-</div>
-</div>
+<section id="embed-vs-reference-guideline">
+<h3>Embed vs reference guideline<a class="headerlink" href="#embed-vs-reference-guideline" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Guideline name</p></th>
+<th class="head"><p>Question</p></th>
+<th class="head"><p>Embed</p></th>
+<th class="head"><p>Reference</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Simplicity</p></td>
+<td><p>Would keeping the pieces of information together lead to a simpler data model and code?</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Go Together</p></td>
+<td><p>Do the pieces of information have a “has-a,” “contains,” or similar relationship?</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Query Atomicity</p></td>
+<td><p>Does the application query the pieces of information together?</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Update Complexity</p></td>
+<td><p>Are the pieces of information updated together?</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Archival</p></td>
+<td><p>Should the pieces of information be archived at the same time?</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cardinality</p></td>
+<td><p>Is there a high cardinality (current or growing) in the child side of the relationship?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Data Duplication</p></td>
+<td><p>Would data duplication be too complicated to manage and undesired?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Document Size</p></td>
+<td><p>Would the combined size of the pieces of information take too much memory or transfer bandwidth for the application?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Document Growth</p></td>
+<td><p>Would the embedded piece grow without bound?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Workload</p></td>
+<td><p>Are the pieces of information written at different times in a write-heavy workload?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Individuality</p></td>
+<td><p>For the children side of the relationship, can the pieces exist by themselves without a parent?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 </section>
@@ -541,12 +478,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="lecture2.html"
+       href="lecture3.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Lecture 2: Introduction to MongoDB and the document model</p>
+        <p class="prev-next-title">Lecture 3: MongoDB Atlas and connecting to MongoDB database</p>
       </div>
     </a>
     <a class="right-next"
@@ -577,8 +514,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#slides">Slides</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supplemental-materials">Supplemental materials</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-on-mongodb-atlas">Quick start on MongoDB Atlas</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demo-of-connecting-to-a-mongdb-via-pymongo">Demo of connecting to a MongDB via pymongo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#embed-vs-reference-guideline">Embed vs reference guideline</a></li>
 </ul>
 </li>
 </ul>

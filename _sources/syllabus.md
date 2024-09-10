@@ -32,21 +32,16 @@ Please find the list of lecture, and the required readings below. This list will
 |        1 | Tue      |  Sep 3 | Introduction to noSQL database, [READINGS](https://www.mongodb.com/resources/basics/databases/nosql-explained)                              |
 |        1 | Thu      |  Sep 5 | Introduction to MongoDB and the document model, [READINGS](https://www.mongodb.com/docs/manual/introduction/)              |
 |        1 | Fri      |  Sep 6 | Setup MongoDB Atlas & connecting to a MongoDB database, [READINGS](https://www.mongodb.com/docs/atlas/getting-started/)      |
-|        2 | Tue      | Sep 10 | Data modelling 1: types of data relationships, MongoDB rule |
-|        2 | Thu      | Sep 12 | Data modelling 2: embedding, referencing, anti-schema       |
-|        2 | Fri      | Sep 13 | MongoDB CRUD operations: Insert and Find                    |
-|        3 | Tue      | Sep 17 | MongoDB CRUD operations: Replace and Delete                 |
-|        3 | Thu      | Sep 19 | MogoDB CRUD operations: Modifying query results             |
-|        3 | Fri      | Sep 20 | MongoDB Aggregation in Python                               |
+|        2 | Tue      | Sep 10 | Data modelling 1: types of data relationships,embedding, referencing MongoDB rule [READINGS](https://www.mongodb.com/resources/basics/databases/data-modeling?_ga=2.78532820.1354789398.1725846515-313659227.1724002709&_gac=1.49047124.1725915715.CjwKCAjwufq2BhAmEiwAnZqw8ie_eJe6uF__ba1CVblmMnGYtkSns4HU92Ku1GlMUambTsnHKhaczBoCgK4QAvD_BwE) |
+|        2 | Thu      | Sep 12 | Data modelling 2: Schema design pattern, [READINGS](https://www.mongodb.com/blog/post/building-with-patterns-a-summary?utm_source=google&utm_campaign=search_gs_pl_evergreen_atlas_core_prosp-brand_gic-null_amers-ca_ps-all_desktop_eng_lead&utm_term=mongodb%20dbaas&utm_medium=cpc_paid_search&utm_ad=p&utm_ad_campaign_id=12212624311&adgroup=115749704143&cq_cmp=12212624311&gad_source=1&gbraid=0AAAAADQ1402kQEgrhXEau3I953YWCXlEJ&gclid=CjwKCAjwufq2BhAmEiwAnZqw8hiKNjqLUzhUQJSBcWp1sAnzSqY8sqgpPyToP1yGniuFBn1-O1hF6xoCerAQAvD_BwE)       |
+|        3 | Tue      | Sep 17 | MongoDB CRUD operations: Insert,Find, Replace and Delete                 |
+|        3 | Thu      | Sep 19 | MogoDB CRUD operations: Modifying query results, MongoDB Aggregation in Python                  |
 |        4 | Tue      | Sep 24 | MongoDB Indexes                                             |
-|        4 | Thu      | Sep 26 | MongoDB Atlas search                                        |
-|        4 | Fri      | Sep 27 | Atlas Vector Search for LLMs                                |
+|        4 | Thu      | Sep 26 | MongoDB Atlas search, Atlas Vector Search for LLMs                                        |
 |        5 | Tue      |  Oct 1 | Part 1: MongoDB review                                      |
-|        5 | Thu      |  Oct 3 | Backup lecture                                              |
-|        5 | Fri      |  Oct 4 | MIDTERM 1: Cover materials from week 1 - 4                  |
-|        6 | Tue      |  Oct 8 | Introductino to PySpark                                     |
-|        6 | Thu      | Oct 10 | Working with RDDs                                           |
-|        6 | Fri      | Oct 11 | Introductin to DataFrames in Pyspark                        |
+|        5 | Thu      |  Oct 3 | MIDTERM 1: Cover materials from week 1 - 4                                                |
+|        6 | Tue      |  Oct 8 | Introductino to PySpark ,Working with RDDs                                       |
+|        6 | Thu      | Oct 10 |  Introductin to DataFrames in Pyspark                                        |
 |        7 | Tue      | Oct 15 | Basic dataframe operations                                  |
 |        7 | Thu      | Oct 17 | Spark SQL                                                   |
 |        7 | Fri      | Oct 18 | Dataframe optimization techniques                           |
@@ -76,8 +71,8 @@ You are responsible for the following deliverables, which will determine your co
 | Assignment            | Note                                       | Weight | Date            |
 |-----------------------|--------------------------------------------|--------|-----------------|
 | Weekly worksheet x 10 | Open-book. Release on Mondays              | 20%    | Sundays 11:59PM |
-| Midterm 1             | Closed-book, Moodle timed-quiz, 45 minutes | 25%    | Fri, Oct 4th, 9:30AM    |
-| Midterm 2             | Closed-book, Moodle timed-quiz, 45 minutes | 25%    | Fri, Nov 1st, 9:30AM    |
+| Midterm 1             | Closed-book, Moodle timed-quiz, 45 minutes | 25%    | Thu, Oct 3, 9:30AM    |
+| Midterm 2             | Closed-book, Moodle timed-quiz, 45 minutes | 25%    | Thu, Oct 31, 9:30AM    |
 | Exam                  | Closed-book, Moodle timed-quiz, 90 minutes | 30%    | TBD             |
 
 

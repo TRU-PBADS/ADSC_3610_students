@@ -185,6 +185,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lectures/lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lectures/lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lectures/lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures/lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
 <ul class="nav bd-sidenav">
@@ -423,32 +424,22 @@ document.write(`
 <tr class="row-odd"><td><p>2</p></td>
 <td><p>Tue</p></td>
 <td><p>Sep 10</p></td>
-<td><p>Data modelling 1: types of data relationships, MongoDB rule</p></td>
+<td><p>Data modelling 1: types of data relationships,embedding, referencing MongoDB rule <a class="reference external" href="https://www.mongodb.com/resources/basics/databases/data-modeling?_ga=2.78532820.1354789398.1725846515-313659227.1724002709&amp;amp;_gac=1.49047124.1725915715.CjwKCAjwufq2BhAmEiwAnZqw8ie_eJe6uF__ba1CVblmMnGYtkSns4HU92Ku1GlMUambTsnHKhaczBoCgK4QAvD_BwE">READINGS</a></p></td>
 </tr>
 <tr class="row-even"><td><p>2</p></td>
 <td><p>Thu</p></td>
 <td><p>Sep 12</p></td>
-<td><p>Data modelling 2: embedding, referencing, anti-schema</p></td>
-</tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p>Fri</p></td>
-<td><p>Sep 13</p></td>
-<td><p>MongoDB CRUD operations: Insert and Find</p></td>
-</tr>
-<tr class="row-even"><td><p>3</p></td>
-<td><p>Tue</p></td>
-<td><p>Sep 17</p></td>
-<td><p>MongoDB CRUD operations: Replace and Delete</p></td>
+<td><p>Data modelling 2: Schema design pattern, <a class="reference external" href="https://www.mongodb.com/blog/post/building-with-patterns-a-summary?utm_source=google&amp;amp;utm_campaign=search_gs_pl_evergreen_atlas_core_prosp-brand_gic-null_amers-ca_ps-all_desktop_eng_lead&amp;amp;utm_term=mongodb%20dbaas&amp;amp;utm_medium=cpc_paid_search&amp;amp;utm_ad=p&amp;amp;utm_ad_campaign_id=12212624311&amp;amp;adgroup=115749704143&amp;amp;cq_cmp=12212624311&amp;amp;gad_source=1&amp;amp;gbraid=0AAAAADQ1402kQEgrhXEau3I953YWCXlEJ&amp;amp;gclid=CjwKCAjwufq2BhAmEiwAnZqw8hiKNjqLUzhUQJSBcWp1sAnzSqY8sqgpPyToP1yGniuFBn1-O1hF6xoCerAQAvD_BwE">READINGS</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>3</p></td>
-<td><p>Thu</p></td>
-<td><p>Sep 19</p></td>
-<td><p>MogoDB CRUD operations: Modifying query results</p></td>
+<td><p>Tue</p></td>
+<td><p>Sep 17</p></td>
+<td><p>MongoDB CRUD operations: Insert,Find, Replace and Delete</p></td>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
-<td><p>Fri</p></td>
-<td><p>Sep 20</p></td>
-<td><p>MongoDB Aggregation in Python</p></td>
+<td><p>Thu</p></td>
+<td><p>Sep 19</p></td>
+<td><p>MogoDB CRUD operations: Modifying query results, MongoDB Aggregation in Python</p></td>
 </tr>
 <tr class="row-odd"><td><p>4</p></td>
 <td><p>Tue</p></td>
@@ -458,144 +449,129 @@ document.write(`
 <tr class="row-even"><td><p>4</p></td>
 <td><p>Thu</p></td>
 <td><p>Sep 26</p></td>
-<td><p>MongoDB Atlas search</p></td>
+<td><p>MongoDB Atlas search, Atlas Vector Search for LLMs</p></td>
 </tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>Fri</p></td>
-<td><p>Sep 27</p></td>
-<td><p>Atlas Vector Search for LLMs</p></td>
-</tr>
-<tr class="row-even"><td><p>5</p></td>
+<tr class="row-odd"><td><p>5</p></td>
 <td><p>Tue</p></td>
 <td><p>Oct 1</p></td>
 <td><p>Part 1: MongoDB review</p></td>
 </tr>
-<tr class="row-odd"><td><p>5</p></td>
+<tr class="row-even"><td><p>5</p></td>
 <td><p>Thu</p></td>
 <td><p>Oct 3</p></td>
-<td><p>Backup lecture</p></td>
-</tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>Fri</p></td>
-<td><p>Oct 4</p></td>
 <td><p>MIDTERM 1: Cover materials from week 1 - 4</p></td>
 </tr>
 <tr class="row-odd"><td><p>6</p></td>
 <td><p>Tue</p></td>
 <td><p>Oct 8</p></td>
-<td><p>Introductino to PySpark</p></td>
+<td><p>Introductino to PySpark ,Working with RDDs</p></td>
 </tr>
 <tr class="row-even"><td><p>6</p></td>
 <td><p>Thu</p></td>
 <td><p>Oct 10</p></td>
-<td><p>Working with RDDs</p></td>
-</tr>
-<tr class="row-odd"><td><p>6</p></td>
-<td><p>Fri</p></td>
-<td><p>Oct 11</p></td>
 <td><p>Introductin to DataFrames in Pyspark</p></td>
 </tr>
-<tr class="row-even"><td><p>7</p></td>
+<tr class="row-odd"><td><p>7</p></td>
 <td><p>Tue</p></td>
 <td><p>Oct 15</p></td>
 <td><p>Basic dataframe operations</p></td>
 </tr>
-<tr class="row-odd"><td><p>7</p></td>
+<tr class="row-even"><td><p>7</p></td>
 <td><p>Thu</p></td>
 <td><p>Oct 17</p></td>
 <td><p>Spark SQL</p></td>
 </tr>
-<tr class="row-even"><td><p>7</p></td>
+<tr class="row-odd"><td><p>7</p></td>
 <td><p>Fri</p></td>
 <td><p>Oct 18</p></td>
 <td><p>Dataframe optimization techniques</p></td>
 </tr>
-<tr class="row-odd"><td><p>8</p></td>
+<tr class="row-even"><td><p>8</p></td>
 <td><p>Tue</p></td>
 <td><p>Oct 22</p></td>
 <td><p>Working with structured streaming</p></td>
 </tr>
-<tr class="row-even"><td><p>8</p></td>
+<tr class="row-odd"><td><p>8</p></td>
 <td><p>Thu</p></td>
 <td><p>Oct 24</p></td>
 <td><p>Machine learning with PySpark (MLlib)</p></td>
 </tr>
-<tr class="row-odd"><td><p>8</p></td>
+<tr class="row-even"><td><p>8</p></td>
 <td><p>Fri</p></td>
 <td><p>Oct 25</p></td>
 <td><p>Clustering and recommendation</p></td>
 </tr>
-<tr class="row-even"><td><p>9</p></td>
+<tr class="row-odd"><td><p>9</p></td>
 <td><p>Tue</p></td>
 <td><p>Oct 29</p></td>
 <td><p>PySpark best practices and case study</p></td>
 </tr>
-<tr class="row-odd"><td><p>9</p></td>
+<tr class="row-even"><td><p>9</p></td>
 <td><p>Thu</p></td>
 <td><p>Oct 31</p></td>
 <td><p>Backup lecture</p></td>
 </tr>
-<tr class="row-even"><td><p>9</p></td>
+<tr class="row-odd"><td><p>9</p></td>
 <td><p>Fri</p></td>
 <td><p>Nov 1</p></td>
 <td><p>MIDTERM 2: Cover materials from week 5 - 9</p></td>
 </tr>
-<tr class="row-odd"><td><p>10</p></td>
+<tr class="row-even"><td><p>10</p></td>
 <td><p>Tue</p></td>
 <td><p>Nov 5</p></td>
 <td><p>Introduction to data governance</p></td>
 </tr>
-<tr class="row-even"><td><p>10</p></td>
+<tr class="row-odd"><td><p>10</p></td>
 <td><p>Thu</p></td>
 <td><p>Nov 7</p></td>
 <td><p>MID-TERM BREAK</p></td>
 </tr>
-<tr class="row-odd"><td><p>10</p></td>
+<tr class="row-even"><td><p>10</p></td>
 <td><p>Fri</p></td>
 <td><p>Nov 8</p></td>
 <td><p>MID-TERM BREAK</p></td>
 </tr>
-<tr class="row-even"><td><p>11</p></td>
+<tr class="row-odd"><td><p>11</p></td>
 <td><p>Tue</p></td>
 <td><p>Nov 12</p></td>
 <td><p>Data quality management</p></td>
 </tr>
-<tr class="row-odd"><td><p>11</p></td>
+<tr class="row-even"><td><p>11</p></td>
 <td><p>Thu</p></td>
 <td><p>Nov 14</p></td>
 <td><p>Data privacy</p></td>
 </tr>
-<tr class="row-even"><td><p>11</p></td>
+<tr class="row-odd"><td><p>11</p></td>
 <td><p>Fri</p></td>
 <td><p>Nov 15</p></td>
 <td><p>Data security fundamentals</p></td>
 </tr>
-<tr class="row-odd"><td><p>12</p></td>
+<tr class="row-even"><td><p>12</p></td>
 <td><p>Tue</p></td>
 <td><p>Nov 19</p></td>
 <td><p>Data ethics</p></td>
 </tr>
-<tr class="row-even"><td><p>12</p></td>
+<tr class="row-odd"><td><p>12</p></td>
 <td><p>Thu</p></td>
 <td><p>Nov 21</p></td>
 <td><p>Legal and regulatory compliance</p></td>
 </tr>
-<tr class="row-odd"><td><p>12</p></td>
+<tr class="row-even"><td><p>12</p></td>
 <td><p>Fri</p></td>
 <td><p>Nov 22</p></td>
 <td><p>AI and ethics</p></td>
 </tr>
-<tr class="row-even"><td><p>13</p></td>
+<tr class="row-odd"><td><p>13</p></td>
 <td><p>Tue</p></td>
 <td><p>Nov 26</p></td>
 <td><p>Data breaches and responses</p></td>
 </tr>
-<tr class="row-odd"><td><p>13</p></td>
+<tr class="row-even"><td><p>13</p></td>
 <td><p>Thu</p></td>
 <td><p>Nov 28</p></td>
 <td><p>Future trends in data governance, privacy, and security</p></td>
 </tr>
-<tr class="row-even"><td><p>13</p></td>
+<tr class="row-odd"><td><p>13</p></td>
 <td><p>Fri</p></td>
 <td><p>Nov 29</p></td>
 <td><p>Course conclusion</p></td>
@@ -624,12 +600,12 @@ document.write(`
 <tr class="row-odd"><td><p>Midterm 1</p></td>
 <td><p>Closed-book, Moodle timed-quiz, 45 minutes</p></td>
 <td><p>25%</p></td>
-<td><p>Fri, Oct 4th, 9:30AM</p></td>
+<td><p>Thu, Oct 3, 9:30AM</p></td>
 </tr>
 <tr class="row-even"><td><p>Midterm 2</p></td>
 <td><p>Closed-book, Moodle timed-quiz, 45 minutes</p></td>
 <td><p>25%</p></td>
-<td><p>Fri, Nov 1st, 9:30AM</p></td>
+<td><p>Thu, Oct 31, 9:30AM</p></td>
 </tr>
 <tr class="row-odd"><td><p>Exam</p></td>
 <td><p>Closed-book, Moodle timed-quiz, 90 minutes</p></td>

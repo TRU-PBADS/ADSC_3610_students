@@ -72,16 +72,17 @@ For the remainder screens, pick the default selected options:
 
 [To install windows terminal visit this link](https://aka.ms/terminal)
 and click `Get` to open it in Windows Store.
-Inside the Store, click `Get` again and then click `Install`.
-After installation,
+
+- Inside the Store, click `Get` again and then click `Install`.
+- After installation,
 click `Launch` to start Windows Terminal.
-In the top of the window,
+- In the top of the window,
 you will see the tab bar with one open tab,
 a plus sign,
 and a down arrow.
-Click the down arrow and select `Settings`
+- Click the down arrow and select `Settings`
 (or type the shortcut `Ctrl` + `,`).
-In the `Startup` section,
+- In the `Startup` section,
 click the dropdown menu under `Default profile`
 and select `Git Bash`.
 
