@@ -1,0 +1,1587 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Worksheet 3: CRUD operations in MongoDB &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'worksheets/source/worksheet3/worksheet3';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/TRU_Logo.png" class="logo__image only-light" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>
+    <script>document.write(`<img src="../../../_static/TRU_Logo.png" class="logo__image only-dark" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../syllabus.html">
+                    ADSC 3610 - Database Systems in Applied Data Science II - Syllabus
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../lectures/lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lectures/lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lectures/lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lectures/lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lectures/lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lectures/lecture6.html">Lecture 6: CRUD operations in MongoDB</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_mac.html">Installation instruction for macOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_windows.html">Installation instruction for Windows</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/worksheets/source/worksheet3/worksheet3.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Worksheet 3: CRUD operations in MongoDB</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#establish-pymongo-connection">Establish Pymongo connection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodb-vscode-extension-optional">MongoDB VScode extension (optional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-import-data-into-mongodb">Exercise 1: Import data into MongoDB</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#your-turn">YOUR TURN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-from-json">1.2 Import from JSON</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-insert-update-new-field">Exercise 2: Insert &amp; update new field</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-replace">Exercise 3: Replace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-4-delete">Exercise 4: Delete</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-5-visualize">Exercise 5: Visualize</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission instructions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="worksheet-3-crud-operations-in-mongodb">
+<h1>Worksheet 3: CRUD operations in MongoDB<a class="headerlink" href="#worksheet-3-crud-operations-in-mongodb" title="Link to this heading">#</a></h1>
+<p>Welcome! In this week, we will practice some basic CRUD (Create, Replace, Update, Delete) operations in MongoDB using Pymongo.</p>
+<section id="establish-pymongo-connection">
+<h2>Establish Pymongo connection<a class="headerlink" href="#establish-pymongo-connection" title="Link to this heading">#</a></h2>
+<p>Recall that in worksheet1, we have created a cluster on MongoDB Atlas and connect to it via Pymongo and a credentials JSON file. Let’s reestablish that connection for our exercises.</p>
+<ul class="simple">
+<li><p>Make sure you use the <code class="docutils literal notranslate"><span class="pre">adsc_3610</span></code> conda environment.</p></li>
+<li><p>You might need to copy &amp; paste the <code class="docutils literal notranslate"><span class="pre">credentials_mongodb.json</span></code> file that you used in worksheet1 to the working directory of worksheet3.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span> <span class="c1"># import mongo client to connect</span>
+<span class="kn">import</span> <span class="nn">json</span> <span class="c1"># import json to load credentials</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+
+<span class="c1"># load credentials from json file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;credentials_mongodb.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># assign credentials to variables</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;mongodb+srv://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">/?retryWrites=true&amp;w=majority&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># connect to the database</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># drop database books and students if they exist</span>
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;books&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;students&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To test if your connection has been succesful, let’s try to print out all the databases</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all databases</span>
+<span class="n">client</span><span class="o">.</span><span class="n">list_database_names</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;bookstore&#39;,
+ &#39;sample_airbnb&#39;,
+ &#39;sample_analytics&#39;,
+ &#39;sample_geospatial&#39;,
+ &#39;sample_guides&#39;,
+ &#39;sample_mflix&#39;,
+ &#39;sample_restaurants&#39;,
+ &#39;sample_supplies&#39;,
+ &#39;sample_training&#39;,
+ &#39;sample_weatherdata&#39;,
+ &#39;school&#39;,
+ &#39;admin&#39;,
+ &#39;local&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="mongodb-vscode-extension-optional">
+<h2>MongoDB VScode extension (optional)<a class="headerlink" href="#mongodb-vscode-extension-optional" title="Link to this heading">#</a></h2>
+<p>If you are using VScode, there is a MongoDB extension which provides a handy view of the databases (instead of having to view it on MongoDB Atlas via a browser).</p>
+<p>To install the extension, navigate to the extension bar in VS code and search for “mongodb”</p>
+<p><img alt="" src="../../../_images/vscode3.png" /></p>
+<p>After installing the extension, you can now connect to your MongoDB Atlas cluster via the connection string.</p>
+<p><img alt="" src="../../../_images/connect2.png" /></p>
+<p>To find your connection string, open a browser and navigate to MongoDB Atlas.</p>
+<ul class="simple">
+<li><p>Under your cluster, click <code class="docutils literal notranslate"><span class="pre">connect</span></code></p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">MongoDB</span> <span class="pre">for</span> <span class="pre">VScode</span></code></p></li>
+<li><p>Copy that URL and paste it in VScode</p></li>
+</ul>
+<p><img alt="" src="../../../_images/string2.png" /></p>
+<p>Once connected, you should now be able to see an overview of your databases. Now you can manage your MongoDB and do programming all within VSCode.</p>
+<p>Now that we have establish the connection to our MongoDB cluster, let’s get started with the exercises:</p>
+</section>
+<section id="exercise-1-import-data-into-mongodb">
+<h2>Exercise 1: Import data into MongoDB<a class="headerlink" href="#exercise-1-import-data-into-mongodb" title="Link to this heading">#</a></h2>
+<p>{rubric: accuracy = 5}</p>
+<p>Let’s first create a new database called <code class="docutils literal notranslate"><span class="pre">school</span></code> and store it in an object named <code class="docutils literal notranslate"><span class="pre">db</span></code>. We then create a new collection called <code class="docutils literal notranslate"><span class="pre">students</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 1: Connect to your MongoDB cluster</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="c1"># Step 2: Create a new database named &#39;school&#39; and store it in a variable named db</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">school</span>
+
+<span class="c1"># Step 3: Create a collection named &#39;students&#39; and insert sample documents</span>
+<span class="n">students</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">students</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s insert a sample student document to our <code class="docutils literal notranslate"><span class="pre">students</span></code> collection</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample document to insert</span>
+<span class="n">sample_students</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Alice&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;major&quot;</span><span class="p">:</span> <span class="s2">&quot;Computer Science&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bob&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="s2">&quot;major&quot;</span><span class="p">:</span> <span class="s2">&quot;Mathematics&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Charlie&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">&quot;major&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering&quot;</span><span class="p">}]</span>
+
+<span class="c1"># Insert the sample document</span>
+<span class="n">students</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">sample_students</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), ObjectId(&#39;66e8970fc48457d8d5b12657&#39;)], acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<p>You should see that the document has been inserted into our <code class="docutils literal notranslate"><span class="pre">students</span></code> collection, and it was assigned an <code class="docutils literal notranslate"><span class="pre">ObjectId</span></code>.</p>
+<blockquote>
+<div><p>Note: Every document in MongoDB must have an <code class="docutils literal notranslate"><span class="pre">ObjectId</span></code>. If it doesn’t exist, then MongoDB will create a new one automatically</p>
+</div></blockquote>
+<p>Now we can print out the documents that we just inserted</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find the document that was just inserted</span>
+<span class="c1"># The find_one() method returns the first occurrence in the selection.</span>
+<span class="n">students</span><span class="o">.</span><span class="n">find_one</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262c&#39;),
+ &#39;name&#39;: &#39;Alice&#39;,
+ &#39;age&#39;: 20,
+ &#39;major&#39;: &#39;Computer Science&#39;,
+ &#39;gpa&#39;: None}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find the document by a specific attribute</span>
+<span class="n">students</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bob&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262d&#39;),
+ &#39;name&#39;: &#39;Bob&#39;,
+ &#39;age&#39;: 21,
+ &#39;major&#39;: &#39;Mathematics&#39;,
+ &#39;gpa&#39;: None}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find all documents in the collection</span>
+<span class="c1"># The find() method returns all occurrences in the selection.</span>
+<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262c&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262d&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12631&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12632&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12657&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now if you navigate to your databases in MongoDB Atlas, or using the VSCode MongoDB extension, you should see there’s a new database called <code class="docutils literal notranslate"><span class="pre">school</span></code>. Within that database, there should be a collection named <code class="docutils literal notranslate"><span class="pre">students</span></code>, which contains one document about Alice</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Try to find all documents where age is greater than 20</span>
+<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262d&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12632&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12657&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<section id="your-turn">
+<h3>YOUR TURN<a class="headerlink" href="#your-turn" title="Link to this heading">#</a></h3>
+</section>
+<section id="id1">
+<h3>1.1<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Create a new database called <code class="docutils literal notranslate"><span class="pre">bookstore</span></code>, stored it in a variable called <code class="docutils literal notranslate"><span class="pre">bookstore</span></code></p></li>
+<li><p>Create a collection called <code class="docutils literal notranslate"><span class="pre">books</span></code>, stored it in a variable called <code class="docutils literal notranslate"><span class="pre">books</span></code></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a new database called `bookstore`, stored it in a variable called `bookstore`</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="n">bookstore</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">bookstore</span> <span class="c1"># SOLUTION</span>
+
+<span class="c1"># Create a collection called `books` </span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="n">books</span> <span class="o">=</span> <span class="n">bookstore</span><span class="o">.</span><span class="n">books</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Insert the following sample documents in <code class="docutils literal notranslate"><span class="pre">sample_books</span></code> into the <code class="docutils literal notranslate"><span class="pre">books</span></code> collection</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_books</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Great Gatsby&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;F. Scott Fitzgerald&quot;</span><span class="p">,</span> <span class="s2">&quot;genre&quot;</span><span class="p">:</span> <span class="s2">&quot;Fiction&quot;</span><span class="p">,</span> <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">10.99</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;To Kill a Mockingbird&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Harper Lee&quot;</span><span class="p">,</span> <span class="s2">&quot;genre&quot;</span><span class="p">:</span> <span class="s2">&quot;Fiction&quot;</span><span class="p">,</span> <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">8.99</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;A Brief History of Time&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Stephen Hawking&quot;</span><span class="p">,</span> <span class="s2">&quot;genre&quot;</span><span class="p">:</span> <span class="s2">&quot;Non-Fiction&quot;</span><span class="p">,</span> <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">15.99</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="c1"># YOUR CODE HERE</span>
+
+<span class="c1"># BEGIN SOLUTION</span>
+<span class="c1"># Insert the sample_books into the books collection</span>
+<span class="n">books</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">sample_books</span><span class="p">)</span>
+<span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e8970fc48457d8d5b12658&#39;), ObjectId(&#39;66e8970fc48457d8d5b12659&#39;), ObjectId(&#39;66e8970fc48457d8d5b1265a&#39;)], acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Print out a book with author as Stephen Hawking</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print out a book with author as Stephen Hawking</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Stephen Hawking&quot;</span><span class="p">})</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b1265a&#39;),
+ &#39;title&#39;: &#39;A Brief History of Time&#39;,
+ &#39;author&#39;: &#39;Stephen Hawking&#39;,
+ &#39;genre&#39;: &#39;Non-Fiction&#39;,
+ &#39;price&#39;: 15.99}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print out all books with price less than $10</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">books</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$lt&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}}):</span> <span class="c1"># SOLUTION</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264a&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;published_year&#39;: 1949, &#39;isbn&#39;: &#39;978-0-452-28423-4&#39;, &#39;price&#39;: 8.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b12651&#39;), &#39;title&#39;: &#39;Fahrenheit 451&#39;, &#39;author&#39;: &#39;Ray Bradbury&#39;, &#39;published_year&#39;: 1953, &#39;isbn&#39;: &#39;978-0-7432-4722-2&#39;, &#39;price&#39;: 9.49, &#39;publisher&#39;: &#39;Penguin Books&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b12652&#39;), &#39;title&#39;: &#39;Jane Eyre&#39;, &#39;author&#39;: &#39;Charlotte Brontë&#39;, &#39;published_year&#39;: 1847, &#39;isbn&#39;: &#39;978-0-14-243720-9&#39;, &#39;price&#39;: 8.49, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12659&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;genre&#39;: &#39;Fiction&#39;, &#39;price&#39;: 8.99}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Run the test below to see if you have done it correctly</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># assert bookstore and books exist</span>
+<span class="k">assert</span> <span class="s1">&#39;bookstore&#39;</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">list_database_names</span><span class="p">(),</span> <span class="s2">&quot;bookstore database does not exist&quot;</span>
+<span class="k">assert</span> <span class="s1">&#39;books&#39;</span> <span class="ow">in</span> <span class="n">bookstore</span><span class="o">.</span><span class="n">list_collection_names</span><span class="p">(),</span> <span class="s2">&quot;books collection does not exist&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># assert sample_books were inserted</span>
+<span class="k">assert</span> <span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Stephen Hawking&quot;</span><span class="p">})</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;sample_books were not inserted&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># assert &quot;title&quot;: &quot;To Kill a Mockingbird&quot; is in the collection</span>
+<span class="k">assert</span> <span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;To Kill a Mockingbird&quot;</span><span class="p">})</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>  <span class="s2">&quot;To Kill a Mockingbird is not in the collection&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="import-from-json">
+<h3>1.2 Import from JSON<a class="headerlink" href="#import-from-json" title="Link to this heading">#</a></h3>
+<p>Imagine we have a dataset called <code class="docutils literal notranslate"><span class="pre">students.json</span></code> and we would like to import it into the <code class="docutils literal notranslate"><span class="pre">students</span></code> collection in our MongoDB database.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># Step 1: Load JSON data</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;students.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># view what the data looks like (first 5 records)</span>
+<span class="n">data</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;name&#39;: &#39;Alice Johnson&#39;,
+  &#39;age&#39;: 22,
+  &#39;major&#39;: &#39;Computer Science&#39;,
+  &#39;email&#39;: &#39;alice.johnson@example.com&#39;},
+ {&#39;name&#39;: &#39;Bob Smith&#39;,
+  &#39;age&#39;: 24,
+  &#39;major&#39;: &#39;Mathematics&#39;,
+  &#39;email&#39;: &#39;bob.smith@example.com&#39;},
+ {&#39;name&#39;: &#39;Charlie Brown&#39;,
+  &#39;age&#39;: 20,
+  &#39;major&#39;: &#39;Physics&#39;,
+  &#39;email&#39;: &#39;charlie.brown@example.com&#39;},
+ {&#39;name&#39;: &#39;Diana Prince&#39;,
+  &#39;age&#39;: 21,
+  &#39;major&#39;: &#39;History&#39;,
+  &#39;email&#39;: &#39;diana.prince@example.com&#39;},
+ {&#39;name&#39;: &#39;Eve Adams&#39;,
+  &#39;age&#39;: 23,
+  &#39;major&#39;: &#39;Biology&#39;,
+  &#39;email&#39;: &#39;eve.adams@example.com&#39;}]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 2: Insert JSON data into a collection</span>
+<span class="n">students</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># For a list of documents</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e89710c48457d8d5b1265b&#39;), ObjectId(&#39;66e89710c48457d8d5b1265c&#39;), ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), ObjectId(&#39;66e89710c48457d8d5b1265f&#39;), ObjectId(&#39;66e89710c48457d8d5b12660&#39;), ObjectId(&#39;66e89710c48457d8d5b12661&#39;), ObjectId(&#39;66e89710c48457d8d5b12662&#39;), ObjectId(&#39;66e89710c48457d8d5b12663&#39;), ObjectId(&#39;66e89710c48457d8d5b12664&#39;)], acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find all documents in the collection</span>
+<span class="c1"># The find() method returns all occurrences in the selection.</span>
+<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262c&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262d&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12631&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12632&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12657&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265b&#39;), &#39;name&#39;: &#39;Alice Johnson&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Computer Science&#39;, &#39;email&#39;: &#39;alice.johnson@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265c&#39;), &#39;name&#39;: &#39;Bob Smith&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Mathematics&#39;, &#39;email&#39;: &#39;bob.smith@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265f&#39;), &#39;name&#39;: &#39;Eve Adams&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Biology&#39;, &#39;email&#39;: &#39;eve.adams@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12660&#39;), &#39;name&#39;: &#39;Frank Wright&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Chemistry&#39;, &#39;email&#39;: &#39;frank.wright@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12661&#39;), &#39;name&#39;: &#39;Grace Hopper&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Computer Engineering&#39;, &#39;email&#39;: &#39;grace.hopper@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12663&#39;), &#39;name&#39;: &#39;Ivy League&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Literature&#39;, &#39;email&#39;: &#39;ivy.league@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;), &#39;name&#39;: &#39;Jack Daniels&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Business&#39;, &#39;email&#39;: &#39;jack.daniels@example.com&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now it’s your turn, import the <code class="docutils literal notranslate"><span class="pre">books.json</span></code> into the <code class="docutils literal notranslate"><span class="pre">books</span></code> collection in the <code class="docutils literal notranslate"><span class="pre">bookstore</span></code> database in your MongoDB.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># BEGIN SOLUTION</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;books.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+<span class="n">books</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># For a list of documents</span>
+
+<span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e89710c48457d8d5b12665&#39;), ObjectId(&#39;66e89710c48457d8d5b12666&#39;), ObjectId(&#39;66e89710c48457d8d5b12667&#39;), ObjectId(&#39;66e89710c48457d8d5b12668&#39;), ObjectId(&#39;66e89710c48457d8d5b12669&#39;), ObjectId(&#39;66e89710c48457d8d5b1266a&#39;), ObjectId(&#39;66e89710c48457d8d5b1266b&#39;), ObjectId(&#39;66e89710c48457d8d5b1266c&#39;), ObjectId(&#39;66e89710c48457d8d5b1266d&#39;), ObjectId(&#39;66e89710c48457d8d5b1266e&#39;)], acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pride and Prejudice&quot;</span><span class="p">})</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Pride and Prejudice is not in the collection&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;isbn&quot;</span><span class="p">:</span> <span class="s2">&quot;978-0-06-112008-4&quot;</span><span class="p">})</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;ISBN 978-0-06-112008-4 is not in the collection&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="exercise-2-insert-update-new-field">
+<h2>Exercise 2: Insert &amp; update new field<a class="headerlink" href="#exercise-2-insert-update-new-field" title="Link to this heading">#</a></h2>
+<p>Let’s say we want to add a field called <code class="docutils literal notranslate"><span class="pre">gpa</span></code> to the <code class="docutils literal notranslate"><span class="pre">students</span></code> collection. Here’s how</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 1: Define the new field and its value</span>
+<span class="n">new_field</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gpa&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+
+<span class="c1"># Step 2: Update all documents to include the new field</span>
+<span class="n">students</span><span class="o">.</span><span class="n">update_many</span><span class="p">({},</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="n">new_field</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 18, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726519056, 35), &#39;t&#39;: 203}, &#39;nModified&#39;: 13, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726519056, 35), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xa0X\xdd\x0f\xde\x96\xe2\xf6\x19j\x9e\xe4\xe8ab\x18\r]\xd2J&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726519056, 35), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check if the new field was added</span>
+<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262c&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262d&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12631&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12632&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12657&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265b&#39;), &#39;name&#39;: &#39;Alice Johnson&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Computer Science&#39;, &#39;email&#39;: &#39;alice.johnson@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265c&#39;), &#39;name&#39;: &#39;Bob Smith&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Mathematics&#39;, &#39;email&#39;: &#39;bob.smith@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265f&#39;), &#39;name&#39;: &#39;Eve Adams&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Biology&#39;, &#39;email&#39;: &#39;eve.adams@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12660&#39;), &#39;name&#39;: &#39;Frank Wright&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Chemistry&#39;, &#39;email&#39;: &#39;frank.wright@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12661&#39;), &#39;name&#39;: &#39;Grace Hopper&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Computer Engineering&#39;, &#39;email&#39;: &#39;grace.hopper@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12663&#39;), &#39;name&#39;: &#39;Ivy League&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Literature&#39;, &#39;email&#39;: &#39;ivy.league@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;), &#39;name&#39;: &#39;Jack Daniels&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Business&#39;, &#39;email&#39;: &#39;jack.daniels@example.com&#39;, &#39;gpa&#39;: None}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s try to update the <code class="docutils literal notranslate"><span class="pre">gpa</span></code> of Jack Daniels to 3.4</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 2: Define the filter and the new value</span>
+<span class="nb">filter</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jack Daniels&quot;</span><span class="p">}</span>
+<span class="n">new_value</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;gpa&quot;</span><span class="p">:</span> <span class="mf">3.4</span><span class="p">}}</span>
+
+<span class="c1"># Step 3: Update the specific document</span>
+<span class="n">students</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726519056, 37), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726519056, 37), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xa0X\xdd\x0f\xde\x96\xe2\xf6\x19j\x9e\xe4\xe8ab\x18\r]\xd2J&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726519056, 37), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check Jack Daniels GPA</span>
+<span class="n">students</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jack Daniels&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;),
+ &#39;name&#39;: &#39;Jack Daniels&#39;,
+ &#39;age&#39;: 22,
+ &#39;major&#39;: &#39;Business&#39;,
+ &#39;email&#39;: &#39;jack.daniels@example.com&#39;,
+ &#39;gpa&#39;: 3.4}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now it’s your turn.</p>
+<ul class="simple">
+<li><p>Insert a field called <code class="docutils literal notranslate"><span class="pre">&quot;publisher&quot;</span></code> into the <code class="docutils literal notranslate"><span class="pre">books</span></code> collection with a default value of <code class="docutils literal notranslate"><span class="pre">&quot;Unknown&quot;</span></code>.</p></li>
+<li><p>Update the <code class="docutils literal notranslate"><span class="pre">publisher</span></code> of the book with the author name is “Ray Bradbury”, to “Penguin Books”</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># BEGIN SOLUTION</span>
+<span class="n">books</span><span class="o">.</span><span class="n">update_many</span><span class="p">({},</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;publisher&quot;</span><span class="p">:</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">}})</span>
+<span class="n">books</span><span class="o">.</span><span class="n">update_one</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Ray Bradbury&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;publisher&quot;</span><span class="p">:</span> <span class="s2">&quot;Penguin Books&quot;</span><span class="p">}})</span>
+<span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726519056, 54), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726519056, 54), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xa0X\xdd\x0f\xde\x96\xe2\xf6\x19j\x9e\xe4\xe8ab\x18\r]\xd2J&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726519056, 54), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out the document by Ray Bradbury</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check if the publisher field was added</span>
+<span class="k">assert</span> <span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Ray Bradbury&quot;</span><span class="p">})[</span><span class="s2">&quot;publisher&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Penguin Books&quot;</span><span class="p">,</span> <span class="s2">&quot;publisher field was not added&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-replace">
+<h2>Exercise 3: Replace<a class="headerlink" href="#exercise-3-replace" title="Link to this heading">#</a></h2>
+<p>Let’s print out our student Jack Daniels</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">students</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jack Daniels&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;),
+ &#39;name&#39;: &#39;Jack Daniels&#39;,
+ &#39;age&#39;: 22,
+ &#39;major&#39;: &#39;Business&#39;,
+ &#39;email&#39;: &#39;jack.daniels@example.com&#39;,
+ &#39;gpa&#39;: 3.4}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s say we want to replace the entire document by a new one. Let’s called this <code class="docutils literal notranslate"><span class="pre">new_student</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_student</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> 
+    <span class="s2">&quot;major&quot;</span><span class="p">:</span> <span class="s2">&quot;History&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;john_doe@gmail.com&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gpa&quot;</span><span class="p">:</span> <span class="mf">3.1</span>
+<span class="p">}</span>
+
+<span class="n">students</span><span class="o">.</span><span class="n">replace_one</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jack Daniels&quot;</span><span class="p">},</span> <span class="n">new_student</span><span class="p">)</span>
+
+<span class="c1"># check if Jack Daniels was replaced</span>
+<span class="n">students</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jack Daniels&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">students</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;),
+ &#39;name&#39;: &#39;John Doe&#39;,
+ &#39;age&#39;: 25,
+ &#39;major&#39;: &#39;History&#39;,
+ &#39;email&#39;: &#39;john_doe@gmail.com&#39;,
+ &#39;gpa&#39;: 3.1}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now it’s your turn.</p>
+<p>Replace the book by Stephen Hawking with the <code class="docutils literal notranslate"><span class="pre">new_book</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_book</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Universe in a Nutshell&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Stephen Hawking&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;genre&quot;</span><span class="p">:</span> <span class="s2">&quot;Non-Fiction&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">12.99</span><span class="p">,</span>
+    <span class="s2">&quot;publisher&quot;</span><span class="p">:</span> <span class="s2">&quot;Bantam Books&quot;</span>
+<span class="p">}</span>
+
+<span class="c1"># YOUR CODE HERE</span>
+<span class="n">books</span><span class="o">.</span><span class="n">replace_one</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Stephen Hawking&quot;</span><span class="p">},</span> <span class="n">new_book</span><span class="p">)</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726519056, 58), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726519056, 58), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xa0X\xdd\x0f\xde\x96\xe2\xf6\x19j\x9e\xe4\xe8ab\x18\r]\xd2J&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726519056, 58), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out the document by Stephen Hawking</span>
+<span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Stephen Hawking&quot;</span><span class="p">})</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b1265a&#39;),
+ &#39;title&#39;: &#39;The Universe in a Nutshell&#39;,
+ &#39;author&#39;: &#39;Stephen Hawking&#39;,
+ &#39;genre&#39;: &#39;Non-Fiction&#39;,
+ &#39;price&#39;: 12.99,
+ &#39;publisher&#39;: &#39;Bantam Books&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Universe in a Nutshell&quot;</span><span class="p">})</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;The Universe in a Nutshell is not in the collection&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-delete">
+<h2>Exercise 4: Delete<a class="headerlink" href="#exercise-4-delete" title="Link to this heading">#</a></h2>
+<p>Let’s say I want to delete all documents in the <code class="docutils literal notranslate"><span class="pre">students</span></code> collection where their <code class="docutils literal notranslate"><span class="pre">age</span></code> is above 21</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 1: Define the filter to find the documents to be deleted</span>
+<span class="nb">filter</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">21</span><span class="p">}}</span>
+
+<span class="c1"># Step 2: Delete the documents</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">students</span><span class="o">.</span><span class="n">delete_many</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span>
+
+<span class="c1"># Step 3: Print the number of documents deleted</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">deleted_count</span><span class="p">,</span> <span class="s2">&quot; documents deleted.&quot;</span><span class="p">)</span>
+
+<span class="c1"># check if the documents were deleted</span>
+<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8  documents deleted.
+{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262c&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262d&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12631&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12632&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now it’s your turn.</p>
+<p>Delete all the documents in the <code class="docutils literal notranslate"><span class="pre">books</span></code> collection where the <code class="docutils literal notranslate"><span class="pre">title</span></code> start with letter “T”</p>
+<blockquote>
+<div><p>Hint: You can use regex expression in the filter. For example, if I want all students start with letter “M”, I would use</p>
+<p><code class="docutils literal notranslate"><span class="pre">filter</span> <span class="pre">=</span> <span class="pre">{&quot;name&quot;:</span> <span class="pre">{&quot;$regex&quot;:</span> <span class="pre">&quot;^M&quot;}}</span></code></p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete all the documents in the `books` collection where the `title` start with letter &quot;T&quot;</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="c1"># BEGIN SOLUTION</span>
+<span class="nb">filter</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$regex&quot;</span><span class="p">:</span> <span class="s2">&quot;^T&quot;</span><span class="p">}}</span> 
+<span class="n">result</span> <span class="o">=</span> <span class="n">books</span><span class="o">.</span><span class="n">delete_many</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span> 
+<span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the number of documents deleted</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">deleted_count</span><span class="p">,</span> <span class="s2">&quot; documents deleted.&quot;</span><span class="p">)</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7  documents deleted.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check if the documents were deleted</span>
+<span class="c1"># find all books that start with letter &quot;T&quot;</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">books</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$regex&quot;</span><span class="p">:</span> <span class="s2">&quot;^T&quot;</span><span class="p">}}):</span> <span class="c1"># SOLUTION</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all the documents in the collection</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">books</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>   <span class="c1"># SOLUTION</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264a&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;published_year&#39;: 1949, &#39;isbn&#39;: &#39;978-0-452-28423-4&#39;, &#39;price&#39;: 8.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264b&#39;), &#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;published_year&#39;: 1813, &#39;isbn&#39;: &#39;978-0-19-953556-9&#39;, &#39;price&#39;: 12.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264d&#39;), &#39;title&#39;: &#39;Moby-Dick&#39;, &#39;author&#39;: &#39;Herman Melville&#39;, &#39;published_year&#39;: 1851, &#39;isbn&#39;: &#39;978-0-14-243724-7&#39;, &#39;price&#39;: 11.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264e&#39;), &#39;title&#39;: &#39;War and Peace&#39;, &#39;author&#39;: &#39;Leo Tolstoy&#39;, &#39;published_year&#39;: 1869, &#39;isbn&#39;: &#39;978-0-14-044793-4&#39;, &#39;price&#39;: 14.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b12651&#39;), &#39;title&#39;: &#39;Fahrenheit 451&#39;, &#39;author&#39;: &#39;Ray Bradbury&#39;, &#39;published_year&#39;: 1953, &#39;isbn&#39;: &#39;978-0-7432-4722-2&#39;, &#39;price&#39;: 9.49, &#39;publisher&#39;: &#39;Penguin Books&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b12652&#39;), &#39;title&#39;: &#39;Jane Eyre&#39;, &#39;author&#39;: &#39;Charlotte Brontë&#39;, &#39;published_year&#39;: 1847, &#39;isbn&#39;: &#39;978-0-14-243720-9&#39;, &#39;price&#39;: 8.49, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12666&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;published_year&#39;: 1949, &#39;isbn&#39;: &#39;978-0-452-28423-4&#39;, &#39;price&#39;: 8.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12667&#39;), &#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;published_year&#39;: 1813, &#39;isbn&#39;: &#39;978-0-19-953556-9&#39;, &#39;price&#39;: 12.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12669&#39;), &#39;title&#39;: &#39;Moby-Dick&#39;, &#39;author&#39;: &#39;Herman Melville&#39;, &#39;published_year&#39;: 1851, &#39;isbn&#39;: &#39;978-0-14-243724-7&#39;, &#39;price&#39;: 11.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1266a&#39;), &#39;title&#39;: &#39;War and Peace&#39;, &#39;author&#39;: &#39;Leo Tolstoy&#39;, &#39;published_year&#39;: 1869, &#39;isbn&#39;: &#39;978-0-14-044793-4&#39;, &#39;price&#39;: 14.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1266d&#39;), &#39;title&#39;: &#39;Fahrenheit 451&#39;, &#39;author&#39;: &#39;Ray Bradbury&#39;, &#39;published_year&#39;: 1953, &#39;isbn&#39;: &#39;978-0-7432-4722-2&#39;, &#39;price&#39;: 9.49, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1266e&#39;), &#39;title&#39;: &#39;Jane Eyre&#39;, &#39;author&#39;: &#39;Charlotte Brontë&#39;, &#39;published_year&#39;: 1847, &#39;isbn&#39;: &#39;978-0-14-243720-9&#39;, &#39;price&#39;: 8.49, &#39;publisher&#39;: &#39;Unknown&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># assert there are no documents that start with letter &quot;T&quot;</span>
+<span class="k">assert</span> <span class="n">books</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$regex&quot;</span><span class="p">:</span> <span class="s2">&quot;^T&quot;</span><span class="p">}})</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;There are documents that start with letter T&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-5-visualize">
+<h2>Exercise 5: Visualize<a class="headerlink" href="#exercise-5-visualize" title="Link to this heading">#</a></h2>
+<p>Let’s say that we are retriving students data and we want to convert the results to pandas DataFrame</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="c1"># Step 2: Query all documents in the collection</span>
+<span class="n">cursor</span> <span class="o">=</span> <span class="n">students</span><span class="o">.</span><span class="n">find</span><span class="p">()</span>
+
+<span class="c1"># Step 3: Convert the cursor to a list and then to a DataFrame</span>
+<span class="n">students_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">students_data</span><span class="p">)</span>
+
+<span class="c1"># Print the DataFrame to verify</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>_id</th>
+      <th>name</th>
+      <th>age</th>
+      <th>major</th>
+      <th>gpa</th>
+      <th>email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>66e8885dc48457d8d5b1262c</td>
+      <td>Alice</td>
+      <td>20</td>
+      <td>Computer Science</td>
+      <td>None</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>66e8885dc48457d8d5b1262d</td>
+      <td>Bob</td>
+      <td>21</td>
+      <td>Mathematics</td>
+      <td>None</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>66e88869c48457d8d5b12631</td>
+      <td>Charlie Brown</td>
+      <td>20</td>
+      <td>Physics</td>
+      <td>None</td>
+      <td>charlie.brown@example.com</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>66e88869c48457d8d5b12632</td>
+      <td>Diana Prince</td>
+      <td>21</td>
+      <td>History</td>
+      <td>None</td>
+      <td>diana.prince@example.com</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>66e88869c48457d8d5b12636</td>
+      <td>Hank Pym</td>
+      <td>21</td>
+      <td>Biochemistry</td>
+      <td>None</td>
+      <td>hank.pym@example.com</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Now let’s create a simple bar chart of students’ age</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a histogram of students age</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;hist&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Age Distribution of Students&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Age Distribution of Students&#39;}, ylabel=&#39;Frequency&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../../_images/f213bbc6322667cafba83d6b1312edc67c916942bc9b5ca6aea4f3d574d98190.png" src="../../../_images/f213bbc6322667cafba83d6b1312edc67c916942bc9b5ca6aea4f3d574d98190.png" />
+</div>
+</div>
+<p>Now it’s your turn</p>
+<ul class="simple">
+<li><p>Convert the <code class="docutils literal notranslate"><span class="pre">books</span></code> collection into a pd.Dataframe called <code class="docutils literal notranslate"><span class="pre">df_books</span></code></p></li>
+<li><p>Create a histogram of books’ prices</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert the `books` collection into a pd.Dataframe called `df_books`</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="c1"># BEGIN SOLUTION</span>
+<span class="n">cursor</span> <span class="o">=</span> <span class="n">books</span><span class="o">.</span><span class="n">find</span><span class="p">()</span>
+<span class="n">books_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+<span class="n">df_books</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">books_data</span><span class="p">)</span>
+<span class="n">df_books</span>
+<span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>_id</th>
+      <th>title</th>
+      <th>author</th>
+      <th>published_year</th>
+      <th>isbn</th>
+      <th>price</th>
+      <th>publisher</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>66e89549c48457d8d5b1264a</td>
+      <td>1984</td>
+      <td>George Orwell</td>
+      <td>1949</td>
+      <td>978-0-452-28423-4</td>
+      <td>8.99</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>66e89549c48457d8d5b1264b</td>
+      <td>Pride and Prejudice</td>
+      <td>Jane Austen</td>
+      <td>1813</td>
+      <td>978-0-19-953556-9</td>
+      <td>12.99</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>66e89549c48457d8d5b1264d</td>
+      <td>Moby-Dick</td>
+      <td>Herman Melville</td>
+      <td>1851</td>
+      <td>978-0-14-243724-7</td>
+      <td>11.99</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>66e89549c48457d8d5b1264e</td>
+      <td>War and Peace</td>
+      <td>Leo Tolstoy</td>
+      <td>1869</td>
+      <td>978-0-14-044793-4</td>
+      <td>14.99</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>66e89549c48457d8d5b12651</td>
+      <td>Fahrenheit 451</td>
+      <td>Ray Bradbury</td>
+      <td>1953</td>
+      <td>978-0-7432-4722-2</td>
+      <td>9.49</td>
+      <td>Penguin Books</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>66e89549c48457d8d5b12652</td>
+      <td>Jane Eyre</td>
+      <td>Charlotte Brontë</td>
+      <td>1847</td>
+      <td>978-0-14-243720-9</td>
+      <td>8.49</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>66e89710c48457d8d5b12666</td>
+      <td>1984</td>
+      <td>George Orwell</td>
+      <td>1949</td>
+      <td>978-0-452-28423-4</td>
+      <td>8.99</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>66e89710c48457d8d5b12667</td>
+      <td>Pride and Prejudice</td>
+      <td>Jane Austen</td>
+      <td>1813</td>
+      <td>978-0-19-953556-9</td>
+      <td>12.99</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>66e89710c48457d8d5b12669</td>
+      <td>Moby-Dick</td>
+      <td>Herman Melville</td>
+      <td>1851</td>
+      <td>978-0-14-243724-7</td>
+      <td>11.99</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>66e89710c48457d8d5b1266a</td>
+      <td>War and Peace</td>
+      <td>Leo Tolstoy</td>
+      <td>1869</td>
+      <td>978-0-14-044793-4</td>
+      <td>14.99</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>66e89710c48457d8d5b1266d</td>
+      <td>Fahrenheit 451</td>
+      <td>Ray Bradbury</td>
+      <td>1953</td>
+      <td>978-0-7432-4722-2</td>
+      <td>9.49</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>66e89710c48457d8d5b1266e</td>
+      <td>Jane Eyre</td>
+      <td>Charlotte Brontë</td>
+      <td>1847</td>
+      <td>978-0-14-243720-9</td>
+      <td>8.49</td>
+      <td>Unknown</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># visualize the distribution of book prices</span>
+<span class="n">df_books</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;hist&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Price Distribution of Books&#39;</span><span class="p">)</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Price Distribution of Books&#39;}, ylabel=&#39;Frequency&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../../_images/a75d8a21bc9a9a7557a8587f3b1f628f7d8998b9e262f15b12288e3977ce7481.png" src="../../../_images/a75d8a21bc9a9a7557a8587f3b1f628f7d8998b9e262f15b12288e3977ce7481.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># assert the dataframe was created</span>
+<span class="k">assert</span> <span class="n">df_books</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;df_books does not exist&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># assert the dataframe has the correct columns</span>
+<span class="k">assert</span> <span class="s2">&quot;title&quot;</span> <span class="ow">in</span> <span class="n">df_books</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;title column is missing&quot;</span>
+<span class="k">assert</span> <span class="s2">&quot;author&quot;</span> <span class="ow">in</span> <span class="n">df_books</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;author column is missing&quot;</span>
+<span class="k">assert</span> <span class="s2">&quot;price&quot;</span> <span class="ow">in</span> <span class="n">df_books</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;price column is missing&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="submission-instructions">
+<h2>Submission instructions<a class="headerlink" href="#submission-instructions" title="Link to this heading">#</a></h2>
+<p>{rubric: mechanics = 5}</p>
+<ul class="simple">
+<li><p>Make sure the notebook can run from top to bottom without any error. Restart the kernel and run all cells.</p></li>
+<li><p>Commit and push your notebook to the github repo</p></li>
+<li><p>Double check your notebook is rendered properly on Github and you can see all the outputs clearly</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./worksheets/source/worksheet3"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#establish-pymongo-connection">Establish Pymongo connection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodb-vscode-extension-optional">MongoDB VScode extension (optional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-import-data-into-mongodb">Exercise 1: Import data into MongoDB</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#your-turn">YOUR TURN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-from-json">1.2 Import from JSON</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-insert-update-new-field">Exercise 2: Insert &amp; update new field</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-replace">Exercise 3: Replace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-4-delete">Exercise 4: Delete</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-5-visualize">Exercise 5: Visualize</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission instructions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Quan Nguyen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

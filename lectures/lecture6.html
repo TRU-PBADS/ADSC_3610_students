@@ -1,0 +1,1013 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Lecture 6: CRUD operations in MongoDB &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture6';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation instruction for macOS" href="../installation_mac.html" />
+    <link rel="prev" title="Lecture 5: Schema design patterns in MongoDB" href="lecture5.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/TRU_Logo.png" class="logo__image only-light" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>
+    <script>document.write(`<img src="../_static/TRU_Logo.png" class="logo__image only-dark" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../syllabus.html">
+                    ADSC 3610 - Database Systems in Applied Data Science II - Syllabus
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 6: CRUD operations in MongoDB</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation_mac.html">Installation instruction for macOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation_windows.html">Installation instruction for Windows</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/lectures/lecture6.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 6: CRUD operations in MongoDB</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-notes">Lecture Notes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#find-read">1. Find (Read)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#syntax">Syntax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#insert-create">2. Insert (Create)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Syntax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#update">3. Update</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Syntax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delete">4. Delete</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Syntax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operators">5. Operators</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#common-operators">Common Operators</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supplemental-materials">Supplemental materials</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-6-crud-operations-in-mongodb">
+<h1>Lecture 6: CRUD operations in MongoDB<a class="headerlink" href="#lecture-6-crud-operations-in-mongodb" title="Link to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this lecture, students should understand:</p>
+<ul class="simple">
+<li><p>Describe the use cases for the MongoDB Query Language (MQL).</p></li>
+<li><p>Perform basic CRUD operations using MQL.</p></li>
+<li><p>Execute queries using MQL find() and delete().</p></li>
+<li><p>Use the most common MQL query operators to optimize searches.</p></li>
+</ul>
+</section>
+<section id="lecture-notes">
+<h2>Lecture Notes<a class="headerlink" href="#lecture-notes" title="Link to this heading">#</a></h2>
+<section id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h3>
+<p>CRUD operations are the basic operations you can perform on a database. CRUD stands for Create, Read, Update, and Delete. In MongoDB, these operations can be performed using various methods provided by the PyMongo library.</p>
+<p>MQL is designed for single collection queries and it is typically used for creating, reading, updating, or deletion (CRUD) operations.</p>
+<p>MQL query operators:</p>
+<ul class="simple">
+<li><p>Comparison</p></li>
+<li><p>Logical</p></li>
+<li><p>Element</p></li>
+<li><p>Array</p></li>
+<li><p>Evaluation</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span> <span class="c1"># import mongo client to connect</span>
+<span class="kn">import</span> <span class="nn">json</span> <span class="c1"># import json to load credentials</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+
+<span class="c1"># load credentials from json file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;credentials_mongodb.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># assign credentials to variables</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;mongodb+srv://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">/?retryWrites=true&amp;w=majority&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+
+<span class="c1"># connect to the database</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="c1"># drop database books and students if they exist</span>
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;library&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="find-read">
+<h3>1. Find (Read)<a class="headerlink" href="#find-read" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">find</span></code> method is used to query documents from a collection.</p>
+<section id="syntax">
+<h4>Syntax<a class="headerlink" href="#syntax" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">projection</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">projection</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;query&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">query</span></code>: A dictionary specifying the criteria for the query.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">projection</span></code>: A dictionary specifying the fields to include or exclude.</p></li>
+</ul>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create database and collection</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">]</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;books&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># add sample books to the collection</span>
+<span class="n">sample_books</span> <span class="o">=</span> <span class="p">[</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Great Gatsby&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;F. Scott Fitzgerald&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1925</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;A Farewell to Arms&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Ernest Hemingway&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1929</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Catcher in the Rye&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;J.D. Salinger&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1951</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Grapes of Wrath&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;John Steinbeck&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1939</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;To Kill a Mockingbird&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Harper Lee&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1960</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1949</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Animal Farm&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1945</span><span class="p">}]</span>
+
+<span class="c1"># insert sample books to the collection</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">sample_books</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), ObjectId(&#39;66e8a0597a895c83fa099dea&#39;), ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), ObjectId(&#39;66e8a0597a895c83fa099ded&#39;)], acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find all documents, this will return a cursor</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pymongo.cursor.Cursor at 0x118046a50&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all documents</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dea&#39;), &#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099ded&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find documents with a specific condition</span>
+<span class="n">specific_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1950</span><span class="p">}})</span>
+
+<span class="c1"># Print the results</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">specific_books</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="insert-create">
+<h3>2. Insert (Create)<a class="headerlink" href="#insert-create" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">insert_one</span></code> and <code class="docutils literal notranslate"><span class="pre">insert_many</span></code> methods are used to insert documents into a collection.</p>
+<section id="id1">
+<h4>Syntax<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">document</span></code>: A dictionary representing a single document.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documents</span></code>: A list of dictionaries representing multiple documents.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h4>Example<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Insert a single document</span>
+<span class="n">new_book</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Brave New World&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Aldous Huxley&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;published_year&quot;</span><span class="p">:</span> <span class="mi">1932</span><span class="p">,</span>
+    <span class="s2">&quot;isbn&quot;</span><span class="p">:</span> <span class="s2">&quot;978-0-06-085052-4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">11.99</span>
+<span class="p">}</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">new_book</span><span class="p">)</span>
+
+<span class="c1"># Insert multiple documents</span>
+<span class="n">new_books</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Road&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Cormac McCarthy&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;published_year&quot;</span><span class="p">:</span> <span class="mi">2006</span><span class="p">,</span>
+        <span class="s2">&quot;isbn&quot;</span><span class="p">:</span> <span class="s2">&quot;978-0-307-38789-9&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">12.99</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Handmaid&#39;s Tale&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Margaret Atwood&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;published_year&quot;</span><span class="p">:</span> <span class="mi">1985</span><span class="p">,</span>
+        <span class="s2">&quot;isbn&quot;</span><span class="p">:</span> <span class="s2">&quot;978-0-385-49081-8&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">9.99</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">new_books</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), ObjectId(&#39;66e8a05d7a895c83fa099df0&#39;)], acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check if the documents were inserted</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dea&#39;), &#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099ded&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099dee&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099df0&#39;), &#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="update">
+<h3>3. Update<a class="headerlink" href="#update" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">update_one</span></code> and <code class="docutils literal notranslate"><span class="pre">update_many</span></code> methods are used to update documents in a collection.</p>
+<section id="id3">
+<h4>Syntax<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">update</span><span class="p">)</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">update_many</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">update</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">filter</span></code>: A dictionary specifying the criteria for the update.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code>: A dictionary specifying the fields to update.</p></li>
+</ul>
+</section>
+<section id="id4">
+<h4>Example<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update a single document</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">8.49</span><span class="p">}}</span>
+<span class="p">)</span>
+
+<span class="c1"># Update multiple documents</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">update_many</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;genre&quot;</span><span class="p">:</span> <span class="s2">&quot;Dystopian&quot;</span><span class="p">}}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 2, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726521489, 8), &#39;t&#39;: 203}, &#39;nModified&#39;: 2, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726521489, 8), &#39;signature&#39;: {&#39;hash&#39;: b&quot;\x17A\xc4dRGQ\xf9^0\xc8&#39;\xeb?\xfcZ\x8d:3\xec&quot;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726521489, 8), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check if the documents were updated</span>
+<span class="c1"># print book with title &quot;1984&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949, &#39;price&#39;: 8.49, &#39;genre&#39;: &#39;Dystopian&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all books with author &quot;George Orwell&quot;</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949, &#39;price&#39;: 8.49, &#39;genre&#39;: &#39;Dystopian&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099ded&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945, &#39;genre&#39;: &#39;Dystopian&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="delete">
+<h3>4. Delete<a class="headerlink" href="#delete" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">delete_one</span></code> and <code class="docutils literal notranslate"><span class="pre">delete_many</span></code> methods are used to delete documents from a collection.</p>
+<section id="id5">
+<h4>Syntax<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">delete_one</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">delete_many</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">filter</span></code>: A dictionary specifying the criteria for the deletion.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h4>Example<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete a single document</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">delete_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">})</span>
+
+<span class="c1"># Delete multiple documents</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">delete_many</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DeleteResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726521551, 13), &#39;t&#39;: 203}, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726521551, 13), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\x91\x05\x8c7\x8a\xba\x88\xf3\xb2\xef,\x8f8\x91\xab\xb6\x1aD\x0fD&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726521551, 13)}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check if the documents were deleted</span>
+<span class="c1"># print book with title &quot;1984&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>None
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all books with author &quot;George Orwell&quot;</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="operators">
+<h3>5. Operators<a class="headerlink" href="#operators" title="Link to this heading">#</a></h3>
+<p>MongoDB provides various operators to perform complex queries and updates.</p>
+<section id="common-operators">
+<h4>Common Operators<a class="headerlink" href="#common-operators" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$gt</span></code>: Greater than</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$lt</span></code>: Less than</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$gte</span></code>: Greater than or equal to</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$lte</span></code>: Less than or equal to</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$eq</span></code>: Equal to</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$ne</span></code>: Not equal to</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$in</span></code>: In a list</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$nin</span></code>: Not in a list</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$set</span></code>: Set a field to a value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$unset</span></code>: Remove a field</p></li>
+</ul>
+</section>
+<section id="id7">
+<h4>Example<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all documents</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dea&#39;), &#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099dee&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099df0&#39;), &#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find documents with price greater than 10</span>
+<span class="n">expensive_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}})</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">expensive_books</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099dee&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete documents where author starts with &quot;J&quot;</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">delete_many</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$regex&quot;</span><span class="p">:</span> <span class="s2">&quot;^J&quot;</span><span class="p">}})</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099dee&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099df0&#39;), &#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show documents where year is between 1920 and 1930</span>
+<span class="n">books_between_1930_and_1950</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gte&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">,</span> <span class="s2">&quot;$lte&quot;</span><span class="p">:</span> <span class="mi">1930</span><span class="p">}})</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">books_between_1930_and_1950</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion">
+<h3>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h3>
+<p>These are the basic CRUD operations you can perform on a MongoDB database using PyMongo. Understanding these operations is essential for managing and manipulating data in MongoDB.</p>
+</section>
+</section>
+<section id="supplemental-materials">
+<h2>Supplemental materials<a class="headerlink" href="#supplemental-materials" title="Link to this heading">#</a></h2>
+<p>Read more here: https://www.mongodb.com/docs/manual/crud/</p>
+<p><img alt="" src="https://media.cheatography.com/storage/thumb/isaeus_mongodb.750.jpg" /></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./lectures"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lecture5.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 5: Schema design patterns in MongoDB</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../installation_mac.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Installation instruction for macOS</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-notes">Lecture Notes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#find-read">1. Find (Read)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#syntax">Syntax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#insert-create">2. Insert (Create)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Syntax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#update">3. Update</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Syntax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delete">4. Delete</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Syntax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operators">5. Operators</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#common-operators">Common Operators</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supplemental-materials">Supplemental materials</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Quan Nguyen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
