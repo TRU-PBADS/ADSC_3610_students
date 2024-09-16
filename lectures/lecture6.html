@@ -434,22 +434,6 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
-<section id="find-read">
-<h3>1. Find (Read)<a class="headerlink" href="#find-read" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">find</span></code> method is used to query documents from a collection.</p>
-<section id="syntax">
-<h4>Syntax<a class="headerlink" href="#syntax" title="Link to this heading">#</a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">projection</span><span class="p">)</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">query</span></code>: A dictionary specifying the criteria for the query.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">projection</span></code>: A dictionary specifying the fields to include or exclude.</p></li>
-</ul>
-</section>
-<section id="example">
-<h4>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create database and collection</span>
@@ -481,6 +465,22 @@ document.write(`
 </div>
 </div>
 </div>
+</section>
+<section id="find-read">
+<h3>1. Find (Read)<a class="headerlink" href="#find-read" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">find</span></code> method is used to query documents from a collection.</p>
+<section id="syntax">
+<h4>Syntax<a class="headerlink" href="#syntax" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">projection</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">query</span></code>: A dictionary specifying the criteria for the query.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">projection</span></code>: A dictionary specifying the fields to include or exclude.</p></li>
+</ul>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find all documents, this will return a cursor</span>
@@ -516,8 +516,27 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all documents without _id</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+{&#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find documents with a specific condition</span>
-<span class="n">specific_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1950</span><span class="p">}})</span>
+<span class="n">specific_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">}})</span>
 
 <span class="c1"># Print the results</span>
 <span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">specific_books</span><span class="p">:</span>
@@ -526,8 +545,28 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
 {&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find documents with a specific condition, and return only the title</span>
+<span class="n">specific_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">}},</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+
+<span class="c1"># Print the results</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">specific_books</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;The Great Gatsby&#39;}
+{&#39;title&#39;: &#39;A Farewell to Arms&#39;}
+{&#39;title&#39;: &#39;To Kill a Mockingbird&#39;}
 </pre></div>
 </div>
 </div>
