@@ -348,7 +348,8 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregation-pipeline">Aggregation Pipeline</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-syntax">General Syntax</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-stages">Common Stages</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pipeline">Example Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pipeline">Example Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-mongodb-stages">Explanation of MongoDB Stages</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-aggregation-operators">Key Aggregation Operators</a></li>
 </ul>
 </li>
@@ -571,6 +572,44 @@ document.write(`
 </div>
 </div>
 </div>
+<p>Here is a table comparing SQL clauses (<code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, <code class="docutils literal notranslate"><span class="pre">WHERE</span></code>, <code class="docutils literal notranslate"><span class="pre">GROUP</span> <span class="pre">BY</span></code>, <code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span></code>) with their MongoDB aggregation framework equivalents.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>SQL Clause</strong></p></th>
+<th class="head"><p><strong>MongoDB Aggregation Stage</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SELECT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$project</span></code></p></td>
+<td><p>Specifies the fields to include or exclude in the output documents.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WHERE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$match</span></code></p></td>
+<td><p>Filters the documents to pass only those that match the specified condition(s).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GROUP</span> <span class="pre">BY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$group</span></code></p></td>
+<td><p>Groups input documents by a specified identifier expression and applies the accumulator expressions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$sort</span></code></p></td>
+<td><p>Sorts all input documents and returns them in the specified order.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="explanation-of-mongodb-stages">
+<h3>Explanation of MongoDB Stages<a class="headerlink" href="#explanation-of-mongodb-stages" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>$match</strong>: Filters documents where <code class="docutils literal notranslate"><span class="pre">grades.score</span></code> is greater than 20.</p></li>
+<li><p><strong>$group</strong>: Groups documents by <code class="docutils literal notranslate"><span class="pre">cuisine</span></code> and calculates the average <code class="docutils literal notranslate"><span class="pre">grades.score</span></code> for each group.</p></li>
+<li><p><strong>$sort</strong>: Sorts the grouped documents by <code class="docutils literal notranslate"><span class="pre">averageScore</span></code> in descending order.</p></li>
+<li><p><strong>$project</strong>: Projects the <code class="docutils literal notranslate"><span class="pre">cuisine</span></code> and <code class="docutils literal notranslate"><span class="pre">averageScore</span></code> fields, excluding the <code class="docutils literal notranslate"><span class="pre">_id</span></code> field.</p></li>
+</ul>
+<p>This table and example illustrate how common SQL clauses map to MongoDB aggregation stages, helping to understand the similarities and differences between SQL and MongoDB queries.</p>
 <p>This pipeline demonstrates how to use multiple stages to filter, group, sort, and project documents in MongoDB using the aggregation framework.</p>
 <section id="key-aggregation-operators">
 <h4>Key Aggregation Operators<a class="headerlink" href="#key-aggregation-operators" title="Link to this heading">#</a></h4>
@@ -1381,7 +1420,8 @@ Find the top 2 authors with the most books, sorted by the number of books in des
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregation-pipeline">Aggregation Pipeline</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-syntax">General Syntax</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-stages">Common Stages</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pipeline">Example Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pipeline">Example Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-mongodb-stages">Explanation of MongoDB Stages</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-aggregation-operators">Key Aggregation Operators</a></li>
 </ul>
 </li>
