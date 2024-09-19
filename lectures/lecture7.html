@@ -1,0 +1,1462 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Lecture 7: Aggregation operations in MongoDB &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture7';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation instruction for macOS" href="../installation_mac.html" />
+    <link rel="prev" title="Lecture 6: CRUD operations in MongoDB" href="lecture6.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/TRU_Logo.png" class="logo__image only-light" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>
+    <script>document.write(`<img src="../_static/TRU_Logo.png" class="logo__image only-dark" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../syllabus.html">
+                    ADSC 3610 - Database Systems in Applied Data Science II - Syllabus
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture6.html">Lecture 6: CRUD operations in MongoDB</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 7: Aggregation operations in MongoDB</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation_mac.html">Installation instruction for macOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation_windows.html">Installation instruction for Windows</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/lectures/lecture7.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 7: Aggregation operations in MongoDB</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodb-aggregation-using-pymongo-with-book-data">MongoDB Aggregation using PyMongo with Book Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregation-pipeline">Aggregation Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-syntax">General Syntax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-stages">Common Stages</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pipeline">Example Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-aggregation-operators">Key Aggregation Operators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#match">1. $match</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#group">2. $group</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation">Explanation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort">3. $sort</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#project">4. $project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combining-stages-into-a-pipeline">Combining stages into a pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practice-exercises">Practice exercises</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-count-restaurants-by-borough">Exercise 1: Count Restaurants by Borough</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-find-the-top-3-cuisines-with-the-most-restaurants">Exercise 2: Find the Top 3 Cuisines with the Most Restaurants</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-code">Example Code</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supplemental-materials">Supplemental materials</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-7-aggregation-operations-in-mongodb">
+<h1>Lecture 7: Aggregation operations in MongoDB<a class="headerlink" href="#lecture-7-aggregation-operations-in-mongodb" title="Link to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this lecture, students should understand:</p>
+<ul class="simple">
+<li><p>Describe the use cases for the MongoDB Query Language (MQL).</p></li>
+<li><p>Perform basic CRUD operations using MQL.</p></li>
+<li><p>Execute queries using MQL find() and delete().</p></li>
+<li><p>Use the most common MQL query operators to optimize searches.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span> <span class="c1"># import mongo client to connect</span>
+<span class="kn">import</span> <span class="nn">json</span> <span class="c1"># import json to load credentials</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+
+<span class="c1"># load credentials from json file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;credentials_mongodb.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># assign credentials to variables</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;mongodb+srv://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">/?retryWrites=true&amp;w=majority&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+
+<span class="c1"># connect to the database</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="c1"># drop database books and students if they exist</span>
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;library&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create database and collection</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">]</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;books&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample book data</span>
+<span class="n">sample_books</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;To Kill a Mockingbird&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Harper Lee&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">281</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1960</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Go Set a Watchman&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Harper Lee&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">278</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">2015</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Mockingbird Songs: My Friendship with Harper Lee&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Harper Lee&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">288</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">2017</span><span class="p">},</span>
+    
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">328</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1949</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Animal Farm&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">112</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1945</span><span class="p">},</span>
+    
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pride and Prejudice&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Jane Austen&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">279</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1813</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Sense and Sensibility&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Jane Austen&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">226</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1811</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Emma&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Jane Austen&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">474</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1815</span><span class="p">},</span>
+    
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Great Gatsby&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;F. Scott Fitzgerald&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">180</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1925</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Tender Is the Night&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;F. Scott Fitzgerald&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">317</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1934</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;This Side of Paradise&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;F. Scott Fitzgerald&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">305</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">},</span>
+    
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Bartleby, the Scrivener&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Herman Melville&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1853</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Billy Budd, Sailor&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Herman Melville&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="mi">192</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1924</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># Insert sample data</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">sample_books</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66eb9baaddbe7989b91b279a&#39;), ObjectId(&#39;66eb9baaddbe7989b91b279b&#39;), ObjectId(&#39;66eb9baaddbe7989b91b279c&#39;), ObjectId(&#39;66eb9baaddbe7989b91b279d&#39;), ObjectId(&#39;66eb9baaddbe7989b91b279e&#39;), ObjectId(&#39;66eb9baaddbe7989b91b279f&#39;), ObjectId(&#39;66eb9baaddbe7989b91b27a0&#39;), ObjectId(&#39;66eb9baaddbe7989b91b27a1&#39;), ObjectId(&#39;66eb9baaddbe7989b91b27a2&#39;), ObjectId(&#39;66eb9baaddbe7989b91b27a3&#39;), ObjectId(&#39;66eb9baaddbe7989b91b27a4&#39;), ObjectId(&#39;66eb9baaddbe7989b91b27a5&#39;), ObjectId(&#39;66eb9baaddbe7989b91b27a6&#39;)], acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="mongodb-aggregation-using-pymongo-with-book-data">
+<h2>MongoDB Aggregation using PyMongo with Book Data<a class="headerlink" href="#mongodb-aggregation-using-pymongo-with-book-data" title="Link to this heading">#</a></h2>
+<section id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h3>
+<p>MongoDB’s aggregation framework is a powerful tool for performing data processing and analysis directly within the database. It allows you to transform and combine documents in a collection to produce aggregated results. PyMongo, the Python driver for MongoDB, provides a way to interact with MongoDB’s aggregation framework.</p>
+</section>
+<section id="aggregation-pipeline">
+<h3>Aggregation Pipeline<a class="headerlink" href="#aggregation-pipeline" title="Link to this heading">#</a></h3>
+<p>The aggregation pipeline is a framework for data aggregation modeled on the concept of data processing pipelines. Documents enter a multi-stage pipeline that transforms the documents into aggregated results.</p>
+<p><img alt="" src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*NOEORMhph8Nfu1F4patM3A.png" /></p>
+<p>The syntax for an aggregation pipeline in MongoDB is a sequence of stages, where each stage transforms the documents as they pass through the pipeline. Each stage is represented as a document in an array, and the stages are processed in the order they appear.</p>
+</section>
+<section id="general-syntax">
+<h3>General Syntax<a class="headerlink" href="#general-syntax" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span> <span class="o">&lt;</span><span class="n">stage1</span><span class="o">&gt;</span><span class="p">:</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">stage</span><span class="o">-</span><span class="n">specific</span><span class="o">-</span><span class="n">operator1</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">expression1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="o">&lt;</span><span class="n">stage2</span><span class="o">&gt;</span><span class="p">:</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">stage</span><span class="o">-</span><span class="n">specific</span><span class="o">-</span><span class="n">operator2</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">expression2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="common-stages">
+<h3>Common Stages<a class="headerlink" href="#common-stages" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>$match</strong>: Filters documents.</p></li>
+<li><p><strong>$group</strong>: Groups documents by a specified key.</p></li>
+<li><p><strong>$sort</strong>: Sorts documents.</p></li>
+<li><p><strong>$project</strong>: Reshapes documents by including, excluding, or adding fields.</p></li>
+<li><p><strong>$limit</strong>: Limits the number of documents.</p></li>
+<li><p><strong>$skip</strong>: Skips a specified number of documents.</p></li>
+<li><p><strong>$unwind</strong>: Deconstructs an array field from the input documents to output a document for each element.</p></li>
+</ol>
+</section>
+<section id="example-pipeline">
+<h3>Example Pipeline<a class="headerlink" href="#example-pipeline" title="Link to this heading">#</a></h3>
+<p>Let’s create an example pipeline that:</p>
+<ol class="arabic simple">
+<li><p>Filters books with more than 150 pages.</p></li>
+<li><p>Groups the books by author and calculates the total number of pages for each author.</p></li>
+<li><p>Sorts the authors by the total number of pages in descending order.</p></li>
+<li><p>Projects the author and total pages fields, excluding the <code class="docutils literal notranslate"><span class="pre">_id</span></code> field.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define each stage separately</span>
+<span class="n">match_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$match&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">150</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">group_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$author&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;totalPages&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="s2">&quot;$pages&quot;</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">sort_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;totalPages&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">project_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;$_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;totalPages&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># Combine stages into a pipeline</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">match_stage</span><span class="p">,</span>
+    <span class="n">group_stage</span><span class="p">,</span>
+    <span class="n">sort_stage</span><span class="p">,</span>
+    <span class="n">project_stage</span>
+<span class="p">]</span>
+
+<span class="c1"># Execute the pipeline</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;totalPages&#39;: 979, &#39;author&#39;: &#39;Jane Austen&#39;}
+{&#39;totalPages&#39;: 847, &#39;author&#39;: &#39;Harper Lee&#39;}
+{&#39;totalPages&#39;: 802, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;}
+{&#39;totalPages&#39;: 328, &#39;author&#39;: &#39;George Orwell&#39;}
+{&#39;totalPages&#39;: 192, &#39;author&#39;: &#39;Herman Melville&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>This pipeline demonstrates how to use multiple stages to filter, group, sort, and project documents in MongoDB using the aggregation framework.</p>
+<section id="key-aggregation-operators">
+<h4>Key Aggregation Operators<a class="headerlink" href="#key-aggregation-operators" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>$match</strong></p></li>
+<li><p><strong>$group</strong></p></li>
+<li><p><strong>$sort</strong></p></li>
+<li><p><strong>$project</strong></p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="match">
+<h2>1. $match<a class="headerlink" href="#match" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">$match</span></code> stage filters documents to pass only the documents that match the specified condition(s) to the next pipeline stage.</p>
+<p><strong>Syntax:</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;$match&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">query</span><span class="o">&gt;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example:</strong>
+Filter books that have more than 250 pages.</p>
+<p>First, recall that we could use the <code class="docutils literal notranslate"><span class="pre">find()</span></code> function to filter the data, as shown in the previous lecture</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">250</span><span class="p">}}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279a&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 281, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279b&#39;), &#39;title&#39;: &#39;Go Set a Watchman&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 278, &#39;year&#39;: 2015}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279c&#39;), &#39;title&#39;: &#39;Mockingbird Songs: My Friendship with Harper Lee&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 288, &#39;year&#39;: 2017}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279d&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;pages&#39;: 328, &#39;year&#39;: 1949}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279f&#39;), &#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;pages&#39;: 279, &#39;year&#39;: 1813}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a1&#39;), &#39;title&#39;: &#39;Emma&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;pages&#39;: 474, &#39;year&#39;: 1815}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a3&#39;), &#39;title&#39;: &#39;Tender Is the Night&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;pages&#39;: 317, &#39;year&#39;: 1934}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a4&#39;), &#39;title&#39;: &#39;This Side of Paradise&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;pages&#39;: 305, &#39;year&#39;: 1920}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let’s use the <code class="docutils literal notranslate"><span class="pre">$match</span></code> method, to be used within an aggregation pipeline</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$match&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">250</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279a&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 281, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279b&#39;), &#39;title&#39;: &#39;Go Set a Watchman&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 278, &#39;year&#39;: 2015}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279c&#39;), &#39;title&#39;: &#39;Mockingbird Songs: My Friendship with Harper Lee&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 288, &#39;year&#39;: 2017}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279d&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;pages&#39;: 328, &#39;year&#39;: 1949}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279f&#39;), &#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;pages&#39;: 279, &#39;year&#39;: 1813}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a1&#39;), &#39;title&#39;: &#39;Emma&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;pages&#39;: 474, &#39;year&#39;: 1815}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a3&#39;), &#39;title&#39;: &#39;Tender Is the Night&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;pages&#39;: 317, &#39;year&#39;: 1934}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a4&#39;), &#39;title&#39;: &#39;This Side of Paradise&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;pages&#39;: 305, &#39;year&#39;: 1920}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The primary difference between <code class="docutils literal notranslate"><span class="pre">find</span></code> and <code class="docutils literal notranslate"><span class="pre">$match</span></code> in MongoDB lies in their usage and context within the MongoDB query language:</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">find</span></code></strong></p>
+<ul>
+<li><p><strong>Context</strong>: Used as a standalone query method.</p></li>
+<li><p><strong>Purpose</strong>: Retrieves documents from a collection that match the specified query criteria.</p></li>
+<li><p><strong>Usage</strong>: Directly used on a collection to fetch documents.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">250</span><span class="p">}})</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong><code class="docutils literal notranslate"><span class="pre">$match</span></code></strong></p>
+<ul>
+<li><p><strong>Context</strong>: Used within an aggregation pipeline.</p></li>
+<li><p><strong>Purpose</strong>: Filters documents to pass only those that match the specified condition(s) to the next stage in the pipeline.</p></li>
+<li><p><strong>Usage</strong>: Part of the aggregation framework, typically used in conjunction with other stages like <code class="docutils literal notranslate"><span class="pre">$group</span></code>, <code class="docutils literal notranslate"><span class="pre">$sort</span></code>, <code class="docutils literal notranslate"><span class="pre">$project</span></code>, etc.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;$match&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">250</span><span class="p">}}}</span>
+<span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+
+</pre></div>
+</div>
+</li>
+</ul>
+<p>In summary, use <code class="docutils literal notranslate"><span class="pre">find</span></code> for straightforward document retrieval and <code class="docutils literal notranslate"><span class="pre">$match</span></code> within an aggregation pipeline for more complex data processing tasks.</p>
+</div>
+</section>
+<section id="group">
+<h2>2. $group<a class="headerlink" href="#group" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">$group</span></code> stage groups input documents by the specified <code class="docutils literal notranslate"><span class="pre">_id</span></code> expression and for each distinct grouping, outputs a document. The output documents can also contain computed fields that hold the values of some accumulator expressions.</p>
+<p><strong>Syntax:</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="o">&lt;</span><span class="n">field1</span><span class="o">&gt;</span><span class="p">:</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">accumulator1</span><span class="o">&gt;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">expression1</span><span class="o">&gt;</span> <span class="p">},</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="explanation">
+<h3>Explanation<a class="headerlink" href="#explanation" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">$group</span></code></strong>: This is the stage operator that specifies the grouping operation.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">_id</span></code></strong>: This field specifies the key by which to group the documents. The value of <code class="docutils literal notranslate"><span class="pre">_id</span></code> can be any valid expression that resolves to a value. Documents with the same <code class="docutils literal notranslate"><span class="pre">_id</span></code> value are grouped together. If you want to group all documents together, you can set <code class="docutils literal notranslate"><span class="pre">_id</span></code> to <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">&lt;field1&gt;</span></code></strong>: This is the name of the field in the output documents that will hold the result of the aggregation. You can specify multiple fields to perform different aggregations on the grouped data.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">&lt;accumulator1&gt;</span></code></strong>: This specifies the accumulator operator to use for the aggregation. Common accumulator operators include:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">$sum</span></code>: Calculates the sum of numeric values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$avg</span></code>: Calculates the average of numeric values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$min</span></code>: Finds the minimum value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$max</span></code>: Finds the maximum value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$push</span></code>: Appends values to an array.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$addToSet</span></code>: Adds values to an array, but only unique values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$first</span></code>: Returns the first value in a group.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$last</span></code>: Returns the last value in a group.</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">&lt;expression1&gt;</span></code></strong>: This is the expression that specifies the field or value to be aggregated. It can be a field path, a constant value, or a more complex expression.</p></li>
+</ul>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p>Let’s consider an example where we group books by their author and calculate the total number of pages for each author.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$author&quot;</span><span class="p">,</span>  <span class="c1"># Group by author</span>
+            <span class="s2">&quot;totalPages&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="s2">&quot;$pages&quot;</span> <span class="p">}</span>  <span class="c1"># Calculate the sum of pages for each author</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Herman Melville&#39;, &#39;totalPages&#39;: 256}
+{&#39;_id&#39;: &#39;George Orwell&#39;, &#39;totalPages&#39;: 440}
+{&#39;_id&#39;: &#39;Jane Austen&#39;, &#39;totalPages&#39;: 979}
+{&#39;_id&#39;: &#39;Harper Lee&#39;, &#39;totalPages&#39;: 847}
+{&#39;_id&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;totalPages&#39;: 802}
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_id</span></code>is set to <code class="docutils literal notranslate"><span class="pre">$author</span></code>, so the documents are grouped by the <code class="docutils literal notranslate"><span class="pre">author</span></code> field.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">totalPages</span></code> is the name of the field in the output documents.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;$sum&quot;:</span> <span class="pre">&quot;$pages&quot;</span> <span class="pre">}</span></code> specifies that the <code class="docutils literal notranslate"><span class="pre">totalPages</span></code> field should contain the sum of the <code class="docutils literal notranslate"><span class="pre">pages</span></code> field for each group.</p></li>
+</ul>
+<p><strong>Example:</strong>
+Group books by author to:</p>
+<ul class="simple">
+<li><p>count the number of books for each author</p></li>
+<li><p>determine the earliest publication year</p></li>
+<li><p>determine the latest publication year.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$author&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">},</span>
+            <span class="s2">&quot;min_year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$min&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span> <span class="p">},</span>
+            <span class="s2">&quot;max_year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$max&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Herman Melville&#39;, &#39;count&#39;: 2, &#39;min_year&#39;: 1853, &#39;max_year&#39;: 1924}
+{&#39;_id&#39;: &#39;Harper Lee&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1960, &#39;max_year&#39;: 2017}
+{&#39;_id&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1920, &#39;max_year&#39;: 1934}
+{&#39;_id&#39;: &#39;Jane Austen&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1811, &#39;max_year&#39;: 1815}
+{&#39;_id&#39;: &#39;George Orwell&#39;, &#39;count&#39;: 2, &#39;min_year&#39;: 1945, &#39;max_year&#39;: 1949}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sort">
+<h2>3. $sort<a class="headerlink" href="#sort" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">$sort</span></code> stage sorts all input documents and returns them to the pipeline in sorted order.</p>
+<p><strong>Syntax:</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">field1</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">sort</span> <span class="n">order</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">field2</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">sort</span> <span class="n">order</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example:</strong>
+Sort books by the number of pages in descending order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a1&#39;), &#39;title&#39;: &#39;Emma&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;pages&#39;: 474, &#39;year&#39;: 1815}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279d&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;pages&#39;: 328, &#39;year&#39;: 1949}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a3&#39;), &#39;title&#39;: &#39;Tender Is the Night&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;pages&#39;: 317, &#39;year&#39;: 1934}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a4&#39;), &#39;title&#39;: &#39;This Side of Paradise&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;pages&#39;: 305, &#39;year&#39;: 1920}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279c&#39;), &#39;title&#39;: &#39;Mockingbird Songs: My Friendship with Harper Lee&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 288, &#39;year&#39;: 2017}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279a&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 281, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279f&#39;), &#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;pages&#39;: 279, &#39;year&#39;: 1813}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279b&#39;), &#39;title&#39;: &#39;Go Set a Watchman&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;pages&#39;: 278, &#39;year&#39;: 2015}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a0&#39;), &#39;title&#39;: &#39;Sense and Sensibility&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;pages&#39;: 226, &#39;year&#39;: 1811}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a6&#39;), &#39;title&#39;: &#39;Billy Budd, Sailor&#39;, &#39;author&#39;: &#39;Herman Melville&#39;, &#39;pages&#39;: 192, &#39;year&#39;: 1924}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a2&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;pages&#39;: 180, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b279e&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;pages&#39;: 112, &#39;year&#39;: 1945}
+{&#39;_id&#39;: ObjectId(&#39;66eb9baaddbe7989b91b27a5&#39;), &#39;title&#39;: &#39;Bartleby, the Scrivener&#39;, &#39;author&#39;: &#39;Herman Melville&#39;, &#39;pages&#39;: 64, &#39;year&#39;: 1853}
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example 1: Sort by Author Name in Ascending Order</strong></p>
+<p>Sort the grouped results by author name in ascending order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$author&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">},</span>
+            <span class="s2">&quot;min_year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$min&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span> <span class="p">},</span>
+            <span class="s2">&quot;max_year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$max&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">1</span>  <span class="c1"># Sort by author name in ascending order</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1920, &#39;max_year&#39;: 1934}
+{&#39;_id&#39;: &#39;George Orwell&#39;, &#39;count&#39;: 2, &#39;min_year&#39;: 1945, &#39;max_year&#39;: 1949}
+{&#39;_id&#39;: &#39;Harper Lee&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1960, &#39;max_year&#39;: 2017}
+{&#39;_id&#39;: &#39;Herman Melville&#39;, &#39;count&#39;: 2, &#39;min_year&#39;: 1853, &#39;max_year&#39;: 1924}
+{&#39;_id&#39;: &#39;Jane Austen&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1811, &#39;max_year&#39;: 1815}
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example 2: Sort by Count of Books in Descending Order</strong>
+Sort the grouped results by the count of books in descending order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$author&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">},</span>
+            <span class="s2">&quot;min_year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$min&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span> <span class="p">},</span>
+            <span class="s2">&quot;max_year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$max&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># Sort by count of books in descending order</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Harper Lee&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1960, &#39;max_year&#39;: 2017}
+{&#39;_id&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1920, &#39;max_year&#39;: 1934}
+{&#39;_id&#39;: &#39;Jane Austen&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1811, &#39;max_year&#39;: 1815}
+{&#39;_id&#39;: &#39;Herman Melville&#39;, &#39;count&#39;: 2, &#39;min_year&#39;: 1853, &#39;max_year&#39;: 1924}
+{&#39;_id&#39;: &#39;George Orwell&#39;, &#39;count&#39;: 2, &#39;min_year&#39;: 1945, &#39;max_year&#39;: 1949}
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example 3: Sort by Count of Books in Descending Order and then by Author Name in Ascending Order</strong></p>
+<p>Sort the grouped results first by the count of books in descending order, and then by author name in ascending order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$author&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">},</span>
+            <span class="s2">&quot;min_year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$min&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span> <span class="p">},</span>
+            <span class="s2">&quot;max_year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$max&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Sort by count of books in descending order</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">1</span>      <span class="c1"># Then sort by author name in ascending order</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1920, &#39;max_year&#39;: 1934}
+{&#39;_id&#39;: &#39;Harper Lee&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1960, &#39;max_year&#39;: 2017}
+{&#39;_id&#39;: &#39;Jane Austen&#39;, &#39;count&#39;: 3, &#39;min_year&#39;: 1811, &#39;max_year&#39;: 1815}
+{&#39;_id&#39;: &#39;George Orwell&#39;, &#39;count&#39;: 2, &#39;min_year&#39;: 1945, &#39;max_year&#39;: 1949}
+{&#39;_id&#39;: &#39;Herman Melville&#39;, &#39;count&#39;: 2, &#39;min_year&#39;: 1853, &#39;max_year&#39;: 1924}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="project">
+<h2>4. $project<a class="headerlink" href="#project" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">$project</span></code> stage reshapes each document in the stream, such as by adding new fields or removing existing fields.</p>
+<p><strong>Syntax:</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="o">&lt;</span><span class="n">field1</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">expression1</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="o">&lt;</span><span class="n">field2</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">expression2</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example:</strong>
+Project only the title and author fields of the books.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;}
+{&#39;title&#39;: &#39;Go Set a Watchman&#39;, &#39;author&#39;: &#39;Harper Lee&#39;}
+{&#39;title&#39;: &#39;Mockingbird Songs: My Friendship with Harper Lee&#39;, &#39;author&#39;: &#39;Harper Lee&#39;}
+{&#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;}
+{&#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;}
+{&#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;}
+{&#39;title&#39;: &#39;Sense and Sensibility&#39;, &#39;author&#39;: &#39;Jane Austen&#39;}
+{&#39;title&#39;: &#39;Emma&#39;, &#39;author&#39;: &#39;Jane Austen&#39;}
+{&#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;}
+{&#39;title&#39;: &#39;Tender Is the Night&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;}
+{&#39;title&#39;: &#39;This Side of Paradise&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;}
+{&#39;title&#39;: &#39;Bartleby, the Scrivener&#39;, &#39;author&#39;: &#39;Herman Melville&#39;}
+{&#39;title&#39;: &#39;Billy Budd, Sailor&#39;, &#39;author&#39;: &#39;Herman Melville&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="combining-stages-into-a-pipeline">
+<h2>Combining stages into a pipeline<a class="headerlink" href="#combining-stages-into-a-pipeline" title="Link to this heading">#</a></h2>
+<p>You can combine multiple stages to form a more complex aggregation pipeline.</p>
+<p><strong>Example:</strong>
+Find the top 2 authors with the most books, sorted by the number of books in descending order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$author&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$limit&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Jane Austen&#39;, &#39;count&#39;: 3}
+{&#39;_id&#39;: &#39;Harper Lee&#39;, &#39;count&#39;: 3}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here’s another example that combines multiple stages in an aggregation pipeline. This example will:</p>
+<ol class="arabic simple">
+<li><p>Filter books published after the year 1900.</p></li>
+<li><p>Group the books by author and calculate the total number of pages and the average number of pages for each author.</p></li>
+<li><p>Sort the authors by the total number of pages in descending order.</p></li>
+<li><p>Project the author, total pages, and average pages fields, excluding the <code class="docutils literal notranslate"><span class="pre">_id</span></code> field.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define each stage separately</span>
+<span class="n">match_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$match&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1900</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">group_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$author&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;totalPages&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="s2">&quot;$pages&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;averagePages&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$avg&quot;</span><span class="p">:</span> <span class="s2">&quot;$pages&quot;</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">sort_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;totalPages&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">project_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;$_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;totalPages&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;averagePages&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$round&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;$averagePages&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># Combine stages into a pipeline</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">match_stage</span><span class="p">,</span>
+    <span class="n">group_stage</span><span class="p">,</span>
+    <span class="n">sort_stage</span><span class="p">,</span>
+    <span class="n">project_stage</span>
+<span class="p">]</span>
+
+<span class="c1"># Execute the pipeline</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;totalPages&#39;: 847, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;averagePages&#39;: 282.33}
+{&#39;totalPages&#39;: 802, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;averagePages&#39;: 267.33}
+{&#39;totalPages&#39;: 440, &#39;author&#39;: &#39;George Orwell&#39;, &#39;averagePages&#39;: 220.0}
+{&#39;totalPages&#39;: 192, &#39;author&#39;: &#39;Herman Melville&#39;, &#39;averagePages&#39;: 192.0}
+</pre></div>
+</div>
+</div>
+</div>
+<section id="conclusion">
+<h3>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h3>
+<p>MongoDB’s aggregation framework is a powerful tool for data analysis and transformation. By using stages like <code class="docutils literal notranslate"><span class="pre">$match</span></code>, <code class="docutils literal notranslate"><span class="pre">$group</span></code>, <code class="docutils literal notranslate"><span class="pre">$sort</span></code>, and <code class="docutils literal notranslate"><span class="pre">$project</span></code>, you can perform complex queries and data manipulations directly within the database. PyMongo provides a convenient way to interact with this framework from Python.</p>
+</section>
+</section>
+<section id="practice-exercises">
+<h2>Practice exercises<a class="headerlink" href="#practice-exercises" title="Link to this heading">#</a></h2>
+<p>We are going to use the <code class="docutils literal notranslate"><span class="pre">restaurants</span></code> collection in the <code class="docutils literal notranslate"><span class="pre">sample_restaurants</span></code> database</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">sample_restaurants</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">restaurants</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here’s a sample document in the <code class="docutils literal notranslate"><span class="pre">restaurants</span></code> collection</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;5eb3d668b31de5d588f4292c&#39;),
+ &#39;address&#39;: {&#39;building&#39;: &#39;2206&#39;,
+  &#39;coord&#39;: [-74.1377286, 40.6119572],
+  &#39;street&#39;: &#39;Victory Boulevard&#39;,
+  &#39;zipcode&#39;: &#39;10314&#39;},
+ &#39;borough&#39;: &#39;Staten Island&#39;,
+ &#39;cuisine&#39;: &#39;Jewish/Kosher&#39;,
+ &#39;grades&#39;: [{&#39;date&#39;: datetime.datetime(2014, 10, 6, 0, 0),
+   &#39;grade&#39;: &#39;A&#39;,
+   &#39;score&#39;: 9},
+  {&#39;date&#39;: datetime.datetime(2014, 5, 20, 0, 0), &#39;grade&#39;: &#39;A&#39;, &#39;score&#39;: 12},
+  {&#39;date&#39;: datetime.datetime(2013, 4, 4, 0, 0), &#39;grade&#39;: &#39;A&#39;, &#39;score&#39;: 12},
+  {&#39;date&#39;: datetime.datetime(2012, 1, 24, 0, 0), &#39;grade&#39;: &#39;A&#39;, &#39;score&#39;: 9}],
+ &#39;name&#39;: &#39;Kosher Island&#39;,
+ &#39;restaurant_id&#39;: &#39;40356442&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exercise-1-count-restaurants-by-borough">
+<h3>Exercise 1: Count Restaurants by Borough<a class="headerlink" href="#exercise-1-count-restaurants-by-borough" title="Link to this heading">#</a></h3>
+<p><strong>Objective</strong>: Count the number of restaurants in each borough.</p>
+<ol class="arabic simple">
+<li><p><strong>Group</strong>: By borough.</p></li>
+<li><p><strong>Count</strong>: The number of restaurants in each borough.</p></li>
+<li><p><strong>Sort</strong>: By the count in descending order.</p></li>
+<li><p><strong>Project</strong>: Borough and count.</p></li>
+</ol>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">group_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$borough&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">sort_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">project_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;borough&quot;</span><span class="p">:</span> <span class="s2">&quot;$_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">group_stage</span><span class="p">,</span>
+    <span class="n">sort_stage</span><span class="p">,</span>
+    <span class="n">project_stage</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;count&#39;: 10259, &#39;borough&#39;: &#39;Manhattan&#39;}
+{&#39;count&#39;: 6086, &#39;borough&#39;: &#39;Brooklyn&#39;}
+{&#39;count&#39;: 5656, &#39;borough&#39;: &#39;Queens&#39;}
+{&#39;count&#39;: 2338, &#39;borough&#39;: &#39;Bronx&#39;}
+{&#39;count&#39;: 969, &#39;borough&#39;: &#39;Staten Island&#39;}
+{&#39;count&#39;: 51, &#39;borough&#39;: &#39;Missing&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2-find-the-top-3-cuisines-with-the-most-restaurants">
+<h3>Exercise 2: Find the Top 3 Cuisines with the Most Restaurants<a class="headerlink" href="#exercise-2-find-the-top-3-cuisines-with-the-most-restaurants" title="Link to this heading">#</a></h3>
+<p><strong>Objective</strong>: Identify the top 3 cuisines with the highest number of restaurants.</p>
+<ol class="arabic simple">
+<li><p><strong>Group</strong>: By cuisine.</p></li>
+<li><p><strong>Count</strong>: The number of restaurants for each cuisine.</p></li>
+<li><p><strong>Sort</strong>: By count in descending order.</p></li>
+<li><p><strong>Limit</strong>: To the top 3 cuisines.</p></li>
+<li><p><strong>Project</strong>: Cuisine and count.</p></li>
+</ol>
+<section id="example-code">
+<h4>Example Code<a class="headerlink" href="#example-code" title="Link to this heading">#</a></h4>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define each stage separately</span>
+<span class="n">group_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$cuisine&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">sort_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">limit_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$limit&quot;</span><span class="p">:</span> <span class="mi">3</span>
+<span class="p">}</span>
+
+<span class="n">project_stage</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;cuisine&quot;</span><span class="p">:</span> <span class="s2">&quot;$_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># Combine stages into a pipeline</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">group_stage</span><span class="p">,</span>
+    <span class="n">sort_stage</span><span class="p">,</span>
+    <span class="n">limit_stage</span><span class="p">,</span>
+    <span class="n">project_stage</span>
+<span class="p">]</span>
+
+<span class="c1"># Execute the pipeline</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;count&#39;: 6183, &#39;cuisine&#39;: &#39;American&#39;}
+{&#39;count&#39;: 2418, &#39;cuisine&#39;: &#39;Chinese&#39;}
+{&#39;count&#39;: 1214, &#39;cuisine&#39;: &#39;Café/Coffee/Tea&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h3>
+<p>These exercises provide practice with the following stages:</p>
+<ul class="simple">
+<li><p><strong>$group</strong>: Grouping documents by a specified key and performing aggregations.</p></li>
+<li><p><strong>$sort</strong>: Sorting documents based on a specified field.</p></li>
+<li><p><strong>$project</strong>: Reshaping documents by including or excluding fields.</p></li>
+<li><p><strong>$limit</strong>: Limiting the number of documents passed to the next stage in the pipeline.</p></li>
+</ul>
+<p>By completing these exercises, students will gain hands-on experience with MongoDB’s aggregation framework and learn how to perform complex data transformations and analyses.</p>
+</section>
+</section>
+<section id="supplemental-materials">
+<h2>Supplemental materials<a class="headerlink" href="#supplemental-materials" title="Link to this heading">#</a></h2>
+<p>Read more here: https://www.mongodb.com/docs/manual/aggregation/</p>
+<p>MongoDB University lesson: https://learn.mongodb.com/learn/course/mongodb-aggregation-in-python/lesson-1-building-a-mongodb-aggregation-pipeline-in-python-applications/learn</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./lectures"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lecture6.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 6: CRUD operations in MongoDB</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../installation_mac.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Installation instruction for macOS</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodb-aggregation-using-pymongo-with-book-data">MongoDB Aggregation using PyMongo with Book Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregation-pipeline">Aggregation Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-syntax">General Syntax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-stages">Common Stages</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pipeline">Example Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-aggregation-operators">Key Aggregation Operators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#match">1. $match</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#group">2. $group</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation">Explanation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort">3. $sort</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#project">4. $project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combining-stages-into-a-pipeline">Combining stages into a pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practice-exercises">Practice exercises</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-count-restaurants-by-borough">Exercise 1: Count Restaurants by Borough</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-find-the-top-3-cuisines-with-the-most-restaurants">Exercise 2: Find the Top 3 Cuisines with the Most Restaurants</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-code">Example Code</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supplemental-materials">Supplemental materials</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Quan Nguyen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

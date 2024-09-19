@@ -60,7 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture6';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation instruction for macOS" href="../installation_mac.html" />
+    <link rel="next" title="Lecture 7: Aggregation operations in MongoDB" href="lecture7.html" />
     <link rel="prev" title="Lecture 5: Schema design patterns in MongoDB" href="lecture5.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -187,6 +187,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 6: CRUD operations in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture7.html">Lecture 7: Aggregation operations in MongoDB</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
 <ul class="nav bd-sidenav">
@@ -453,14 +454,31 @@ document.write(`
                     <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;To Kill a Mockingbird&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Harper Lee&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1960</span><span class="p">},</span>
                     <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1949</span><span class="p">},</span>
                     <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Animal Farm&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1945</span><span class="p">}]</span>
-
-<span class="c1"># insert sample books to the collection</span>
+<span class="n">sample_books</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925},
+ {&#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929},
+ {&#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951},
+ {&#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939},
+ {&#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960},
+ {&#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949},
+ {&#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># insert sample books to the collection</span>
 <span class="n">collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">sample_books</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), ObjectId(&#39;66e8a0597a895c83fa099dea&#39;), ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), ObjectId(&#39;66e8a0597a895c83fa099ded&#39;)], acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e9b117529d9b11d569aab3&#39;), ObjectId(&#39;66e9b117529d9b11d569aab4&#39;), ObjectId(&#39;66e9b117529d9b11d569aab5&#39;), ObjectId(&#39;66e9b117529d9b11d569aab6&#39;), ObjectId(&#39;66e9b117529d9b11d569aab7&#39;), ObjectId(&#39;66e9b117529d9b11d569aab8&#39;), ObjectId(&#39;66e9b117529d9b11d569aab9&#39;)], acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -489,7 +507,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pymongo.cursor.Cursor at 0x118046a50&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pymongo.cursor.Cursor at 0x104fff7a0&gt;
 </pre></div>
 </div>
 </div>
@@ -503,13 +521,13 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dea&#39;), &#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099ded&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab3&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab4&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab5&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab6&#39;), &#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab7&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab8&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab9&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}
 </pre></div>
 </div>
 </div>
@@ -517,18 +535,19 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all documents without _id</span>
-<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
-{&#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
-{&#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
-{&#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
-{&#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
-{&#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+{&#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
+{&#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949}
+{&#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}
 </pre></div>
 </div>
 </div>
@@ -536,7 +555,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find documents with a specific condition</span>
-<span class="n">specific_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">}})</span>
+<span class="n">specific_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1950</span><span class="p">}})</span>
 
 <span class="c1"># Print the results</span>
 <span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">specific_books</span><span class="p">:</span>
@@ -545,9 +564,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab5&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab7&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
 </pre></div>
 </div>
 </div>
@@ -555,7 +573,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find documents with a specific condition, and return only the title</span>
-<span class="n">specific_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">}},</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="n">specific_books</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$gt&quot;</span><span class="p">:</span> <span class="mi">1950</span><span class="p">}},</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
 
 <span class="c1"># Print the results</span>
 <span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">specific_books</span><span class="p">:</span>
@@ -564,9 +582,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;The Great Gatsby&#39;}
-{&#39;title&#39;: &#39;A Farewell to Arms&#39;}
-{&#39;title&#39;: &#39;To Kill a Mockingbird&#39;}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;year&#39;: 1951}
+{&#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;year&#39;: 1960}
 </pre></div>
 </div>
 </div>
@@ -600,8 +617,18 @@ document.write(`
     <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">11.99</span>
 <span class="p">}</span>
 <span class="n">collection</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">new_book</span><span class="p">)</span>
-
-<span class="c1"># Insert multiple documents</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertOneResult(ObjectId(&#39;66e9b353529d9b11d569aaba&#39;), acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Insert multiple documents</span>
 <span class="n">new_books</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span>
         <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Road&quot;</span><span class="p">,</span>
@@ -623,7 +650,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), ObjectId(&#39;66e8a05d7a895c83fa099df0&#39;)], acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e9b37f529d9b11d569aabb&#39;), ObjectId(&#39;66e9b37f529d9b11d569aabc&#39;)], acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -637,16 +664,16 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de9&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dea&#39;), &#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099ded&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}
-{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099dee&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
-{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
-{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099df0&#39;), &#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab3&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab4&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab5&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;, &#39;year&#39;: 1951}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab6&#39;), &#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab7&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab8&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab9&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}
+{&#39;_id&#39;: ObjectId(&#39;66e9b353529d9b11d569aaba&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;_id&#39;: ObjectId(&#39;66e9b37f529d9b11d569aabb&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+{&#39;_id&#39;: ObjectId(&#39;66e9b37f529d9b11d569aabc&#39;), &#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
 </pre></div>
 </div>
 </div>
@@ -674,10 +701,50 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update a single document</span>
 <span class="n">collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
     <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">8.49</span><span class="p">}}</span>
+    <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mf">8.49</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">}}</span>
 <span class="p">)</span>
-
-<span class="c1"># Update multiple documents</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726592254, 20), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726592254, 20), &#39;signature&#39;: {&#39;hash&#39;: b&#39;[4%;\xf6=\xedY\xb4\xbf\xeapc\xab\xfco\x0c?\x0fG&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726592254, 20), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab8&#39;),
+ &#39;title&#39;: &#39;1984&#39;,
+ &#39;author&#39;: &#39;George Orwell&#39;,
+ &#39;year&#39;: 2000,
+ &#39;price&#39;: 8.49}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 2000, &#39;price&#39;: 8.49}
+{&#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update multiple documents</span>
 <span class="n">collection</span><span class="o">.</span><span class="n">update_many</span><span class="p">(</span>
     <span class="p">{</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">},</span>
     <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;genre&quot;</span><span class="p">:</span> <span class="s2">&quot;Dystopian&quot;</span><span class="p">}}</span>
@@ -686,7 +753,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 2, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726521489, 8), &#39;t&#39;: 203}, &#39;nModified&#39;: 2, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726521489, 8), &#39;signature&#39;: {&#39;hash&#39;: b&quot;\x17A\xc4dRGQ\xf9^0\xc8&#39;\xeb?\xfcZ\x8d:3\xec&quot;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726521489, 8), &#39;updatedExisting&#39;: True}, acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 2, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726592400, 6), &#39;t&#39;: 203}, &#39;nModified&#39;: 2, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726592400, 6), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xc5Y7\xe2\x9a\xf6]\xb9\x80\xb5\x08c\xca^m5d\xeaf;&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726592400, 6), &#39;updatedExisting&#39;: True}, acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -708,14 +775,14 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all books with author &quot;George Orwell&quot;</span>
-<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">}):</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099dec&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1949, &#39;price&#39;: 8.49, &#39;genre&#39;: &#39;Dystopian&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099ded&#39;), &#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945, &#39;genre&#39;: &#39;Dystopian&#39;}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 2000, &#39;price&#39;: 8.49, &#39;genre&#39;: &#39;Dystopian&#39;}
+{&#39;title&#39;: &#39;Animal Farm&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;year&#39;: 1945, &#39;genre&#39;: &#39;Dystopian&#39;}
 </pre></div>
 </div>
 </div>
@@ -741,14 +808,39 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete a single document</span>
 <span class="n">collection</span><span class="o">.</span><span class="n">delete_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">})</span>
-
-<span class="c1"># Delete multiple documents</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DeleteResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726592514, 36), &#39;t&#39;: 203}, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726592514, 36), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xe9i\x06\xd4QV?3n\xf1\xe5\xc7_~\x93\xb3,\xac\xeb{&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726592514, 36)}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;1984&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete multiple documents</span>
 <span class="n">collection</span><span class="o">.</span><span class="n">delete_many</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DeleteResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726521551, 13), &#39;t&#39;: 203}, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726521551, 13), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\x91\x05\x8c7\x8a\xba\x88\xf3\xb2\xef,\x8f8\x91\xab\xb6\x1aD\x0fD&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726521551, 13)}, acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DeleteResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726592534, 5), &#39;t&#39;: 203}, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726592534, 5), &#39;signature&#39;: {&#39;hash&#39;: b&#39;di7\xf6\xcf\xfe]\x9e-\x13r\xe7\xa1*1\x9c\x82a\xcd\x84&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726592534, 5)}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -772,6 +864,52 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all books with author &quot;George Orwell&quot;</span>
 <span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;George Orwell&quot;</span><span class="p">}):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Delete a field</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;J.D. Salinger&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab5&#39;),
+ &#39;title&#39;: &#39;The Catcher in the Rye&#39;,
+ &#39;author&#39;: &#39;J.D. Salinger&#39;,
+ &#39;year&#39;: 1951}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update multiple documents</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">update_many</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;J.D. Salinger&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;$unset&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726592714, 6), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726592714, 6), &#39;signature&#39;: {&#39;hash&#39;: b&#39;E\xea\x08a\x9c|\xc3\x879\xe6\xca\x91g\xa4\xed\xa6\x85^*i&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726592714, 6), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;J.D. Salinger&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab5&#39;),
+ &#39;title&#39;: &#39;The Catcher in the Rye&#39;,
+ &#39;author&#39;: &#39;J.D. Salinger&#39;}
 </pre></div>
 </div>
 </div>
@@ -829,8 +967,23 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099dee&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
-{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b353529d9b11d569aaba&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;_id&#39;: ObjectId(&#39;66e9b37f529d9b11d569aabb&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">author_J</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$regex&quot;</span><span class="p">:</span> <span class="s2">&quot;^J&quot;</span><span class="p">}})</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">author_J</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab5&#39;), &#39;title&#39;: &#39;The Catcher in the Rye&#39;, &#39;author&#39;: &#39;J.D. Salinger&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab6&#39;), &#39;title&#39;: &#39;The Grapes of Wrath&#39;, &#39;author&#39;: &#39;John Steinbeck&#39;, &#39;year&#39;: 1939}
 </pre></div>
 </div>
 </div>
@@ -845,12 +998,28 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de7&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099de8&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
-{&#39;_id&#39;: ObjectId(&#39;66e8a0597a895c83fa099deb&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
-{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099dee&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
-{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099def&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
-{&#39;_id&#39;: ObjectId(&#39;66e8a05d7a895c83fa099df0&#39;), &#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab3&#39;), &#39;title&#39;: &#39;The Great Gatsby&#39;, &#39;author&#39;: &#39;F. Scott Fitzgerald&#39;, &#39;year&#39;: 1925}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab4&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab7&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;year&#39;: 1960}
+{&#39;_id&#39;: ObjectId(&#39;66e9b353529d9b11d569aaba&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;_id&#39;: ObjectId(&#39;66e9b37f529d9b11d569aabb&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
+{&#39;_id&#39;: ObjectId(&#39;66e9b37f529d9b11d569aabc&#39;), &#39;title&#39;: &quot;The Handmaid&#39;s Tale&quot;, &#39;author&#39;: &#39;Margaret Atwood&#39;, &#39;published_year&#39;: 1985, &#39;isbn&#39;: &#39;978-0-385-49081-8&#39;, &#39;price&#39;: 9.99}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">author_end_with_y</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$regex&quot;</span><span class="p">:</span> <span class="s2">&quot;y$&quot;</span><span class="p">}})</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">author_end_with_y</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e9b117529d9b11d569aab4&#39;), &#39;title&#39;: &#39;A Farewell to Arms&#39;, &#39;author&#39;: &#39;Ernest Hemingway&#39;, &#39;year&#39;: 1929}
+{&#39;_id&#39;: ObjectId(&#39;66e9b353529d9b11d569aaba&#39;), &#39;title&#39;: &#39;Brave New World&#39;, &#39;author&#39;: &#39;Aldous Huxley&#39;, &#39;published_year&#39;: 1932, &#39;isbn&#39;: &#39;978-0-06-085052-4&#39;, &#39;price&#39;: 11.99}
+{&#39;_id&#39;: ObjectId(&#39;66e9b37f529d9b11d569aabb&#39;), &#39;title&#39;: &#39;The Road&#39;, &#39;author&#39;: &#39;Cormac McCarthy&#39;, &#39;published_year&#39;: 2006, &#39;isbn&#39;: &#39;978-0-307-38789-9&#39;, &#39;price&#39;: 12.99}
 </pre></div>
 </div>
 </div>
@@ -925,11 +1094,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="../installation_mac.html"
+       href="lecture7.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Installation instruction for macOS</p>
+        <p class="prev-next-title">Lecture 7: Aggregation operations in MongoDB</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
