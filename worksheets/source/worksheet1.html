@@ -62,6 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'worksheets/source/worksheet1';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Worksheet 2: Data modelling with MongoDB" href="worksheet2.html" />
+    <link rel="prev" title="Installation instruction for Windows" href="../../installation_windows.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -124,8 +126,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -186,6 +186,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture6.html">Lecture 6: CRUD operations in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture7.html">Lecture 7: Aggregation operations in MongoDB</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../installation_mac.html">Installation instruction for macOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_windows.html">Installation instruction for Windows</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Worksheet solution</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="worksheet2.html">Worksheet 2: Data modelling with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="worksheet3/worksheet3.html">Worksheet 3: CRUD operations in MongoDB</a></li>
 </ul>
 
     </div>
@@ -544,6 +559,10 @@ document.write(`
 <li><p>List the number of documents and the storage size of each collection in the <code class="docutils literal notranslate"><span class="pre">sample_restaurant</span></code> database</p></li>
 </ul>
 <p>Hints: You can read more about the documentation of <code class="docutils literal notranslate"><span class="pre">sample_restaurant</span></code> database here https://www.mongodb.com/docs/atlas/sample-data/sample-restaurants/</p>
+<p><strong>SOLUTION</strong></p>
+<p>There are total 2 collections in the sample_restaurant database.</p>
+<p>Neighbour collection has 195 documents and 1.83MB storage.</p>
+<p>Restaurant collection has 25359 documents and 4.72MB storage.</p>
 </section>
 <section id="id3">
 <h3>3.3<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
@@ -560,6 +579,13 @@ document.write(`
 <li><p>What is the lowest rating score?</p></li>
 <li><p>What is the highest rating score?</p></li>
 </ul>
+<p>_id : 5eb3d668b31de5d588f4292c</p>
+<p>coord : Array (2) 0 -74.1377286 1 40.6119572</p>
+<p>borough : “Staten Island”</p>
+<p>cuisine “Jewish/Kosher”</p>
+<p>reviews : 4</p>
+<p>lowest score : 9</p>
+<p>highest score : 12</p>
 </section>
 </section>
 <section id="exercise-4-connect-to-your-mongodb-using-pymongo">
@@ -607,6 +633,25 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all databases</span>
+<span class="n">client</span><span class="o">.</span><span class="n">list_database_names</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;bookstore&#39;,
+ &#39;library&#39;,
+ &#39;sample_airbnb&#39;,
+ &#39;sample_analytics&#39;,
+ &#39;sample_geospatial&#39;,
+ &#39;sample_guides&#39;,
+ &#39;sample_mflix&#39;,
+ &#39;sample_restaurants&#39;,
+ &#39;sample_supplies&#39;,
+ &#39;sample_training&#39;,
+ &#39;sample_weatherdata&#39;,
+ &#39;school&#39;,
+ &#39;admin&#39;,
+ &#39;local&#39;]
 </pre></div>
 </div>
 </div>
@@ -620,6 +665,12 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all collections in the sample_restaurants database</span>
+<span class="n">client</span><span class="o">.</span><span class="n">sample_restaurants</span><span class="o">.</span><span class="n">list_collection_names</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;sample&#39;, &#39;restaurants&#39;, &#39;neighborhoods&#39;]
 </pre></div>
 </div>
 </div>
@@ -633,6 +684,26 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the first document</span>
+<span class="n">client</span><span class="o">.</span><span class="n">sample_restaurants</span><span class="o">.</span><span class="n">restaurants</span><span class="o">.</span><span class="n">find_one</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;5eb3d668b31de5d588f4292c&#39;),
+ &#39;address&#39;: {&#39;building&#39;: &#39;2206&#39;,
+  &#39;coord&#39;: [-74.1377286, 40.6119572],
+  &#39;street&#39;: &#39;Victory Boulevard&#39;,
+  &#39;zipcode&#39;: &#39;10314&#39;},
+ &#39;borough&#39;: &#39;Staten Island&#39;,
+ &#39;cuisine&#39;: &#39;Jewish/Kosher&#39;,
+ &#39;grades&#39;: [{&#39;date&#39;: datetime.datetime(2014, 10, 6, 0, 0),
+   &#39;grade&#39;: &#39;A&#39;,
+   &#39;score&#39;: 9},
+  {&#39;date&#39;: datetime.datetime(2014, 5, 20, 0, 0), &#39;grade&#39;: &#39;A&#39;, &#39;score&#39;: 12},
+  {&#39;date&#39;: datetime.datetime(2013, 4, 4, 0, 0), &#39;grade&#39;: &#39;A&#39;, &#39;score&#39;: 12},
+  {&#39;date&#39;: datetime.datetime(2012, 1, 24, 0, 0), &#39;grade&#39;: &#39;A&#39;, &#39;score&#39;: 9}],
+ &#39;name&#39;: &#39;Kosher Island&#39;,
+ &#39;restaurant_id&#39;: &#39;40356442&#39;}
 </pre></div>
 </div>
 </div>
@@ -680,6 +751,24 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../../installation_windows.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Installation instruction for Windows</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="worksheet2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Worksheet 2: Data modelling with MongoDB</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               

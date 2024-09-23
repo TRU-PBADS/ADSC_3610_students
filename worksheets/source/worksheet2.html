@@ -60,6 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'worksheets/source/worksheet2';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Worksheet 3: CRUD operations in MongoDB" href="worksheet3/worksheet3.html" />
+    <link rel="prev" title="Worksheet 1: Introduction to noSQL databases and document model with MongoDB" href="worksheet1.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -122,8 +124,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -185,11 +185,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture6.html">Lecture 6: CRUD operations in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/lecture7.html">Lecture 7: Aggregation operations in MongoDB</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../installation_mac.html">Installation instruction for macOS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation_windows.html">Installation instruction for Windows</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Worksheet solution</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="worksheet1.html">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Worksheet 2: Data modelling with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="worksheet3/worksheet3.html">Worksheet 3: CRUD operations in MongoDB</a></li>
 </ul>
 
     </div>
@@ -344,27 +353,24 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-by-step-instructions">Step-by-Step Instructions:</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exerees-2-identify-database-workload">Exerees 2: Identify database workload</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-identify-database-workload">Exercise 2: Identify database workload</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantifying-reads-and-writes-in-the-online-bookstore-example">Quantifying Reads and Writes in the Online Bookstore Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-identifying-and-modeling-relationships-in-mongodb">Exercise 3: Identifying and Modeling Relationships in MongoDB</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#case-study-online-bookstore-continued">Case Study: Online Bookstore (Continued)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Objectives:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Step-by-Step Instructions:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#submission">Submission:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-identifying-and-modeling-relationships-in-mongodb">Exercise 3: Identifying and Modeling Relationships in MongoDB</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#case-study-online-bookstore-continued">Case Study: Online Bookstore (Continued)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Objectives:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Step-by-Step Instructions:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Submission:</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-4-schema-design-patterns-in-mongodb">Exercise 4: Schema Design Patterns in MongoDB</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Case Study: Online Bookstore (Continued)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Objectives:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Step-by-Step Instructions:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Submission:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example:</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#json-example">JSON Example:</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission instructions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission instructions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Quantifying Reads and Writes in the Online Bookstore Example</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -517,529 +523,309 @@ document.write(`
 </ol>
 </section>
 </section>
-<section id="exerees-2-identify-database-workload">
-<h2>Exerees 2: Identify database workload<a class="headerlink" href="#exerees-2-identify-database-workload" title="Link to this heading">#</a></h2>
+<section id="exercise-2-identify-database-workload">
+<h2>Exercise 2: Identify database workload<a class="headerlink" href="#exercise-2-identify-database-workload" title="Link to this heading">#</a></h2>
 <p>In this exercise, you will extend your data modeling skills by identifying entities and attributes, quantifying entities, and analyzing read and write operations for different types of application users. You will also map these operations to application flows and quantify them.</p>
-<section id="id1">
-<h3>Objectives:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p>Identify entities and their attributes.</p></li>
-<li><p>Quantify the number of entities.</p></li>
-<li><p>Identify read and write operations for different types of application users.</p></li>
-<li><p>Map read and write operations to application flows.</p></li>
-<li><p>Quantify the read and write operations.</p></li>
-</ol>
+<section id="quantifying-reads-and-writes-in-the-online-bookstore-example">
+<h3>Quantifying Reads and Writes in the Online Bookstore Example<a class="headerlink" href="#quantifying-reads-and-writes-in-the-online-bookstore-example" title="Link to this heading">#</a></h3>
+<p>To quantify the read and write operations in the online bookstore example, we need to consider the different types of operations performed by various users (customers and admins) and the frequency of these operations.</p>
+<p>Fill out the table below with possible operations by customers and admins and specify the estimated frequency, as well as whether it’s a read or write operations. You can make your own assumptions.</p>
+<p>I have added one operation as an example.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Operation</p></th>
+<th class="head text-center"><p>User Type</p></th>
+<th class="head text-center"><p>Read/Write</p></th>
+<th class="head text-center"><p>Frequency (per day)</p></th>
+<th class="head text-center"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Browse Books</p></td>
+<td class="text-center"><p>Customer</p></td>
+<td class="text-center"><p>Read</p></td>
+<td class="text-center"><p>100,000</p></td>
+<td class="text-center"><p>Customers browsing the list of available books.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>View Book Details</p></td>
+<td class="text-center"><p>Customer</p></td>
+<td class="text-center"><p>Read</p></td>
+<td class="text-center"><p>50,000</p></td>
+<td class="text-center"><p>Customers viewing details (e.g., title, author, reviews) for specific books.</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Add a new book</p></td>
+<td class="text-center"><p>Admin</p></td>
+<td class="text-center"><p>Write</p></td>
+<td class="text-center"><p>5</p></td>
+<td class="text-center"><p>Admin adding new books to the inventory</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Leave a Book Review</p></td>
+<td class="text-center"><p>Customer</p></td>
+<td class="text-center"><p>Write</p></td>
+<td class="text-center"><p>5,000</p></td>
+<td class="text-center"><p>Customers leaving reviews and ratings for purchased books.</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Search for a Book</p></td>
+<td class="text-center"><p>Customer</p></td>
+<td class="text-center"><p>Read</p></td>
+<td class="text-center"><p>80,000</p></td>
+<td class="text-center"><p>Customers using search functionality to find books.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="id2">
-<h3>Step-by-Step Instructions:<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p><strong>Identify Entities and Attributes:</strong></p>
-<ul class="simple">
-<li><p><strong>Books</strong>: title, ISBN, publication_date, authors</p></li>
-<li><p><strong>Authors</strong>: name, books</p></li>
-<li><p><strong>Customers</strong>: name, email, purchases</p></li>
-<li><p><strong>Purchases</strong>: date, customer_id, books</p></li>
-<li><p><strong>Reviews</strong>: rating, comment, customer_id, book_id</p></li>
-</ul>
-</li>
-<li><p><strong>Quantify Entities:</strong></p>
-<ul class="simple">
-<li><p>Estimate the number of each entity in the system:</p>
-<ul>
-<li><p><strong>Books</strong>: 10,000</p></li>
-<li><p><strong>Authors</strong>: 2,000</p></li>
-<li><p><strong>Customers</strong>: 50,000</p></li>
-<li><p><strong>Purchases</strong>: 200,000</p></li>
-<li><p><strong>Reviews</strong>: 500,000</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Identify Reads and Writes for Different App Users:</strong></p>
-<ul class="simple">
-<li><p><strong>Customers</strong>:</p>
-<ul>
-<li><p><strong>Reads</strong>:</p>
-<ul>
-<li><p>Browse books</p></li>
-<li><p>View book details</p></li>
-<li><p>View purchase history</p></li>
-<li><p>Read reviews</p></li>
-</ul>
-</li>
-<li><p><strong>Writes</strong>:</p>
-<ul>
-<li><p>Make a purchase</p></li>
-<li><p>Leave a review</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Admin</strong>:</p>
-<ul>
-<li><p><strong>Reads</strong>:</p>
-<ul>
-<li><p>View all books</p></li>
-<li><p>View all customers</p></li>
-<li><p>View all purchases</p></li>
-</ul>
-</li>
-<li><p><strong>Writes</strong>:</p>
-<ul>
-<li><p>Add new books</p></li>
-<li><p>Update book details</p></li>
-<li><p>Remove books</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Map Reads and Writes to Application Flows:</strong></p>
-<ul class="simple">
-<li><p><strong>Customer Flows</strong>:</p>
-<ul>
-<li><p><strong>Browse Books</strong>:</p>
-<ul>
-<li><p>Read operation</p></li>
-</ul>
-</li>
-<li><p><strong>View Book Details</strong>:</p>
-<ul>
-<li><p>Read operation for book details</p></li>
-<li><p>Read operation for reviews</p></li>
-</ul>
-</li>
-<li><p><strong>View Purchase History</strong>:</p>
-<ul>
-<li><p>Read operation for purchase history</p></li>
-</ul>
-</li>
-<li><p><strong>Read Reviews</strong>:</p>
-<ul>
-<li><p>Read operation for reviews</p></li>
-</ul>
-</li>
-<li><p><strong>Make a Purchase</strong>:</p>
-<ul>
-<li><p>Write operation for purchase</p></li>
-</ul>
-</li>
-<li><p><strong>Leave a Review</strong>:</p>
-<ul>
-<li><p>Write operation for review</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Admin Flows</strong>:</p>
-<ul>
-<li><p><strong>View All Books</strong>:</p>
-<ul>
-<li><p>Read operation for all books</p></li>
-</ul>
-</li>
-<li><p><strong>View All Customers</strong>:</p>
-<ul>
-<li><p>Read operation for all customers</p></li>
-</ul>
-</li>
-<li><p><strong>View All Purchases</strong>:</p>
-<ul>
-<li><p>Read operation for all purchases</p></li>
-</ul>
-</li>
-<li><p><strong>Add New Books</strong>:</p>
-<ul>
-<li><p>Write operation for new book</p></li>
-</ul>
-</li>
-<li><p><strong>Update Book Details</strong>:</p>
-<ul>
-<li><p>Write operation for updating book details</p></li>
-</ul>
-</li>
-<li><p><strong>Remove Books</strong>:</p>
-<ul>
-<li><p>Write operation for removing book</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Quantify Reads and Writes:</strong></p>
-<ul class="simple">
-<li><p><strong>Customers</strong>:</p>
-<ul>
-<li><p><strong>Reads</strong>:</p>
-<ul>
-<li><p>Browse Books: 100,000 reads/day</p></li>
-<li><p>View Book Details: 50,000 reads/day</p></li>
-<li><p>View Purchase History: 10,000 reads/day</p></li>
-<li><p>Read Reviews: 30,000 reads/day</p></li>
-</ul>
-</li>
-<li><p><strong>Writes</strong>:</p>
-<ul>
-<li><p>Make a Purchase: 5,000 writes/day</p></li>
-<li><p>Leave a Review: 2,000 writes/day</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Admin</strong>:</p>
-<ul>
-<li><p><strong>Reads</strong>:</p>
-<ul>
-<li><p>View All Books: 500 reads/day</p></li>
-<li><p>View All Customers: 200 reads/day</p></li>
-<li><p>View All Purchases: 300 reads/day</p></li>
-</ul>
-</li>
-<li><p><strong>Writes</strong>:</p>
-<ul>
-<li><p>Add New Books: 50 writes/day</p></li>
-<li><p>Update Book Details: 100 writes/day</p></li>
-<li><p>Remove Books: 20 writes/day</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-</section>
-<section id="submission">
-<h3>Submission:<a class="headerlink" href="#submission" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Provide a detailed list of entities and their attributes.</p></li>
-<li><p>Estimate the number of each entity in the system.</p></li>
-<li><p>Identify and list read and write operations for customers and admins.</p></li>
-<li><p>Map these operations to specific application flows.</p></li>
-<li><p>Quantify the read and write operations for each flow.</p></li>
-</ul>
-<p>This exercise will help you understand the workload and data access patterns in a MongoDB-based application, enabling you to optimize your data model and queries for better performance.</p>
 </section>
 <section id="exercise-3-identifying-and-modeling-relationships-in-mongodb">
-<h3>Exercise 3: Identifying and Modeling Relationships in MongoDB<a class="headerlink" href="#exercise-3-identifying-and-modeling-relationships-in-mongodb" title="Link to this heading">#</a></h3>
+<h2>Exercise 3: Identifying and Modeling Relationships in MongoDB<a class="headerlink" href="#exercise-3-identifying-and-modeling-relationships-in-mongodb" title="Link to this heading">#</a></h2>
 <section id="case-study-online-bookstore-continued">
-<h4>Case Study: Online Bookstore (Continued)<a class="headerlink" href="#case-study-online-bookstore-continued" title="Link to this heading">#</a></h4>
+<h3>Case Study: Online Bookstore (Continued)<a class="headerlink" href="#case-study-online-bookstore-continued" title="Link to this heading">#</a></h3>
 <p>In this exercise, you will identify one-to-one, one-to-many, and many-to-many relationships between entities in an online bookstore. You will analyze these entities to determine whether to embed or reference them using common guidelines. Finally, you will model these relationships using both embedded and referenced approaches.</p>
 </section>
-<section id="id3">
-<h4>Objectives:<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<section id="id1">
+<h3>Objectives:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ol class="arabic simple">
 <li><p>Identify one-to-one, one-to-many, and many-to-many relationships between entities.</p></li>
 <li><p>Analyze entities to determine whether to embed or reference using common guidelines.</p></li>
 <li><p>Model embedded and referenced one-to-one, one-to-many, and many-to-many relationships.</p></li>
 </ol>
 </section>
-<section id="id4">
-<h4>Step-by-Step Instructions:<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
-<ol class="arabic">
-<li><p><strong>Identify Relationships:</strong></p>
+<section id="id2">
+<h3>Step-by-Step Instructions:<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>For each of the following pair of entities, identify:</p>
 <ul class="simple">
-<li><p><strong>One-to-One</strong>:</p>
-<ul>
-<li><p>Each customer has one profile.</p></li>
+<li><p>What type of relationships is there</p></li>
+<li><p>Determine whether to use embedding or referencing</p></li>
+<li><p>Give an example in JSON format</p></li>
 </ul>
-</li>
-<li><p><strong>One-to-Many</strong>:</p>
-<ul>
-<li><p>Each book can have multiple reviews.</p></li>
-<li><p>Each customer can have multiple purchases.</p></li>
-</ul>
-</li>
-<li><p><strong>Many-to-Many</strong>:</p>
-<ul>
-<li><p>Each book can have multiple authors, and each author can write multiple books.</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Analyze Entities to Determine Embed or Reference:</strong></p>
-<ul class="simple">
-<li><p><strong>One-to-One</strong>:</p>
-<ul>
-<li><p><strong>Customer and Profile</strong>: Embed the profile within the customer document if the profile data is small and frequently accessed together with the customer data.</p></li>
-</ul>
-</li>
-<li><p><strong>One-to-Many</strong>:</p>
-<ul>
-<li><p><strong>Book and Reviews</strong>: Embed reviews within the book document if the number of reviews is relatively small and they are frequently accessed together with the book data.</p></li>
-<li><p><strong>Customer and Purchases</strong>: Reference purchases from the customer document if the number of purchases is large or if purchases are frequently accessed independently.</p></li>
-</ul>
-</li>
-<li><p><strong>Many-to-Many</strong>:</p>
-<ul>
-<li><p><strong>Books and Authors</strong>: Use references to model the relationship since both books and authors are likely to be accessed independently and the relationship is many-to-many.</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Model Relationships:</strong></p>
-<ul>
-<li><p><strong>One-to-One (Embedded)</strong>:</p>
-<ul>
-<li><p><strong>Customer and Profile</strong>:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jane Smith&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jane.smith@example.com&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;profile&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123 Main St&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;phone&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;555-1234&quot;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-<li><p><strong>One-to-One (Referenced)</strong>:</p>
-<ul>
-<li><p><strong>Customer and Profile</strong>:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="c1">// Customer Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jane Smith&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jane.smith@example.com&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;profile_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;profileId&quot;</span><span class="err">)</span>
-<span class="p">}</span>
-
-<span class="c1">// Profile Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;profileId&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123 Main St&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;phone&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;555-1234&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-<li><p><strong>One-to-Many (Embedded)</strong>:</p>
-<ul>
-<li><p><strong>Book and Reviews</strong>:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;reviews&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;comment&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Great book on MongoDB!&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;customer_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;customerId&quot;</span><span class="err">)</span>
-<span class="w">        </span><span class="p">},</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;comment&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Very informative.&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;customer_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;anotherCustomerId&quot;</span><span class="err">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-<li><p><strong>One-to-Many (Referenced)</strong>:</p>
-<ul>
-<li><p><strong>Customer and Purchases</strong>:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="c1">// Customer Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jane Smith&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jane.smith@example.com&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;purchases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;purchaseId1&quot;</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;purchaseId2&quot;</span><span class="err">)</span><span class="p">]</span>
-<span class="p">}</span>
-
-<span class="c1">// Purchase Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;purchaseId1&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">ISODa</span><span class="kc">te</span><span class="err">(</span><span class="s2">&quot;2021-06-01T00:00:00Z&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;customer_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;customerId&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;books&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;bookId1&quot;</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;bookId2&quot;</span><span class="err">)</span><span class="p">]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-<li><p><strong>Many-to-Many (Referenced)</strong>:</p>
-<ul>
-<li><p><strong>Books and Authors</strong>:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="c1">// Book Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;authors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;authorId1&quot;</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;authorId2&quot;</span><span class="err">)</span><span class="p">]</span>
-<span class="p">}</span>
-
-<span class="c1">// Author Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;authorId1&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;books&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;bookId1&quot;</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;bookId2&quot;</span><span class="err">)</span><span class="p">]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
 </section>
-<section id="id5">
-<h4>Submission:<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Identify and list one-to-one, one-to-many, and many-to-many relationships between entities.</p></li>
-<li><p>Analyze each relationship to determine whether to embed or reference using common guidelines.</p></li>
-<li><p>Provide models for embedded and referenced one-to-one, one-to-many, and many-to-many relationships.</p></li>
-</ul>
-<p>This exercise will help you understand how to model different types of relationships in MongoDB and make informed decisions about embedding or referencing data based on access patterns and data size.</p>
-</section>
-</section>
-<section id="exercise-4-schema-design-patterns-in-mongodb">
-<h3>Exercise 4: Schema Design Patterns in MongoDB<a class="headerlink" href="#exercise-4-schema-design-patterns-in-mongodb" title="Link to this heading">#</a></h3>
-<section id="id6">
-<h4>Case Study: Online Bookstore (Continued)<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
-<p>In this exercise, you will explore advanced data modeling patterns in MongoDB, including the Inheritance Pattern, the Computed Pattern, the Approximation Pattern, the Extended Reference Pattern, and the Schema Versioning Pattern. You will apply these patterns to the online bookstore case study.</p>
-</section>
-<section id="id7">
-<h4>Objectives:<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
+<section id="example">
+<h3>Example:<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p><strong>Entities: Books and Reviews</strong></p>
 <ol class="arabic simple">
-<li><p>Understand and apply the Inheritance Pattern.</p></li>
-<li><p>Understand and apply the Computed Pattern.</p></li>
-<li><p>Understand and apply the Approximation Pattern.</p></li>
-<li><p>Understand and apply the Extended Reference Pattern.</p></li>
-<li><p>Understand and apply the Schema Versioning Pattern.</p></li>
+<li><p><strong>Type of Relationship:</strong> One-to-Many (e.g., one book has many reviews)</p></li>
+<li><p><strong>Embed or Reference:</strong> Embed</p></li>
+<li><p><strong>Explanation:</strong> Reviews are typically small in size and are frequently accessed together with the book details. Embedding reviews within the book document ensures that all related data can be retrieved in a single read operation, improving read performance.</p></li>
 </ol>
-</section>
-<section id="id8">
-<h4>Step-by-Step Instructions:<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
-<ol class="arabic">
-<li><p><strong>The Inheritance Pattern:</strong></p>
-<ul class="simple">
-<li><p><strong>Scenario</strong>: The bookstore sells different types of books, such as eBooks and printed books. Each type of book has some common attributes (e.g., title, ISBN) and some specific attributes (e.g., file format for eBooks, weight for printed books).</p></li>
-<li><p><strong>Task</strong>: Model the inheritance pattern for books.</p></li>
-</ul>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="c1">// Common Book Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eBook&quot;</span><span class="w"> </span><span class="c1">// or &quot;Printed&quot;</span>
-<span class="p">}</span>
-
-<span class="c1">// eBook Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;commonBookId&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;file_format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PDF&quot;</span>
-<span class="p">}</span>
-
-<span class="c1">// Printed Book Document</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;commonBookId&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;weight&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;500g&quot;</span>
+<section id="json-example">
+<h4>JSON Example:<a class="headerlink" href="#json-example" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">&quot;bookId1&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ISBN&quot;</span><span class="p">:</span> <span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reviews&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;rating&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Great book on MongoDB!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;customer_id&quot;</span><span class="p">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">&quot;customerId1&quot;</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;rating&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Very informative.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;customer_id&quot;</span><span class="p">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">&quot;customerId2&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-</li>
-<li><p><strong>The Computed Pattern:</strong></p>
-<ul class="simple">
-<li><p><strong>Scenario</strong>: The bookstore wants to store the average rating of each book to avoid recalculating it every time a book is queried.</p></li>
-<li><p><strong>Task</strong>: Model the computed pattern for storing the average rating of books.</p></li>
-</ul>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;average_rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.5</span><span class="w"> </span><span class="c1">// Computed field</span>
-<span class="p">}</span>
-</pre></div>
 </div>
-</li>
-<li><p><strong>The Approximation Pattern:</strong></p>
-<ul class="simple">
-<li><p><strong>Scenario</strong>: The bookstore wants to store an approximate count of the number of times each book has been viewed.</p></li>
-<li><p><strong>Task</strong>: Model the approximation pattern for storing the view count of books.</p></li>
-</ul>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;view_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="c1">// Approximate count</span>
-<span class="p">}</span>
-</pre></div>
 </div>
-</li>
-<li><p><strong>The Extended Reference Pattern:</strong></p>
+<p><strong>YOUR TURN</strong></p>
+<p>For each of the following pairs of entities, identify the type of relationship, decide whether to use embedding or referencing, explain why, and provide a JSON example.</p>
+<ol class="arabic simple">
+<li><p><strong>Entities: Books and Authors</strong></p>
 <ul class="simple">
-<li><p><strong>Scenario</strong>: The bookstore wants to store additional information about authors directly within the book document to avoid additional queries.</p></li>
-<li><p><strong>Task</strong>: Model the extended reference pattern for storing author information within the book document.</p></li>
+<li><p><strong>Type of Relationship:</strong></p></li>
+<li><p><strong>Embed or Reference:</strong></p></li>
+<li><p><strong>Explanation:</strong></p></li>
+<li><p><strong>JSON Example:</strong></p></li>
 </ul>
+</li>
+</ol>
+<blockquote>
+<div><p>YOUR ANSWER HERE</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p><strong>Entities: Books and Authors</strong></p>
+<ul class="simple">
+<li><p><strong>Type of Relationship:</strong> Many-to-Many</p></li>
+<li><p><strong>Embed or Reference:</strong> Embed for books, and reference for authors</p></li>
+<li><p><strong>Explanation:</strong> Each book can have multiple authors, but each author can also write multiple books.</p></li>
+<li><p>For the books collection, since the number of authors of each book is relatively small, we can directly embed authors information in the books collection. This will help users to retrieve information on authors while browsing a book faster.</p></li>
+<li><p>For the authors collection, since each authors can have a large number of books, embedding books information in authors collection would likely result in unbounded documents (it’s too long), and slow down the querry time. Hence, it’s better to do referencing to books ID in the authors collection</p></li>
+<li><p>We will also accept the option to use referencing in authors collection here if you assume each authors only publish a small limited number of books</p></li>
+<li><p><strong>JSON Example:</strong></p></li>
+</ul>
+</li>
+</ol>
+<p>Books collection (embedded authors)</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;book_id_3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Good Omens&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-0-06-085398-3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;publication_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1990-05-01&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;authors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;authorId1&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;bio&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Author bio here&quot;</span>
+<span class="w">            </span><span class="nt">&quot;author_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Neil Gaiman&quot;</span>
 <span class="w">        </span><span class="p">},</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;authorId2&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jane Smith&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;bio&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Author bio here&quot;</span>
+<span class="w">            </span><span class="nt">&quot;author_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Terry Pratchett&quot;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-</li>
-<li><p><strong>The Schema Versioning Pattern:</strong></p>
-<ul class="simple">
-<li><p><strong>Scenario</strong>: The bookstore’s schema for books has evolved over time, and you need to handle multiple versions of the schema.</p></li>
-<li><p><strong>Task</strong>: Model the schema versioning pattern for handling different versions of the book schema.</p></li>
-</ul>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="c1">// Version 1</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
-<span class="p">}</span>
-
-<span class="c1">// Version 2</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MongoDB Basics&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;publication_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">ISODa</span><span class="kc">te</span><span class="err">(</span><span class="s2">&quot;2021-01-01T00:00:00Z&quot;</span><span class="err">)</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<p>Authors collection (referencing books)</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;author_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Neil Gaiman&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;books&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;book_id_3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;book_id_6&quot;</span>
+<span class="w">    </span><span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Entities: Customers and Purchases</strong></p>
+<ul class="simple">
+<li><p><strong>Type of Relationship:</strong></p></li>
+<li><p><strong>Embed or Reference:</strong></p></li>
+<li><p><strong>Explanation:</strong></p></li>
+<li><p><strong>JSON Example:</strong></p></li>
+</ul>
 </li>
 </ol>
-</section>
-<section id="id9">
-<h4>Submission:<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>YOUR ANSWER HERE</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><strong>Entities: Customers and Purchases</strong></p>
 <ul class="simple">
-<li><p>Apply the Inheritance Pattern to model different types of books.</p></li>
-<li><p>Apply the Computed Pattern to store the average rating of books.</p></li>
-<li><p>Apply the Approximation Pattern to store the view count of books.</p></li>
-<li><p>Apply the Extended Reference Pattern to store author information within the book document.</p></li>
-<li><p>Apply the Schema Versioning Pattern to handle different versions of the book schema.</p></li>
+<li><p><strong>Type of Relationship:</strong> One-to-many</p></li>
+<li><p><strong>Embed or Reference:</strong> We would reference purchase ID in the customers collection. The reason is that each customer can have a large number of purchases, embedding it would result in unbounded documents, extremly long json file and slow down querry time. So referencing would be a better choice here.</p></li>
+<li><p><strong>Explanation:</strong> Each customer can have multiple purchases, but each purchase order belongs to only one customer</p></li>
+<li><p><strong>JSON Example:</strong></p></li>
 </ul>
-<p>This exercise will help you understand and apply advanced data modeling patterns in MongoDB, enabling you to design more efficient and scalable data models.</p>
+</li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;customer_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;customer_id_2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jane Smith&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jane.smith@example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;purchases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;purchase_id_1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;purchase_id_2&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">...</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;purchase_id_100&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Entities: Books and Purchases</strong></p>
+<ul class="simple">
+<li><p><strong>Type of Relationship:</strong></p></li>
+<li><p><strong>Embed or Reference:</strong></p></li>
+<li><p><strong>Explanation:</strong></p></li>
+<li><p><strong>JSON Example:</strong></p></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<div><p>YOUR ANSWER HERE</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p><strong>Entities: Books and Purchases</strong></p>
+<ul class="simple">
+<li><p><strong>Type of Relationship:</strong>: Many-to-many</p></li>
+<li><p><strong>Embed or Reference:</strong></p></li>
+<li><p><strong>Explanation:</strong> Each book can be purchased multiple times, each purchase order can have multiple books</p></li>
+<li><p>For the books collection, we can reference the purchased id since we can have hundreds to millions of purchase orders for a single popular book (e.g. Harry Potter)</p></li>
+<li><p>For the purchases collection, we can use either embedding or referencing. If we assume that most purchase order will contain only a small number of books, then we can use embedding. This is most likely to be the case in real-life. If we assume that most purchases order will contain a large number of books (bulk order of 100s of books), then we can use referencing.</p></li>
+<li><p><strong>JSON Example:</strong>
+<strong>books collection</strong> (referencing purchase ids)</p></li>
+</ul>
+</li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;book_id_1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Harry Potter and the Sorcerer&#39;s Stone&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-0-590-35340-3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;publication_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1997-06-26&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;purchases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;purchase_id_1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;purchase_id_2&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">...</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;purchase_id_100&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>purchase collection</strong> (embed books info)</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;purchase_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;purchase_id_1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-10-01&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;customer_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;customer_id_1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;books&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;book_id_1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Harry Potter and the Sorcerer&#39;s Stone&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;book_id_2&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The Hobbit&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>Entities: Customers and Reviews</strong></p>
+<ul class="simple">
+<li><p><strong>Type of Relationship:</strong></p></li>
+<li><p><strong>Embed or Reference:</strong></p></li>
+<li><p><strong>Explanation:</strong></p></li>
+<li><p><strong>JSON Example:</strong></p></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<div><p>YOUR ANSWER HERE</p>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p><strong>Entities: Customers and Reviews</strong></p>
+<ul class="simple">
+<li><p><strong>Type of Relationship:</strong> One-to-many</p></li>
+<li><p><strong>Embed or Reference:</strong> Reference reviews in customer collection</p></li>
+<li><p><strong>Explanation:</strong> Each customer can write multiples reviews, each review belongs to a single customer. We should reference the reviews id in the customer collection because the number of reviews could get quite large, hence referencing would be suitable here.</p></li>
+<li><p><strong>JSON Example:</strong></p></li>
+</ul>
+</li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;customer_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;customer_id_1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;john.doe@example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;reviews&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;review_id_1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_2&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_4&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_5&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_6&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_7&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_8&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_9&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;review_id_10&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>
@@ -1052,6 +838,12 @@ document.write(`
 <li><p>Double check your notebook is rendered properly on Github and you can see all the outputs clearly</p></li>
 <li><p>Submit a URL to the github repo that contain this worksheet to Moodle</p></li>
 </ul>
+<section id="id3">
+<h3>Quantifying Reads and Writes in the Online Bookstore Example<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p>To quantify the read and write operations in the online bookstore example, we need to consider the different types of operations performed by various users (customers and admins) and the frequency of these operations.</p>
+<p>Fill out the table below with possible operations by customers and admins and specify the estimated frequency, as well as whether it’s a read or write operations. You can make your own assumptions.</p>
+<p>I have added one operation as an example.</p>
+</section>
 </section>
 </section>
 
@@ -1085,6 +877,24 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="worksheet1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="worksheet3/worksheet3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Worksheet 3: CRUD operations in MongoDB</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -1107,27 +917,24 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-by-step-instructions">Step-by-Step Instructions:</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exerees-2-identify-database-workload">Exerees 2: Identify database workload</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-identify-database-workload">Exercise 2: Identify database workload</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantifying-reads-and-writes-in-the-online-bookstore-example">Quantifying Reads and Writes in the Online Bookstore Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-identifying-and-modeling-relationships-in-mongodb">Exercise 3: Identifying and Modeling Relationships in MongoDB</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#case-study-online-bookstore-continued">Case Study: Online Bookstore (Continued)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Objectives:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Step-by-Step Instructions:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#submission">Submission:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-identifying-and-modeling-relationships-in-mongodb">Exercise 3: Identifying and Modeling Relationships in MongoDB</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#case-study-online-bookstore-continued">Case Study: Online Bookstore (Continued)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Objectives:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Step-by-Step Instructions:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Submission:</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-4-schema-design-patterns-in-mongodb">Exercise 4: Schema Design Patterns in MongoDB</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Case Study: Online Bookstore (Continued)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Objectives:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Step-by-Step Instructions:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Submission:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example:</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#json-example">JSON Example:</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission instructions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission instructions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Quantifying Reads and Writes in the Online Bookstore Example</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
