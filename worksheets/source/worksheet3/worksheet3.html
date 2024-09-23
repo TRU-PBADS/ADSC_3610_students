@@ -60,7 +60,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'worksheets/source/worksheet3/worksheet3';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="prev" title="Worksheet 2: Data modelling with MongoDB" href="../worksheet2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -122,6 +121,8 @@
     <div class="bd-container__inner bd-page-width">
       
       
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -194,10 +195,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation_windows.html">Installation instruction for Windows</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Worksheet solution</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../worksheet1.html">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../worksheet2.html">Worksheet 2: Data modelling with MongoDB</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Worksheet 3: CRUD operations in MongoDB</a></li>
 </ul>
 
     </div>
@@ -410,7 +410,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># drop database books and students if they exist</span>
-<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;books&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;bookstore&#39;</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;students&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -425,7 +425,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;bookstore&#39;,
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;library&#39;,
  &#39;sample_airbnb&#39;,
  &#39;sample_analytics&#39;,
  &#39;sample_geospatial&#39;,
@@ -492,7 +492,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), ObjectId(&#39;66e8970fc48457d8d5b12657&#39;)], acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66f1c50f2a1f550705a4f5d3&#39;), ObjectId(&#39;66f1c50f2a1f550705a4f5d4&#39;), ObjectId(&#39;66f1c50f2a1f550705a4f5d5&#39;)], acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -552,9 +552,19 @@ document.write(`
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12631&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12632&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12657&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b7&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b8&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5bf&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c0&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c4&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d3&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d4&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d5&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
 </pre></div>
 </div>
 </div>
@@ -572,8 +582,14 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8885dc48457d8d5b1262d&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12632&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12657&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b8&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c0&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c4&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d4&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d5&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
 </pre></div>
 </div>
 </div>
@@ -619,7 +635,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e8970fc48457d8d5b12658&#39;), ObjectId(&#39;66e8970fc48457d8d5b12659&#39;), ObjectId(&#39;66e8970fc48457d8d5b1265a&#39;)], acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66f1c50f2a1f550705a4f5d6&#39;), ObjectId(&#39;66f1c50f2a1f550705a4f5d7&#39;), ObjectId(&#39;66f1c50f2a1f550705a4f5d8&#39;)], acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -634,7 +650,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b1265a&#39;),
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d8&#39;),
  &#39;title&#39;: &#39;A Brief History of Time&#39;,
  &#39;author&#39;: &#39;Stephen Hawking&#39;,
  &#39;genre&#39;: &#39;Non-Fiction&#39;,
@@ -653,10 +669,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264a&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;published_year&#39;: 1949, &#39;isbn&#39;: &#39;978-0-452-28423-4&#39;, &#39;price&#39;: 8.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b12651&#39;), &#39;title&#39;: &#39;Fahrenheit 451&#39;, &#39;author&#39;: &#39;Ray Bradbury&#39;, &#39;published_year&#39;: 1953, &#39;isbn&#39;: &#39;978-0-7432-4722-2&#39;, &#39;price&#39;: 9.49, &#39;publisher&#39;: &#39;Penguin Books&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b12652&#39;), &#39;title&#39;: &#39;Jane Eyre&#39;, &#39;author&#39;: &#39;Charlotte Brontë&#39;, &#39;published_year&#39;: 1847, &#39;isbn&#39;: &#39;978-0-14-243720-9&#39;, &#39;price&#39;: 8.49, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12659&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;genre&#39;: &#39;Fiction&#39;, &#39;price&#39;: 8.99}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d7&#39;), &#39;title&#39;: &#39;To Kill a Mockingbird&#39;, &#39;author&#39;: &#39;Harper Lee&#39;, &#39;genre&#39;: &#39;Fiction&#39;, &#39;price&#39;: 8.99}
 </pre></div>
 </div>
 </div>
@@ -742,7 +755,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e89710c48457d8d5b1265b&#39;), ObjectId(&#39;66e89710c48457d8d5b1265c&#39;), ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), ObjectId(&#39;66e89710c48457d8d5b1265f&#39;), ObjectId(&#39;66e89710c48457d8d5b12660&#39;), ObjectId(&#39;66e89710c48457d8d5b12661&#39;), ObjectId(&#39;66e89710c48457d8d5b12662&#39;), ObjectId(&#39;66e89710c48457d8d5b12663&#39;), ObjectId(&#39;66e89710c48457d8d5b12664&#39;)], acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66f1c5102a1f550705a4f5d9&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5da&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5db&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5dc&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5dd&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5de&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5df&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e0&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e1&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e2&#39;)], acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -762,19 +775,29 @@ document.write(`
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12631&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12632&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12657&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265b&#39;), &#39;name&#39;: &#39;Alice Johnson&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Computer Science&#39;, &#39;email&#39;: &#39;alice.johnson@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265c&#39;), &#39;name&#39;: &#39;Bob Smith&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Mathematics&#39;, &#39;email&#39;: &#39;bob.smith@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265f&#39;), &#39;name&#39;: &#39;Eve Adams&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Biology&#39;, &#39;email&#39;: &#39;eve.adams@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12660&#39;), &#39;name&#39;: &#39;Frank Wright&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Chemistry&#39;, &#39;email&#39;: &#39;frank.wright@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12661&#39;), &#39;name&#39;: &#39;Grace Hopper&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Computer Engineering&#39;, &#39;email&#39;: &#39;grace.hopper@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12663&#39;), &#39;name&#39;: &#39;Ivy League&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Literature&#39;, &#39;email&#39;: &#39;ivy.league@example.com&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;), &#39;name&#39;: &#39;Jack Daniels&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Business&#39;, &#39;email&#39;: &#39;jack.daniels@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b7&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b8&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5bf&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c0&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c4&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d3&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d4&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d5&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5d9&#39;), &#39;name&#39;: &#39;Alice Johnson&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Computer Science&#39;, &#39;email&#39;: &#39;alice.johnson@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5da&#39;), &#39;name&#39;: &#39;Bob Smith&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Mathematics&#39;, &#39;email&#39;: &#39;bob.smith@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5db&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5dc&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5dd&#39;), &#39;name&#39;: &#39;Eve Adams&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Biology&#39;, &#39;email&#39;: &#39;eve.adams@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5de&#39;), &#39;name&#39;: &#39;Frank Wright&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Chemistry&#39;, &#39;email&#39;: &#39;frank.wright@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5df&#39;), &#39;name&#39;: &#39;Grace Hopper&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Computer Engineering&#39;, &#39;email&#39;: &#39;grace.hopper@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e0&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e1&#39;), &#39;name&#39;: &#39;Ivy League&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Literature&#39;, &#39;email&#39;: &#39;ivy.league@example.com&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e2&#39;), &#39;name&#39;: &#39;Jack Daniels&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Business&#39;, &#39;email&#39;: &#39;jack.daniels@example.com&#39;}
 </pre></div>
 </div>
 </div>
@@ -793,7 +816,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66e89710c48457d8d5b12665&#39;), ObjectId(&#39;66e89710c48457d8d5b12666&#39;), ObjectId(&#39;66e89710c48457d8d5b12667&#39;), ObjectId(&#39;66e89710c48457d8d5b12668&#39;), ObjectId(&#39;66e89710c48457d8d5b12669&#39;), ObjectId(&#39;66e89710c48457d8d5b1266a&#39;), ObjectId(&#39;66e89710c48457d8d5b1266b&#39;), ObjectId(&#39;66e89710c48457d8d5b1266c&#39;), ObjectId(&#39;66e89710c48457d8d5b1266d&#39;), ObjectId(&#39;66e89710c48457d8d5b1266e&#39;)], acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66f1c5102a1f550705a4f5e3&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e4&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e5&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e6&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e7&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e8&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5e9&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5ea&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5eb&#39;), ObjectId(&#39;66f1c5102a1f550705a4f5ec&#39;)], acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -828,7 +851,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 18, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726519056, 35), &#39;t&#39;: 203}, &#39;nModified&#39;: 13, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726519056, 35), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xa0X\xdd\x0f\xde\x96\xe2\xf6\x19j\x9e\xe4\xe8ab\x18\r]\xd2J&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726519056, 35), &#39;updatedExisting&#39;: True}, acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 28, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1727120656, 42), &#39;t&#39;: 203}, &#39;nModified&#39;: 13, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1727120656, 42), &#39;signature&#39;: {&#39;hash&#39;: b&#39;=\x98\x93T\x06\xbf\xb3|6^H\xbf\x1c\xf6\x97w\x0c\x17k\xa8&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1727120656, 42), &#39;updatedExisting&#39;: True}, acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -849,17 +872,27 @@ document.write(`
 {&#39;_id&#39;: ObjectId(&#39;66e88869c48457d8d5b12636&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12655&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12656&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b12657&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265b&#39;), &#39;name&#39;: &#39;Alice Johnson&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Computer Science&#39;, &#39;email&#39;: &#39;alice.johnson@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265c&#39;), &#39;name&#39;: &#39;Bob Smith&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Mathematics&#39;, &#39;email&#39;: &#39;bob.smith@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265f&#39;), &#39;name&#39;: &#39;Eve Adams&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Biology&#39;, &#39;email&#39;: &#39;eve.adams@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12660&#39;), &#39;name&#39;: &#39;Frank Wright&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Chemistry&#39;, &#39;email&#39;: &#39;frank.wright@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12661&#39;), &#39;name&#39;: &#39;Grace Hopper&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Computer Engineering&#39;, &#39;email&#39;: &#39;grace.hopper@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12663&#39;), &#39;name&#39;: &#39;Ivy League&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Literature&#39;, &#39;email&#39;: &#39;ivy.league@example.com&#39;, &#39;gpa&#39;: None}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;), &#39;name&#39;: &#39;Jack Daniels&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Business&#39;, &#39;email&#39;: &#39;jack.daniels@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b7&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b8&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5bf&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c0&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c4&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d3&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d4&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d5&#39;), &#39;name&#39;: &#39;Charlie&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Engineering&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5d9&#39;), &#39;name&#39;: &#39;Alice Johnson&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Computer Science&#39;, &#39;email&#39;: &#39;alice.johnson@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5da&#39;), &#39;name&#39;: &#39;Bob Smith&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Mathematics&#39;, &#39;email&#39;: &#39;bob.smith@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5db&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5dc&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5dd&#39;), &#39;name&#39;: &#39;Eve Adams&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Biology&#39;, &#39;email&#39;: &#39;eve.adams@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5de&#39;), &#39;name&#39;: &#39;Frank Wright&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Chemistry&#39;, &#39;email&#39;: &#39;frank.wright@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5df&#39;), &#39;name&#39;: &#39;Grace Hopper&#39;, &#39;age&#39;: 24, &#39;major&#39;: &#39;Computer Engineering&#39;, &#39;email&#39;: &#39;grace.hopper@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e0&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e1&#39;), &#39;name&#39;: &#39;Ivy League&#39;, &#39;age&#39;: 23, &#39;major&#39;: &#39;Literature&#39;, &#39;email&#39;: &#39;ivy.league@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e2&#39;), &#39;name&#39;: &#39;Jack Daniels&#39;, &#39;age&#39;: 22, &#39;major&#39;: &#39;Business&#39;, &#39;email&#39;: &#39;jack.daniels@example.com&#39;, &#39;gpa&#39;: None}
 </pre></div>
 </div>
 </div>
@@ -877,7 +910,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726519056, 37), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726519056, 37), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xa0X\xdd\x0f\xde\x96\xe2\xf6\x19j\x9e\xe4\xe8ab\x18\r]\xd2J&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726519056, 37), &#39;updatedExisting&#39;: True}, acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1727120656, 44), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1727120656, 44), &#39;signature&#39;: {&#39;hash&#39;: b&#39;=\x98\x93T\x06\xbf\xb3|6^H\xbf\x1c\xf6\x97w\x0c\x17k\xa8&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1727120656, 44), &#39;updatedExisting&#39;: True}, acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -890,7 +923,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;),
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e2&#39;),
  &#39;name&#39;: &#39;Jack Daniels&#39;,
  &#39;age&#39;: 22,
  &#39;major&#39;: &#39;Business&#39;,
@@ -915,7 +948,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726519056, 54), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726519056, 54), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xa0X\xdd\x0f\xde\x96\xe2\xf6\x19j\x9e\xe4\xe8ab\x18\r]\xd2J&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726519056, 54), &#39;updatedExisting&#39;: True}, acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1727120656, 58), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1727120656, 58), &#39;signature&#39;: {&#39;hash&#39;: b&#39;=\x98\x93T\x06\xbf\xb3|6^H\xbf\x1c\xf6\x97w\x0c\x17k\xa8&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1727120656, 58), &#39;updatedExisting&#39;: True}, acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -946,7 +979,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;),
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e2&#39;),
  &#39;name&#39;: &#39;Jack Daniels&#39;,
  &#39;age&#39;: 22,
  &#39;major&#39;: &#39;Business&#39;,
@@ -982,7 +1015,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12664&#39;),
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e2&#39;),
  &#39;name&#39;: &#39;John Doe&#39;,
  &#39;age&#39;: 25,
  &#39;major&#39;: &#39;History&#39;,
@@ -1010,7 +1043,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1726519056, 58), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1726519056, 58), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xa0X\xdd\x0f\xde\x96\xe2\xf6\x19j\x9e\xe4\xe8ab\x18\r]\xd2J&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1726519056, 58), &#39;updatedExisting&#39;: True}, acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1727120657, 2), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1727120657, 2), &#39;signature&#39;: {&#39;hash&#39;: b&#39;[\x84\x00\xdc\xb3\x1e\xd6\x8b!?\x01\x08\xdfQ\xe9\x195\xdd\x16\xad&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1727120657, 2), &#39;updatedExisting&#39;: True}, acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -1023,7 +1056,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e8970fc48457d8d5b1265a&#39;),
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d8&#39;),
  &#39;title&#39;: &#39;The Universe in a Nutshell&#39;,
  &#39;author&#39;: &#39;Stephen Hawking&#39;,
  &#39;genre&#39;: &#39;Non-Fiction&#39;,
@@ -1073,6 +1106,16 @@ document.write(`
 {&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265d&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1265e&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
 {&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12662&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b7&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4df2a1f550705a4f5b8&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5bf&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c0&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c4e02a1f550705a4f5c4&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d3&#39;), &#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Computer Science&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c50f2a1f550705a4f5d4&#39;), &#39;name&#39;: &#39;Bob&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Mathematics&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5db&#39;), &#39;name&#39;: &#39;Charlie Brown&#39;, &#39;age&#39;: 20, &#39;major&#39;: &#39;Physics&#39;, &#39;email&#39;: &#39;charlie.brown@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5dc&#39;), &#39;name&#39;: &#39;Diana Prince&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;History&#39;, &#39;email&#39;: &#39;diana.prince@example.com&#39;, &#39;gpa&#39;: None}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e0&#39;), &#39;name&#39;: &#39;Hank Pym&#39;, &#39;age&#39;: 21, &#39;major&#39;: &#39;Biochemistry&#39;, &#39;email&#39;: &#39;hank.pym@example.com&#39;, &#39;gpa&#39;: None}
 </pre></div>
 </div>
 </div>
@@ -1127,18 +1170,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264a&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;published_year&#39;: 1949, &#39;isbn&#39;: &#39;978-0-452-28423-4&#39;, &#39;price&#39;: 8.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264b&#39;), &#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;published_year&#39;: 1813, &#39;isbn&#39;: &#39;978-0-19-953556-9&#39;, &#39;price&#39;: 12.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264d&#39;), &#39;title&#39;: &#39;Moby-Dick&#39;, &#39;author&#39;: &#39;Herman Melville&#39;, &#39;published_year&#39;: 1851, &#39;isbn&#39;: &#39;978-0-14-243724-7&#39;, &#39;price&#39;: 11.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b1264e&#39;), &#39;title&#39;: &#39;War and Peace&#39;, &#39;author&#39;: &#39;Leo Tolstoy&#39;, &#39;published_year&#39;: 1869, &#39;isbn&#39;: &#39;978-0-14-044793-4&#39;, &#39;price&#39;: 14.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b12651&#39;), &#39;title&#39;: &#39;Fahrenheit 451&#39;, &#39;author&#39;: &#39;Ray Bradbury&#39;, &#39;published_year&#39;: 1953, &#39;isbn&#39;: &#39;978-0-7432-4722-2&#39;, &#39;price&#39;: 9.49, &#39;publisher&#39;: &#39;Penguin Books&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89549c48457d8d5b12652&#39;), &#39;title&#39;: &#39;Jane Eyre&#39;, &#39;author&#39;: &#39;Charlotte Brontë&#39;, &#39;published_year&#39;: 1847, &#39;isbn&#39;: &#39;978-0-14-243720-9&#39;, &#39;price&#39;: 8.49, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12666&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;published_year&#39;: 1949, &#39;isbn&#39;: &#39;978-0-452-28423-4&#39;, &#39;price&#39;: 8.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12667&#39;), &#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;published_year&#39;: 1813, &#39;isbn&#39;: &#39;978-0-19-953556-9&#39;, &#39;price&#39;: 12.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b12669&#39;), &#39;title&#39;: &#39;Moby-Dick&#39;, &#39;author&#39;: &#39;Herman Melville&#39;, &#39;published_year&#39;: 1851, &#39;isbn&#39;: &#39;978-0-14-243724-7&#39;, &#39;price&#39;: 11.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1266a&#39;), &#39;title&#39;: &#39;War and Peace&#39;, &#39;author&#39;: &#39;Leo Tolstoy&#39;, &#39;published_year&#39;: 1869, &#39;isbn&#39;: &#39;978-0-14-044793-4&#39;, &#39;price&#39;: 14.99, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1266d&#39;), &#39;title&#39;: &#39;Fahrenheit 451&#39;, &#39;author&#39;: &#39;Ray Bradbury&#39;, &#39;published_year&#39;: 1953, &#39;isbn&#39;: &#39;978-0-7432-4722-2&#39;, &#39;price&#39;: 9.49, &#39;publisher&#39;: &#39;Unknown&#39;}
-{&#39;_id&#39;: ObjectId(&#39;66e89710c48457d8d5b1266e&#39;), &#39;title&#39;: &#39;Jane Eyre&#39;, &#39;author&#39;: &#39;Charlotte Brontë&#39;, &#39;published_year&#39;: 1847, &#39;isbn&#39;: &#39;978-0-14-243720-9&#39;, &#39;price&#39;: 8.49, &#39;publisher&#39;: &#39;Unknown&#39;}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e4&#39;), &#39;title&#39;: &#39;1984&#39;, &#39;author&#39;: &#39;George Orwell&#39;, &#39;published_year&#39;: 1949, &#39;isbn&#39;: &#39;978-0-452-28423-4&#39;, &#39;price&#39;: 8.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e5&#39;), &#39;title&#39;: &#39;Pride and Prejudice&#39;, &#39;author&#39;: &#39;Jane Austen&#39;, &#39;published_year&#39;: 1813, &#39;isbn&#39;: &#39;978-0-19-953556-9&#39;, &#39;price&#39;: 12.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e7&#39;), &#39;title&#39;: &#39;Moby-Dick&#39;, &#39;author&#39;: &#39;Herman Melville&#39;, &#39;published_year&#39;: 1851, &#39;isbn&#39;: &#39;978-0-14-243724-7&#39;, &#39;price&#39;: 11.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5e8&#39;), &#39;title&#39;: &#39;War and Peace&#39;, &#39;author&#39;: &#39;Leo Tolstoy&#39;, &#39;published_year&#39;: 1869, &#39;isbn&#39;: &#39;978-0-14-044793-4&#39;, &#39;price&#39;: 14.99, &#39;publisher&#39;: &#39;Unknown&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5eb&#39;), &#39;title&#39;: &#39;Fahrenheit 451&#39;, &#39;author&#39;: &#39;Ray Bradbury&#39;, &#39;published_year&#39;: 1953, &#39;isbn&#39;: &#39;978-0-7432-4722-2&#39;, &#39;price&#39;: 9.49, &#39;publisher&#39;: &#39;Penguin Books&#39;}
+{&#39;_id&#39;: ObjectId(&#39;66f1c5102a1f550705a4f5ec&#39;), &#39;title&#39;: &#39;Jane Eyre&#39;, &#39;author&#39;: &#39;Charlotte Brontë&#39;, &#39;published_year&#39;: 1847, &#39;isbn&#39;: &#39;978-0-14-243720-9&#39;, &#39;price&#39;: 8.49, &#39;publisher&#39;: &#39;Unknown&#39;}
 </pre></div>
 </div>
 </div>
@@ -1260,7 +1297,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Age Distribution of Students&#39;}, ylabel=&#39;Frequency&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../../_images/f213bbc6322667cafba83d6b1312edc67c916942bc9b5ca6aea4f3d574d98190.png" src="../../../_images/f213bbc6322667cafba83d6b1312edc67c916942bc9b5ca6aea4f3d574d98190.png" />
+<img alt="../../../_images/bdea02369d47d0263df2f8ee63e8c644e0e27224ce21ab23c8930c7711488986.png" src="../../../_images/bdea02369d47d0263df2f8ee63e8c644e0e27224ce21ab23c8930c7711488986.png" />
 </div>
 </div>
 <p>Now it’s your turn</p>
@@ -1312,7 +1349,7 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>66e89549c48457d8d5b1264a</td>
+      <td>66f1c5102a1f550705a4f5e4</td>
       <td>1984</td>
       <td>George Orwell</td>
       <td>1949</td>
@@ -1322,7 +1359,7 @@ document.write(`
     </tr>
     <tr>
       <th>1</th>
-      <td>66e89549c48457d8d5b1264b</td>
+      <td>66f1c5102a1f550705a4f5e5</td>
       <td>Pride and Prejudice</td>
       <td>Jane Austen</td>
       <td>1813</td>
@@ -1332,7 +1369,7 @@ document.write(`
     </tr>
     <tr>
       <th>2</th>
-      <td>66e89549c48457d8d5b1264d</td>
+      <td>66f1c5102a1f550705a4f5e7</td>
       <td>Moby-Dick</td>
       <td>Herman Melville</td>
       <td>1851</td>
@@ -1342,7 +1379,7 @@ document.write(`
     </tr>
     <tr>
       <th>3</th>
-      <td>66e89549c48457d8d5b1264e</td>
+      <td>66f1c5102a1f550705a4f5e8</td>
       <td>War and Peace</td>
       <td>Leo Tolstoy</td>
       <td>1869</td>
@@ -1352,7 +1389,7 @@ document.write(`
     </tr>
     <tr>
       <th>4</th>
-      <td>66e89549c48457d8d5b12651</td>
+      <td>66f1c5102a1f550705a4f5eb</td>
       <td>Fahrenheit 451</td>
       <td>Ray Bradbury</td>
       <td>1953</td>
@@ -1362,67 +1399,7 @@ document.write(`
     </tr>
     <tr>
       <th>5</th>
-      <td>66e89549c48457d8d5b12652</td>
-      <td>Jane Eyre</td>
-      <td>Charlotte Brontë</td>
-      <td>1847</td>
-      <td>978-0-14-243720-9</td>
-      <td>8.49</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>66e89710c48457d8d5b12666</td>
-      <td>1984</td>
-      <td>George Orwell</td>
-      <td>1949</td>
-      <td>978-0-452-28423-4</td>
-      <td>8.99</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>66e89710c48457d8d5b12667</td>
-      <td>Pride and Prejudice</td>
-      <td>Jane Austen</td>
-      <td>1813</td>
-      <td>978-0-19-953556-9</td>
-      <td>12.99</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>66e89710c48457d8d5b12669</td>
-      <td>Moby-Dick</td>
-      <td>Herman Melville</td>
-      <td>1851</td>
-      <td>978-0-14-243724-7</td>
-      <td>11.99</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>66e89710c48457d8d5b1266a</td>
-      <td>War and Peace</td>
-      <td>Leo Tolstoy</td>
-      <td>1869</td>
-      <td>978-0-14-044793-4</td>
-      <td>14.99</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>66e89710c48457d8d5b1266d</td>
-      <td>Fahrenheit 451</td>
-      <td>Ray Bradbury</td>
-      <td>1953</td>
-      <td>978-0-7432-4722-2</td>
-      <td>9.49</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>66e89710c48457d8d5b1266e</td>
+      <td>66f1c5102a1f550705a4f5ec</td>
       <td>Jane Eyre</td>
       <td>Charlotte Brontë</td>
       <td>1847</td>
@@ -1445,7 +1422,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Price Distribution of Books&#39;}, ylabel=&#39;Frequency&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../../_images/a75d8a21bc9a9a7557a8587f3b1f628f7d8998b9e262f15b12288e3977ce7481.png" src="../../../_images/a75d8a21bc9a9a7557a8587f3b1f628f7d8998b9e262f15b12288e3977ce7481.png" />
+<img alt="../../../_images/e8987763d432ab839faaff00c04ad957aeb9cec805dcbc82ed43365ecfadeffc.png" src="../../../_images/e8987763d432ab839faaff00c04ad957aeb9cec805dcbc82ed43365ecfadeffc.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1508,15 +1485,6 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../worksheet2.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Worksheet 2: Data modelling with MongoDB</p>
-      </div>
-    </a>
 </div>
                 </footer>
               
