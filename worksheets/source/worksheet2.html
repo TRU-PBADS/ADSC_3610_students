@@ -60,7 +60,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'worksheets/source/worksheet2';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Worksheet 3: CRUD operations in MongoDB" href="worksheet3/worksheet3.html" />
     <link rel="prev" title="Worksheet 1: Introduction to noSQL databases and document model with MongoDB" href="worksheet1.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -198,7 +197,6 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="worksheet1.html">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Worksheet 2: Data modelling with MongoDB</a></li>
-<li class="toctree-l1"><a class="reference internal" href="worksheet3/worksheet3.html">Worksheet 3: CRUD operations in MongoDB</a></li>
 </ul>
 
     </div>
@@ -651,11 +649,10 @@ document.write(`
 <li><p><strong>Entities: Books and Authors</strong></p>
 <ul class="simple">
 <li><p><strong>Type of Relationship:</strong> Many-to-Many</p></li>
-<li><p><strong>Embed or Reference:</strong> Embed for books, and reference for authors</p></li>
+<li><p><strong>Embed or Reference:</strong> Embed for books, and embed for authors</p></li>
 <li><p><strong>Explanation:</strong> Each book can have multiple authors, but each author can also write multiple books.</p></li>
 <li><p>For the books collection, since the number of authors of each book is relatively small, we can directly embed authors information in the books collection. This will help users to retrieve information on authors while browsing a book faster.</p></li>
-<li><p>For the authors collection, since each authors can have a large number of books, embedding books information in authors collection would likely result in unbounded documents (it’s too long), and slow down the querry time. Hence, it’s better to do referencing to books ID in the authors collection</p></li>
-<li><p>We will also accept the option to use referencing in authors collection here if you assume each authors only publish a small limited number of books</p></li>
+<li><p>For the authors collection, each authors can have multiple books, but the number of books that each author wrote over time is likely to be limited (e.g. each author has less than 20 books). Also, when people click on authors name, they will likely want to browse all the books written by that authors. So embedding here would make sense. Data that are accessed together, should stay together!</p></li>
 <li><p><strong>JSON Example:</strong></p></li>
 </ul>
 </li>
@@ -679,13 +676,23 @@ document.write(`
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Authors collection (referencing books)</p>
+<p>Authors collection (embed books)</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;author_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Neil Gaiman&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;author_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;George Orwell&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;books&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="s2">&quot;book_id_3&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="s2">&quot;book_id_6&quot;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;book_id_2&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1984&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-0-452-28423-4&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;publication_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1949-06-08&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;book_id_3&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Animal Farm&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ISBN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-0-452-28424-1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;publication_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1945-08-17&quot;</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
@@ -745,8 +752,8 @@ document.write(`
 <li><p><strong>Type of Relationship:</strong>: Many-to-many</p></li>
 <li><p><strong>Embed or Reference:</strong></p></li>
 <li><p><strong>Explanation:</strong> Each book can be purchased multiple times, each purchase order can have multiple books</p></li>
-<li><p>For the books collection, we can reference the purchased id since we can have hundreds to millions of purchase orders for a single popular book (e.g. Harry Potter)</p></li>
-<li><p>For the purchases collection, we can use either embedding or referencing. If we assume that most purchase order will contain only a small number of books, then we can use embedding. This is most likely to be the case in real-life. If we assume that most purchases order will contain a large number of books (bulk order of 100s of books), then we can use referencing.</p></li>
+<li><p>For the books collection, we can reference the purchased id since we can have hundreds to millions of purchase orders for a single popular book (e.g. Harry Potter). This will also help with reducing data redundancy when we need to update some information about the purcharse order.</p></li>
+<li><p>For the purchases collection, we can use embedding as we assume that most purchase order will contain only a small number of books. When we querry data about purchases, we most likely will always want to see the book information within the purchase order as well. Books information will unlikely to be changed/updated frequently, so there’s no concerns for data redundancy. Data that are accessed together, should stay together!</p></li>
 <li><p><strong>JSON Example:</strong>
 <strong>books collection</strong> (referencing purchase ids)</p></li>
 </ul>
@@ -774,11 +781,13 @@ document.write(`
 <span class="w">    </span><span class="nt">&quot;books&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;book_id_1&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Harry Potter and the Sorcerer&#39;s Stone&quot;</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Harry Potter and the Sorcerer&#39;s Stone&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">8.99</span>
 <span class="w">        </span><span class="p">},</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;book_id_2&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The Hobbit&quot;</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The Hobbit&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.99</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="p">}</span>
@@ -802,7 +811,7 @@ document.write(`
 <ul class="simple">
 <li><p><strong>Type of Relationship:</strong> One-to-many</p></li>
 <li><p><strong>Embed or Reference:</strong> Reference reviews in customer collection</p></li>
-<li><p><strong>Explanation:</strong> Each customer can write multiples reviews, each review belongs to a single customer. We should reference the reviews id in the customer collection because the number of reviews could get quite large, hence referencing would be suitable here.</p></li>
+<li><p><strong>Explanation:</strong> Each customer can write multiples reviews, each review belongs to a single customer. We should reference the reviews id in the customer collection because the number of reviews could get quite large, hence referencing would be suitable here. Also, if we think about the kind of operations that would querry the customer collection, it’s unlikely that we would need to show all the reviews that each customer made.</p></li>
 <li><p><strong>JSON Example:</strong></p></li>
 </ul>
 </li>
@@ -885,15 +894,6 @@ document.write(`
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="worksheet3/worksheet3.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Worksheet 3: CRUD operations in MongoDB</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
