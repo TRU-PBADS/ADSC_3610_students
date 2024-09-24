@@ -1,0 +1,996 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Lecture 8: ACID transactions in MongoDB &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture8';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Midterm 1 instruction" href="midterm1.html" />
+    <link rel="prev" title="Lecture 7: Aggregation operations in MongoDB" href="lecture7.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/TRU_Logo.png" class="logo__image only-light" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>
+    <script>document.write(`<img src="../_static/TRU_Logo.png" class="logo__image only-dark" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../syllabus.html">
+                    ADSC 3610 - Database Systems in Applied Data Science II - Syllabus
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture6.html">Lecture 6: CRUD operations in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture7.html">Lecture 7: Aggregation operations in MongoDB</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 8: ACID transactions in MongoDB</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Midterms Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="midterm1.html">Midterm 1 instruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation_mac.html">Installation instruction for macOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation_windows.html">Installation instruction for Windows</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Worksheet solution</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../worksheets/source/worksheet1.html">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../worksheets/source/worksheet2.html">Worksheet 2: Data modelling with MongoDB</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/lectures/lecture8.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 8: ACID transactions in MongoDB</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-acid-transactions">Introduction to ACID Transactions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodb-transactions">MongoDB Transactions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-mongodb-connection-and-collections">1. Setup MongoDB Connection and Collections</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#insert-sample-data">2. Insert Sample Data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-inc-in-mongodb">Explanation of <code class="docutils literal notranslate"><span class="pre">$inc</span></code> in MongoDB</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-inc">What is <code class="docutils literal notranslate"><span class="pre">$inc</span></code>?</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#syntax">Syntax</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-transaction-function">3. Define the Transaction Function</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#execute-the-transaction">4. Execute the Transaction</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-the-constraint">5. Testing the constraint</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-8-acid-transactions-in-mongodb">
+<h1>Lecture 8: ACID transactions in MongoDB<a class="headerlink" href="#lecture-8-acid-transactions-in-mongodb" title="Link to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this lecture, students will be able to:</p>
+<ul class="simple">
+<li><p>Understand the ACID properties and their importance in database transactions.</p></li>
+<li><p>Implement multi-document ACID transactions in MongoDB using the <code class="docutils literal notranslate"><span class="pre">pymongo</span></code> library.</p></li>
+<li><p>Handle transaction errors and ensure data consistency and reliability.</p></li>
+</ul>
+</section>
+<section id="introduction-to-acid-transactions">
+<h2>Introduction to ACID Transactions<a class="headerlink" href="#introduction-to-acid-transactions" title="Link to this heading">#</a></h2>
+<p>ACID transactions ensure that database operations are processed reliably. ACID stands for:</p>
+<ul class="simple">
+<li><p><strong>Atomicity</strong>: Ensures that all operations within a transaction are completed successfully. If any operation fails, the entire transaction is rolled back.</p></li>
+<li><p><strong>Consistency</strong>: Ensures that a transaction brings the database from one valid state to another, maintaining database invariants.</p></li>
+<li><p><strong>Isolation</strong>: Ensures that concurrently executing transactions do not affect each other.</p></li>
+<li><p><strong>Durability</strong>: Ensures that once a transaction is committed, it remains so, even in the event of a system failure.</p></li>
+</ul>
+<section id="mongodb-transactions">
+<h3>MongoDB Transactions<a class="headerlink" href="#mongodb-transactions" title="Link to this heading">#</a></h3>
+<p>MongoDB supports multi-document ACID transactions, which allow you to perform multiple operations across multiple documents and collections in a single transaction. Transactions in MongoDB are available for replica sets and sharded clusters.</p>
+</section>
+<section id="key-concepts">
+<h3>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Session</strong>: A session is required to start a transaction.</p></li>
+<li><p><strong>Transaction</strong>: A sequence of read and write operations that are executed as a single unit.</p></li>
+</ul>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p>Below is an example of how to use transactions in MongoDB using Python and the <code class="docutils literal notranslate"><span class="pre">pymongo</span></code> library.</p>
+<section id="setup-mongodb-connection-and-collections">
+<h4>1. Setup MongoDB Connection and Collections<a class="headerlink" href="#setup-mongodb-connection-and-collections" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span> <span class="c1"># import mongo client to connect</span>
+<span class="kn">from</span> <span class="nn">pymongo.errors</span> <span class="kn">import</span> <span class="n">ConnectionFailure</span><span class="p">,</span> <span class="n">OperationFailure</span>
+<span class="kn">import</span> <span class="nn">json</span> <span class="c1"># import json to load credentials</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+
+<span class="c1"># load credentials from json file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;credentials_mongodb.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># assign credentials to variables</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;mongodb+srv://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">/?retryWrites=true&amp;w=majority&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+
+<span class="c1"># connect to the database</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="c1"># drop database banking if they exist</span>
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;banking&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create database and collection</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;banking&quot;</span><span class="p">]</span>
+
+<span class="c1"># Collections</span>
+<span class="n">accounts_collection</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">accounts</span>
+<span class="n">transactions_collection</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">transactions</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="insert-sample-data">
+<h4>2. Insert Sample Data<a class="headerlink" href="#insert-sample-data" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Insert sample data into accounts collection</span>
+<span class="n">accounts_collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">,</span> <span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_2&quot;</span><span class="p">,</span> <span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">}</span>
+<span class="p">])</span>
+
+<span class="c1"># Insert sample data into transactions collection</span>
+<span class="n">transactions_collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">&quot;from_account&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">,</span> <span class="s2">&quot;to_account&quot;</span><span class="p">:</span> <span class="s2">&quot;account_2&quot;</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;completed&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;from_account&quot;</span><span class="p">:</span> <span class="s2">&quot;account_2&quot;</span><span class="p">,</span> <span class="s2">&quot;to_account&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;completed&quot;</span><span class="p">}</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertManyResult([ObjectId(&#39;66f22cb2a09f7a2fb0d6ede5&#39;), ObjectId(&#39;66f22cb2a09f7a2fb0d6ede6&#39;)], acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out documents in accounts collection</span>
+<span class="k">for</span> <span class="n">account</span> <span class="ow">in</span> <span class="n">accounts_collection</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">account</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede3&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 500}
+{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede4&#39;), &#39;account_id&#39;: &#39;account_2&#39;, &#39;balance&#39;: 300}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s say we want to update the account balance. For example, a customer deposit $50 into their account_1</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out account_1 document in accounts collection before update</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">accounts_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede3&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 400}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Increment the balance of account_1 by 50</span>
+<span class="n">accounts_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">}}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1727147916, 1), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1727147916, 1), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xcbc~\xf2\xdfP\x1e\xa7\xcd\xea\xf2\xac\x9f1\xf5\x84\x91\xa0\x04\xee&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1727147916, 1), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out account_1 document in accounts collection after update</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">accounts_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede3&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 450}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="explanation-of-inc-in-mongodb">
+<h4>Explanation of <code class="docutils literal notranslate"><span class="pre">$inc</span></code> in MongoDB<a class="headerlink" href="#explanation-of-inc-in-mongodb" title="Link to this heading">#</a></h4>
+<section id="what-is-inc">
+<h5>What is <code class="docutils literal notranslate"><span class="pre">$inc</span></code>?<a class="headerlink" href="#what-is-inc" title="Link to this heading">#</a></h5>
+<p><code class="docutils literal notranslate"><span class="pre">$inc</span></code> is an update operator in MongoDB that is used to increment (or decrement) the value of a field by a specified amount. It is commonly used in update operations to modify the value of numeric fields.</p>
+</section>
+<section id="syntax">
+<h5>Syntax<a class="headerlink" href="#syntax" title="Link to this heading">#</a></h5>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">field1</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">amount1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">field2</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">amount2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;field1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;field2&gt;</span></code>: The fields to be incremented or decremented.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;amount1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;amount2&gt;</span></code>: The amounts by which to increment or decrement the fields. Positive values increment the field, while negative values decrement the field.</p></li>
+</ul>
+</section>
+<section id="example-usage">
+<h5>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading">#</a></h5>
+<ol class="arabic simple">
+<li><p><strong>Incrementing a Field</strong></p></li>
+</ol>
+<p>Suppose you have a collection named <code class="docutils literal notranslate"><span class="pre">accounts</span></code> with documents that contain account balances. You can use <code class="docutils literal notranslate"><span class="pre">$inc</span></code> to increment the balance of a specific account.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out account_1 document in accounts collection before update</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">accounts_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede3&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 450}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Increment the balance of account_1 by 100</span>
+<span class="n">accounts_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">}}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1727148066, 1), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1727148066, 1), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xff\x04\xce\xc4j\xa95\xd0jD\xe9ss\\\x01\xa5\x04\x8ey\xed&#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1727148066, 1), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out account_1 document in accounts collection after update</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">accounts_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede3&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 550}
+</pre></div>
+</div>
+</div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Decrementing a Field</strong></p></li>
+</ol>
+<p>You can also use <code class="docutils literal notranslate"><span class="pre">$inc</span></code> to decrement the value of a field by specifying a negative amount.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out account_1 document in accounts collection before update</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">accounts_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede3&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 550}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decrement the balance of account_1 by 50</span>
+<span class="n">accounts_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">}}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UpdateResult({&#39;n&#39;: 1, &#39;electionId&#39;: ObjectId(&#39;7fffffff00000000000000cb&#39;), &#39;opTime&#39;: {&#39;ts&#39;: Timestamp(1727148099, 3), &#39;t&#39;: 203}, &#39;nModified&#39;: 1, &#39;ok&#39;: 1.0, &#39;$clusterTime&#39;: {&#39;clusterTime&#39;: Timestamp(1727148099, 3), &#39;signature&#39;: {&#39;hash&#39;: b&#39;\xf9N3\xbbr\xba\xbf8\x9f6h{\x11N\x0c\xdc\xbfP\x13 &#39;, &#39;keyId&#39;: 7381891571605569538}}, &#39;operationTime&#39;: Timestamp(1727148099, 3), &#39;updatedExisting&#39;: True}, acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out account_1 document in accounts collection after update</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">accounts_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_1&quot;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede3&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 500}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="define-the-transaction-function">
+<h4>3. Define the Transaction Function<a class="headerlink" href="#define-the-transaction-function" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">transfer_funds</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">from_account</span><span class="p">,</span> <span class="n">to_account</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+    <span class="c1"># Check if the from_account has sufficient balance</span>
+    <span class="n">from_account_doc</span> <span class="o">=</span> <span class="n">accounts_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="n">from_account</span><span class="p">},</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">from_account_doc</span><span class="p">[</span><span class="s2">&quot;balance&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">amount</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Insufficient funds&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Transfer funds</span>
+    <span class="n">accounts_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="n">from_account</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">amount</span><span class="p">}},</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">session</span>
+    <span class="p">)</span>
+    <span class="n">accounts_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="n">to_account</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="n">amount</span><span class="p">}},</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">session</span>
+    <span class="p">)</span>
+    <span class="n">transactions_collection</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;from_account&quot;</span><span class="p">:</span> <span class="n">from_account</span><span class="p">,</span>
+            <span class="s2">&quot;to_account&quot;</span><span class="p">:</span> <span class="n">to_account</span><span class="p">,</span>
+            <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="n">amount</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;completed&quot;</span>
+        <span class="p">},</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">session</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="execute-the-transaction">
+<h4>4. Execute the Transaction<a class="headerlink" href="#execute-the-transaction" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start a session</span>
+<span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">start_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="c1"># Start a transaction</span>
+    <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">start_transaction</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">transfer_funds</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s2">&quot;account_1&quot;</span><span class="p">,</span> <span class="s2">&quot;account_2&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">ConnectionFailure</span><span class="p">,</span> <span class="n">OperationFailure</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transaction aborted due to: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">abort_transaction</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">commit_transaction</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transaction committed successfully&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transaction committed successfully
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out documents in accounts collection</span>
+<span class="k">for</span> <span class="n">account</span> <span class="ow">in</span> <span class="n">accounts_collection</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">account</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22c7fa09f7a2fb0d6edd6&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 50}
+{&#39;_id&#39;: ObjectId(&#39;66f22c7fa09f7a2fb0d6edd7&#39;), &#39;account_id&#39;: &#39;account_2&#39;, &#39;balance&#39;: 300}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out documents in transactions collection, drop id field</span>
+<span class="k">for</span> <span class="n">transaction</span> <span class="ow">in</span> <span class="n">transactions_collection</span><span class="o">.</span><span class="n">find</span><span class="p">({},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;from_account&#39;: &#39;account_1&#39;, &#39;to_account&#39;: &#39;account_2&#39;, &#39;amount&#39;: 50, &#39;status&#39;: &#39;completed&#39;}
+{&#39;from_account&#39;: &#39;account_2&#39;, &#39;to_account&#39;: &#39;account_1&#39;, &#39;amount&#39;: 30, &#39;status&#39;: &#39;completed&#39;}
+{&#39;from_account&#39;: &#39;account_1&#39;, &#39;to_account&#39;: &#39;account_2&#39;, &#39;amount&#39;: 100, &#39;status&#39;: &#39;completed&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="testing-the-constraint">
+<h4>5. Testing the constraint<a class="headerlink" href="#testing-the-constraint" title="Link to this heading">#</a></h4>
+<p>Let’s add an account_3 with a balance of <span class="math notranslate nohighlight">\(50 and try to perform a transactions to send \)</span>100 from account_3 to account_1. This should give an error because of insufficient funds</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># add account_3 to accounts collection with balance 50</span>
+<span class="n">accounts_collection</span><span class="o">.</span><span class="n">insert_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;account_3&quot;</span><span class="p">,</span> <span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertOneResult(ObjectId(&#39;66f22d79a09f7a2fb0d6ede8&#39;), acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start a session</span>
+<span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">start_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="c1"># Start a transaction</span>
+    <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">start_transaction</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">transfer_funds</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s2">&quot;account_3&quot;</span><span class="p">,</span> <span class="s2">&quot;account_1&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">ConnectionFailure</span><span class="p">,</span> <span class="n">OperationFailure</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transaction aborted due to: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">abort_transaction</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">commit_transaction</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transaction committed successfully&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">46</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">start_transaction</span><span class="p">():</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">6</span>         <span class="n">transfer_funds</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s2">&quot;account_3&quot;</span><span class="p">,</span> <span class="s2">&quot;account_1&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="k">except</span> <span class="p">(</span><span class="n">ConnectionFailure</span><span class="p">,</span> <span class="n">OperationFailure</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transaction aborted due to: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nn">Cell In[45], line 6,</span> in <span class="ni">transfer_funds</span><span class="nt">(session, from_account, to_account, amount)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">from_account_doc</span> <span class="o">=</span> <span class="n">accounts_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="n">from_account</span><span class="p">},</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">if</span> <span class="n">from_account_doc</span><span class="p">[</span><span class="s2">&quot;balance&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">amount</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">6</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Insufficient funds&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># Transfer funds</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">accounts_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="p">{</span><span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="n">from_account</span><span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="p">{</span><span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">amount</span><span class="p">}},</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">session</span><span class="o">=</span><span class="n">session</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="p">)</span>
+
+<span class="ne">ValueError</span>: Insufficient funds
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out documents in accounts collection</span>
+<span class="k">for</span> <span class="n">account</span> <span class="ow">in</span> <span class="n">accounts_collection</span><span class="o">.</span><span class="n">find</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">account</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede3&#39;), &#39;account_id&#39;: &#39;account_1&#39;, &#39;balance&#39;: 400}
+{&#39;_id&#39;: ObjectId(&#39;66f22cb2a09f7a2fb0d6ede4&#39;), &#39;account_id&#39;: &#39;account_2&#39;, &#39;balance&#39;: 400}
+{&#39;_id&#39;: ObjectId(&#39;66f22d79a09f7a2fb0d6ede8&#39;), &#39;account_id&#39;: &#39;account_3&#39;, &#39;balance&#39;: 50}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out documents in transactions collection, drop id field</span>
+<span class="k">for</span> <span class="n">transaction</span> <span class="ow">in</span> <span class="n">transactions_collection</span><span class="o">.</span><span class="n">find</span><span class="p">({},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;from_account&#39;: &#39;account_1&#39;, &#39;to_account&#39;: &#39;account_2&#39;, &#39;amount&#39;: 50, &#39;status&#39;: &#39;completed&#39;}
+{&#39;from_account&#39;: &#39;account_2&#39;, &#39;to_account&#39;: &#39;account_1&#39;, &#39;amount&#39;: 30, &#39;status&#39;: &#39;completed&#39;}
+{&#39;from_account&#39;: &#39;account_1&#39;, &#39;to_account&#39;: &#39;account_2&#39;, &#39;amount&#39;: 100, &#39;status&#39;: &#39;completed&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Explanation</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Setup MongoDB Connection and Collections</strong>: Connect to MongoDB and define the collections to be used in the transaction.</p></li>
+<li><p><strong>Insert Sample Data</strong>: Insert sample data into the <code class="docutils literal notranslate"><span class="pre">accounts</span></code> and <code class="docutils literal notranslate"><span class="pre">transactions</span></code> collections to set up the initial state.</p></li>
+<li><p><strong>Define the Transaction Function with Balance Constraint</strong>: Define a function <code class="docutils literal notranslate"><span class="pre">transfer_funds</span></code> that performs the operations within the transaction. This function checks if the from_account has sufficient balance before proceeding with the transfer. If the balance is insufficient, it raises a ValueError. If the balance is sufficent, this function updates the balance of two accounts and logs the transaction.</p></li>
+<li><p><strong>Execute the Transaction</strong>: Start a session and a transaction. Call the <code class="docutils literal notranslate"><span class="pre">transfer_funds</span></code> function within the transaction. If any operation fails, the transaction is aborted. If all operations succeed, the transaction is committed.</p></li>
+</ol>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./lectures"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lecture7.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 7: Aggregation operations in MongoDB</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="midterm1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Midterm 1 instruction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-acid-transactions">Introduction to ACID Transactions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodb-transactions">MongoDB Transactions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-mongodb-connection-and-collections">1. Setup MongoDB Connection and Collections</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#insert-sample-data">2. Insert Sample Data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-inc-in-mongodb">Explanation of <code class="docutils literal notranslate"><span class="pre">$inc</span></code> in MongoDB</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-inc">What is <code class="docutils literal notranslate"><span class="pre">$inc</span></code>?</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#syntax">Syntax</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-transaction-function">3. Define the Transaction Function</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#execute-the-transaction">4. Execute the Transaction</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-the-constraint">5. Testing the constraint</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Quan Nguyen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

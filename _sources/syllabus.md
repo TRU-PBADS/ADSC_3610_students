@@ -36,7 +36,7 @@ Please find the list of lecture, and the required readings below. This list will
 |        2 | Thu      | Sep 12 | Data modelling 2: Schema design pattern, [READINGS](https://www.mongodb.com/blog/post/building-with-patterns-a-summary?utm_source=google&utm_campaign=search_gs_pl_evergreen_atlas_core_prosp-brand_gic-null_amers-ca_ps-all_desktop_eng_lead&utm_term=mongodb%20dbaas&utm_medium=cpc_paid_search&utm_ad=p&utm_ad_campaign_id=12212624311&adgroup=115749704143&cq_cmp=12212624311&gad_source=1&gbraid=0AAAAADQ1402kQEgrhXEau3I953YWCXlEJ&gclid=CjwKCAjwufq2BhAmEiwAnZqw8hiKNjqLUzhUQJSBcWp1sAnzSqY8sqgpPyToP1yGniuFBn1-O1hF6xoCerAQAvD_BwE)       |
 |        3 | Tue      | Sep 17 | MongoDB CRUD operations: Insert,Find, Replace and Delete                 |
 |        3 | Thu      | Sep 19 | MogoDB CRUD operations: Modifying query results, MongoDB Aggregation in Python                  |
-|        4 | Tue      | Sep 24 | MongoDB Indexes                                             |
+|        4 | Tue      | Sep 24 | MongoDB ACID transactions                                             |
 |        4 | Thu      | Sep 26 | MongoDB Atlas search, Atlas Vector Search for LLMs                                        |
 |        5 | Tue      |  Oct 1 | Part 1: MongoDB review                                      |
 |        5 | Thu      |  Oct 3 | MIDTERM 1: Cover materials from week 1 - 4                                                |
