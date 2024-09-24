@@ -1,0 +1,1475 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Worksheet 4: Aggregations and ACID transaction in MongoDB &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'worksheets/release/worksheet4/autograder/worksheet4';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/TRU_Logo.png" class="logo__image only-light" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>
+    <script>document.write(`<img src="../../../../_static/TRU_Logo.png" class="logo__image only-dark" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../syllabus.html">
+                    ADSC 3610 - Database Systems in Applied Data Science II - Syllabus
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture6.html">Lecture 6: CRUD operations in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture7.html">Lecture 7: Aggregation operations in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture8.html">Lecture 8: ACID transactions in MongoDB</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Midterms Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/midterm1.html">Midterm 1 instruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation_mac.html">Installation instruction for macOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation_windows.html">Installation instruction for Windows</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Worksheet solution</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../source/worksheet1.html">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/worksheet2.html">Worksheet 2: Data modelling with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/worksheet3/worksheet3.html">Worksheet 3: CRUD operations in MongoDB</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../../_sources/worksheets/release/worksheet4/autograder/worksheet4.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Worksheet 4: Aggregations and ACID transaction in MongoDB</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#establish-pymongo-connection">Establish Pymongo connection</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-calculate-the-average-rating-of-movies-by-genre">Exercise 1: Calculate the Average Rating of Movies by Genre</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-find-the-top-5-movies-with-the-highest-imdb-rating">Exercise 2: Find the Top 5 Movies with the Highest IMDb Rating</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-count-the-number-of-movies-by-year">Exercise 3: Count the Number of Movies by Year</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-4-find-the-top-3-directors-with-the-most-movies">Exercise 4: Find the Top 3 Directors with the Most Movies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-5-calculate-the-average-imdb-rating-and-number-of-movies-for-each-genre-rounded-to-2-decimals">Exercise 5: Calculate the Average IMDb Rating and Number of Movies for Each Genre (Rounded to 2 Decimals)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-6-implementing-acid-transactions-for-a-shopping-cart">Exercise 6: Implementing ACID Transactions for a Shopping Cart</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#instructions">Instructions</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#write-a-function-to-check-if-the-inventory-has-enough-quantity-for-a-particular-item">6.1 Write a function to check if the inventory has enough quantity for a particular item</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#write-a-function-to-update-the-quantity-from-the-inventory">6.2 Write a function to update the quantity from the inventory</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#write-a-function-to-update-user-s-shopping-cart">6.3 Write a function to update user’s shopping cart</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#combine-everything-into-a-transaction-function">6.4 Combine everything into a transaction function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission instructions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize Otter</span>
+<span class="kn">import</span> <span class="nn">otter</span>
+<span class="n">grader</span> <span class="o">=</span> <span class="n">otter</span><span class="o">.</span><span class="n">Notebook</span><span class="p">(</span><span class="s2">&quot;worksheet4.ipynb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="worksheet-4-aggregations-and-acid-transaction-in-mongodb">
+<h1>Worksheet 4: Aggregations and ACID transaction in MongoDB<a class="headerlink" href="#worksheet-4-aggregations-and-acid-transaction-in-mongodb" title="Link to this heading">#</a></h1>
+<section id="establish-pymongo-connection">
+<h2>Establish Pymongo connection<a class="headerlink" href="#establish-pymongo-connection" title="Link to this heading">#</a></h2>
+<p>Recall that in worksheet1, we have created a cluster on MongoDB Atlas and connect to it via Pymongo and a credentials JSON file. Let’s reestablish that connection for our exercises.</p>
+<ul class="simple">
+<li><p>Make sure you use the <code class="docutils literal notranslate"><span class="pre">adsc_3610</span></code> conda environment.</p></li>
+<li><p>You might need to copy &amp; paste the <code class="docutils literal notranslate"><span class="pre">credentials_mongodb.json</span></code> file that you used in worksheet1 to the working directory of worksheet3.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span> <span class="c1"># import mongo client to connect</span>
+<span class="kn">import</span> <span class="nn">json</span> <span class="c1"># import json to load credentials</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+
+<span class="c1"># load credentials from json file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;credentials_mongodb.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># assign credentials to variables</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;mongodb+srv://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">/?retryWrites=true&amp;w=majority&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># connect to the database</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># drop database books and students if they exist</span>
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;bookstore&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;students&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To test if your connection has been succesful, let’s try to print out all the databases</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all databases</span>
+<span class="n">client</span><span class="o">.</span><span class="n">list_database_names</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;sample_airbnb&#39;,
+ &#39;sample_analytics&#39;,
+ &#39;sample_geospatial&#39;,
+ &#39;sample_guides&#39;,
+ &#39;sample_mflix&#39;,
+ &#39;sample_restaurants&#39;,
+ &#39;sample_supplies&#39;,
+ &#39;sample_training&#39;,
+ &#39;sample_weatherdata&#39;,
+ &#39;admin&#39;,
+ &#39;local&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Load <code class="docutils literal notranslate"><span class="pre">sample_mflix</span></code> database into an object called db</p></li>
+<li><p>Load the <code class="docutils literal notranslate"><span class="pre">movies</span></code> collection into an object called <code class="docutils literal notranslate"><span class="pre">collection</span></code></p></li>
+</ul>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s1">&#39;sample_mflix&#39;</span><span class="p">]</span> <span class="c1"># SOLUTION</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;movies&#39;</span><span class="p">]</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Print out the first document</p>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">()</span> <span class="c1"># SOLUTION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;573a1390f29313caabcd50e5&#39;),
+ &#39;plot&#39;: &#39;The cartoonist, Winsor McCay, brings the Dinosaurus back to life in the figure of his latest creation, Gertie the Dinosaur.&#39;,
+ &#39;genres&#39;: [&#39;Animation&#39;, &#39;Short&#39;, &#39;Comedy&#39;],
+ &#39;runtime&#39;: 12,
+ &#39;cast&#39;: [&#39;Winsor McCay&#39;, &#39;George McManus&#39;, &#39;Roy L. McCardell&#39;],
+ &#39;num_mflix_comments&#39;: 0,
+ &#39;poster&#39;: &#39;https://m.media-amazon.com/images/M/MV5BMTQxNzI4ODQ3NF5BMl5BanBnXkFtZTgwNzY5NzMwMjE@._V1_SY1000_SX677_AL_.jpg&#39;,
+ &#39;title&#39;: &#39;Gertie the Dinosaur&#39;,
+ &#39;fullplot&#39;: &#39;Winsor Z. McCay bets another cartoonist that he can animate a dinosaur. So he draws a big friendly herbivore called Gertie. Then he get into his own picture. Gertie walks through the picture, eats a tree, meets her creator, and takes him carefully on her back for a ride.&#39;,
+ &#39;languages&#39;: [&#39;English&#39;],
+ &#39;released&#39;: datetime.datetime(1914, 9, 15, 0, 0),
+ &#39;directors&#39;: [&#39;Winsor McCay&#39;],
+ &#39;writers&#39;: [&#39;Winsor McCay&#39;],
+ &#39;awards&#39;: {&#39;wins&#39;: 1, &#39;nominations&#39;: 0, &#39;text&#39;: &#39;1 win.&#39;},
+ &#39;lastupdated&#39;: &#39;2015-08-18 01:03:15.313000000&#39;,
+ &#39;year&#39;: 1914,
+ &#39;imdb&#39;: {&#39;rating&#39;: 7.3, &#39;votes&#39;: 1837, &#39;id&#39;: 4008},
+ &#39;countries&#39;: [&#39;USA&#39;],
+ &#39;type&#39;: &#39;movie&#39;,
+ &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 3.7, &#39;numReviews&#39;: 29},
+  &#39;lastUpdated&#39;: datetime.datetime(2015, 8, 10, 19, 20, 3)}}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grader</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;ex0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exercise-1-calculate-the-average-rating-of-movies-by-genre">
+<h3>Exercise 1: Calculate the Average Rating of Movies by Genre<a class="headerlink" href="#exercise-1-calculate-the-average-rating-of-movies-by-genre" title="Link to this heading">#</a></h3>
+<p>rubric: {accuracy = 2}</p>
+<p><strong>Task</strong>: Write an aggregation pipeline to calculate the average imdb rating of movies grouped by genre.</p>
+<p><strong>Hint</strong>: First, use <code class="docutils literal notranslate"><span class="pre">$unwind</span></code> stage to unwind the <code class="docutils literal notranslate"><span class="pre">genres</span></code> array before grouping by genre. Use the <code class="docutils literal notranslate"><span class="pre">$group</span></code> stage to group by genre and the <code class="docutils literal notranslate"><span class="pre">$avg</span></code> operator to calculate the average rating.</p>
+<p>Expected output should look something like this:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;War&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;averageRa</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">7.128591954022989</span><span class="p">}</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;News&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;averageRa</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">7.252272727272728</span><span class="p">}</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Roma</span><span class="kc">n</span><span class="err">ce&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;averageRa</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.6564272782136396</span><span class="p">}</span>
+<span class="err">...</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Sci</span><span class="mi">-</span><span class="err">Fi&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;averageRa</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.123609653725079</span><span class="p">}</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Film</span><span class="mi">-</span><span class="err">Noir&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;averageRa</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">7.397402597402598</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise 1: Calculate the Average Rating of Movies by Genre</span>
+
+<span class="n">pipeline1</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$unwind&quot;</span><span class="p">:</span> <span class="s2">&quot;$genres&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$genres&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;averageRating&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$avg&quot;</span><span class="p">:</span> <span class="s2">&quot;$imdb.rating&quot;</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1"># END SOLUTION</span>
+<span class="p">]</span>
+
+<span class="c1"># Execute the pipeline</span>
+<span class="n">result1</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline1</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;War&#39;, &#39;averageRating&#39;: 7.128591954022989}
+{&#39;_id&#39;: &#39;News&#39;, &#39;averageRating&#39;: 7.252272727272728}
+{&#39;_id&#39;: &#39;Romance&#39;, &#39;averageRating&#39;: 6.6564272782136396}
+{&#39;_id&#39;: &#39;Biography&#39;, &#39;averageRating&#39;: 7.087984189723319}
+{&#39;_id&#39;: &#39;Animation&#39;, &#39;averageRating&#39;: 6.89669603524229}
+{&#39;_id&#39;: &#39;History&#39;, &#39;averageRating&#39;: 7.1696100917431185}
+{&#39;_id&#39;: &#39;Documentary&#39;, &#39;averageRating&#39;: 7.365679824561403}
+{&#39;_id&#39;: &#39;Action&#39;, &#39;averageRating&#39;: 6.347098402018503}
+{&#39;_id&#39;: &#39;Horror&#39;, &#39;averageRating&#39;: 5.784709897610922}
+{&#39;_id&#39;: &#39;Talk-Show&#39;, &#39;averageRating&#39;: 7.0}
+{&#39;_id&#39;: &#39;Musical&#39;, &#39;averageRating&#39;: 6.665831435079727}
+{&#39;_id&#39;: &#39;Short&#39;, &#39;averageRating&#39;: 7.377574370709382}
+{&#39;_id&#39;: &#39;Western&#39;, &#39;averageRating&#39;: 6.823553719008264}
+{&#39;_id&#39;: &#39;Adventure&#39;, &#39;averageRating&#39;: 6.493680884676145}
+{&#39;_id&#39;: &#39;Mystery&#39;, &#39;averageRating&#39;: 6.527425044091711}
+{&#39;_id&#39;: &#39;Thriller&#39;, &#39;averageRating&#39;: 6.304498977505112}
+{&#39;_id&#39;: &#39;Music&#39;, &#39;averageRating&#39;: 6.883333333333334}
+{&#39;_id&#39;: &#39;Fantasy&#39;, &#39;averageRating&#39;: 6.3829847908745245}
+{&#39;_id&#39;: &#39;Crime&#39;, &#39;averageRating&#39;: 6.688585405625764}
+{&#39;_id&#39;: &#39;Drama&#39;, &#39;averageRating&#39;: 6.803377338624768}
+{&#39;_id&#39;: &#39;Comedy&#39;, &#39;averageRating&#39;: 6.450214658080344}
+{&#39;_id&#39;: &#39;Family&#39;, &#39;averageRating&#39;: 6.3296712109061755}
+{&#39;_id&#39;: &#39;Sport&#39;, &#39;averageRating&#39;: 6.749041095890411}
+{&#39;_id&#39;: &#39;Sci-Fi&#39;, &#39;averageRating&#39;: 6.123609653725079}
+{&#39;_id&#39;: &#39;Film-Noir&#39;, &#39;averageRating&#39;: 7.397402597402598}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grader</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;ex1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2-find-the-top-5-movies-with-the-highest-imdb-rating">
+<h3>Exercise 2: Find the Top 5 Movies with the Highest IMDb Rating<a class="headerlink" href="#exercise-2-find-the-top-5-movies-with-the-highest-imdb-rating" title="Link to this heading">#</a></h3>
+<p>rubric: {accuracy = 3}</p>
+<p><strong>Task</strong>: Write an aggregation pipeline to find the top 5 movies with the highest Tomatoes Viewer rating. In the result, only keep the movies <code class="docutils literal notranslate"><span class="pre">title</span></code> and <code class="docutils literal notranslate"><span class="pre">tomatoes.viewer.rating</span></code> field only, remove <code class="docutils literal notranslate"><span class="pre">_id</span></code> from the result.</p>
+<p><strong>Hint</strong>: Use the <code class="docutils literal notranslate"><span class="pre">$sort</span></code> stage to sort by Tomatoes Viewer rating in descending order and the <code class="docutils literal notranslate"><span class="pre">$limit</span></code> stage to limit the results to the top 5. Use <code class="docutils literal notranslate"><span class="pre">$project</span></code> to select fields that you want to include/exclude in the output.</p>
+<p>Expected output:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="err">...</span>
+<span class="p">{</span><span class="err">&#39;</span><span class="kc">t</span><span class="err">i</span><span class="kc">tle</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Murder</span><span class="w"> </span><span class="err">by</span><span class="w"> </span><span class="err">Na</span><span class="kc">tural</span><span class="w"> </span><span class="err">Causes&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="kc">t</span><span class="err">oma</span><span class="kc">t</span><span class="err">oes&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;viewer&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;ra</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">}}}</span>
+<span class="p">{</span><span class="err">&#39;</span><span class="kc">t</span><span class="err">i</span><span class="kc">tle</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;I</span><span class="w"> </span><span class="err">Am</span><span class="w"> </span><span class="err">Maria&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="kc">t</span><span class="err">oma</span><span class="kc">t</span><span class="err">oes&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;viewer&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;ra</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">}}}</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out tomatoes viewer rating of some movies</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> 
+                                <span class="s2">&quot;tomatoes.viewer.rating&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;Gertie the Dinosaur&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 3.7}}}
+{&#39;title&#39;: &#39;The Great Train Robbery&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 3.7}}}
+{&#39;title&#39;: &#39;The Italian&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 4.0}}}
+{&#39;title&#39;: &#39;Civilization&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 0.0}}}
+{&#39;title&#39;: &#39;Where Are My Children?&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 3.1}}}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise 2: Find the Top 5 Movies with the Highest Tomatoes Viewer Rating</span>
+
+<span class="n">pipeline2</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;tomatoes.viewer.rating&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$limit&quot;</span><span class="p">:</span> <span class="mi">5</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;tomatoes.viewer.rating&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1"># END SOLUTION</span>
+<span class="p">]</span>
+
+<span class="c1"># Execute the pipeline</span>
+<span class="n">result2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result2</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;title&#39;: &#39;Kadin Hamlet&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 5.0}}}
+{&#39;title&#39;: &#39;The Seine Meets Paris&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 5.0}}}
+{&#39;title&#39;: &#39;Night Function&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 5.0}}}
+{&#39;title&#39;: &#39;Murder by Natural Causes&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 5.0}}}
+{&#39;title&#39;: &#39;I Am Maria&#39;, &#39;tomatoes&#39;: {&#39;viewer&#39;: {&#39;rating&#39;: 5.0}}}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grader</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;ex2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-count-the-number-of-movies-by-year">
+<h3>Exercise 3: Count the Number of Movies by Year<a class="headerlink" href="#exercise-3-count-the-number-of-movies-by-year" title="Link to this heading">#</a></h3>
+<p>rubric: {accuracy = 2}</p>
+<p><strong>Task</strong>: Write an aggregation pipeline to count the number of movies released each year. Sort by count in descending order</p>
+<p><strong>Hint</strong>: Use the <code class="docutils literal notranslate"><span class="pre">$group</span></code> stage to group by year and the <code class="docutils literal notranslate"><span class="pre">$count</span></code> operator to count the number of movies. Use the <code class="docutils literal notranslate"><span class="pre">sort</span></code> stage to sort by count</p>
+<p>Expected output:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="err">...</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">2008</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;cou</span><span class="kc">nt</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">886</span><span class="p">}</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">2010</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;cou</span><span class="kc">nt</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">866</span><span class="p">}</span>
+<span class="err">...</span>
+</pre></div>
+</div>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise 3: Count the Number of Movies by Year</span>
+
+<span class="n">pipeline3</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$year&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1"># END SOLUTION</span>
+<span class="p">]</span>
+
+<span class="c1"># Execute the pipeline</span>
+<span class="n">result3</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result3</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: 2013, &#39;count&#39;: 1105}
+{&#39;_id&#39;: 2014, &#39;count&#39;: 1073}
+{&#39;_id&#39;: 2012, &#39;count&#39;: 955}
+{&#39;_id&#39;: 2009, &#39;count&#39;: 917}
+{&#39;_id&#39;: 2011, &#39;count&#39;: 893}
+{&#39;_id&#39;: 2008, &#39;count&#39;: 886}
+{&#39;_id&#39;: 2010, &#39;count&#39;: 866}
+{&#39;_id&#39;: 2007, &#39;count&#39;: 810}
+{&#39;_id&#39;: 2006, &#39;count&#39;: 774}
+{&#39;_id&#39;: 2005, &#39;count&#39;: 713}
+{&#39;_id&#39;: 2004, &#39;count&#39;: 678}
+{&#39;_id&#39;: 2002, &#39;count&#39;: 622}
+{&#39;_id&#39;: 2001, &#39;count&#39;: 612}
+{&#39;_id&#39;: 2003, &#39;count&#39;: 603}
+{&#39;_id&#39;: 2000, &#39;count&#39;: 581}
+{&#39;_id&#39;: 1999, &#39;count&#39;: 515}
+{&#39;_id&#39;: 1998, &#39;count&#39;: 513}
+{&#39;_id&#39;: 2015, &#39;count&#39;: 480}
+{&#39;_id&#39;: 1997, &#39;count&#39;: 439}
+{&#39;_id&#39;: 1996, &#39;count&#39;: 407}
+{&#39;_id&#39;: 1995, &#39;count&#39;: 372}
+{&#39;_id&#39;: 1994, &#39;count&#39;: 305}
+{&#39;_id&#39;: 1993, &#39;count&#39;: 274}
+{&#39;_id&#39;: 1992, &#39;count&#39;: 270}
+{&#39;_id&#39;: 1988, &#39;count&#39;: 251}
+{&#39;_id&#39;: 1991, &#39;count&#39;: 238}
+{&#39;_id&#39;: 1989, &#39;count&#39;: 232}
+{&#39;_id&#39;: 1990, &#39;count&#39;: 225}
+{&#39;_id&#39;: 1987, &#39;count&#39;: 222}
+{&#39;_id&#39;: 1984, &#39;count&#39;: 199}
+{&#39;_id&#39;: 1986, &#39;count&#39;: 190}
+{&#39;_id&#39;: 1985, &#39;count&#39;: 189}
+{&#39;_id&#39;: 1982, &#39;count&#39;: 177}
+{&#39;_id&#39;: 1981, &#39;count&#39;: 168}
+{&#39;_id&#39;: 1980, &#39;count&#39;: 167}
+{&#39;_id&#39;: 1983, &#39;count&#39;: 161}
+{&#39;_id&#39;: 1979, &#39;count&#39;: 131}
+{&#39;_id&#39;: 1978, &#39;count&#39;: 128}
+{&#39;_id&#39;: 1977, &#39;count&#39;: 123}
+{&#39;_id&#39;: 1972, &#39;count&#39;: 121}
+{&#39;_id&#39;: 1970, &#39;count&#39;: 120}
+{&#39;_id&#39;: 1976, &#39;count&#39;: 116}
+{&#39;_id&#39;: 1973, &#39;count&#39;: 112}
+{&#39;_id&#39;: 1975, &#39;count&#39;: 107}
+{&#39;_id&#39;: 1969, &#39;count&#39;: 107}
+{&#39;_id&#39;: 1971, &#39;count&#39;: 106}
+{&#39;_id&#39;: 1974, &#39;count&#39;: 103}
+{&#39;_id&#39;: 1968, &#39;count&#39;: 89}
+{&#39;_id&#39;: 1966, &#39;count&#39;: 87}
+{&#39;_id&#39;: 1964, &#39;count&#39;: 86}
+{&#39;_id&#39;: 1967, &#39;count&#39;: 81}
+{&#39;_id&#39;: 1965, &#39;count&#39;: 77}
+{&#39;_id&#39;: 1958, &#39;count&#39;: 75}
+{&#39;_id&#39;: 1960, &#39;count&#39;: 73}
+{&#39;_id&#39;: 1957, &#39;count&#39;: 71}
+{&#39;_id&#39;: 1959, &#39;count&#39;: 71}
+{&#39;_id&#39;: 1962, &#39;count&#39;: 70}
+{&#39;_id&#39;: 1963, &#39;count&#39;: 69}
+{&#39;_id&#39;: 1961, &#39;count&#39;: 68}
+{&#39;_id&#39;: 1955, &#39;count&#39;: 67}
+{&#39;_id&#39;: 1956, &#39;count&#39;: 67}
+{&#39;_id&#39;: 1953, &#39;count&#39;: 65}
+{&#39;_id&#39;: 1948, &#39;count&#39;: 56}
+{&#39;_id&#39;: 1950, &#39;count&#39;: 55}
+{&#39;_id&#39;: 1951, &#39;count&#39;: 54}
+{&#39;_id&#39;: 1949, &#39;count&#39;: 52}
+{&#39;_id&#39;: 1954, &#39;count&#39;: 47}
+{&#39;_id&#39;: 1952, &#39;count&#39;: 45}
+{&#39;_id&#39;: 1938, &#39;count&#39;: 38}
+{&#39;_id&#39;: 1946, &#39;count&#39;: 34}
+{&#39;_id&#39;: 1943, &#39;count&#39;: 32}
+{&#39;_id&#39;: 1937, &#39;count&#39;: 31}
+{&#39;_id&#39;: 1935, &#39;count&#39;: 31}
+{&#39;_id&#39;: 1936, &#39;count&#39;: 30}
+{&#39;_id&#39;: 1942, &#39;count&#39;: 30}
+{&#39;_id&#39;: 1947, &#39;count&#39;: 29}
+{&#39;_id&#39;: 1945, &#39;count&#39;: 29}
+{&#39;_id&#39;: 1940, &#39;count&#39;: 24}
+{&#39;_id&#39;: 1941, &#39;count&#39;: 24}
+{&#39;_id&#39;: 1934, &#39;count&#39;: 23}
+{&#39;_id&#39;: 1944, &#39;count&#39;: 23}
+{&#39;_id&#39;: 1939, &#39;count&#39;: 20}
+{&#39;_id&#39;: 1933, &#39;count&#39;: 20}
+{&#39;_id&#39;: 1931, &#39;count&#39;: 20}
+{&#39;_id&#39;: 1932, &#39;count&#39;: 18}
+{&#39;_id&#39;: 1930, &#39;count&#39;: 10}
+{&#39;_id&#39;: 1928, &#39;count&#39;: 8}
+{&#39;_id&#39;: 1929, &#39;count&#39;: 7}
+{&#39;_id&#39;: 1924, &#39;count&#39;: 6}
+{&#39;_id&#39;: 1926, &#39;count&#39;: 6}
+{&#39;_id&#39;: 1921, &#39;count&#39;: 5}
+{&#39;_id&#39;: 1920, &#39;count&#39;: 4}
+{&#39;_id&#39;: &#39;2010è&#39;, &#39;count&#39;: 4}
+{&#39;_id&#39;: 1927, &#39;count&#39;: 4}
+{&#39;_id&#39;: 1922, &#39;count&#39;: 3}
+{&#39;_id&#39;: &#39;2012è&#39;, &#39;count&#39;: 3}
+{&#39;_id&#39;: &#39;2007è&#39;, &#39;count&#39;: 3}
+{&#39;_id&#39;: 1914, &#39;count&#39;: 3}
+{&#39;_id&#39;: 1925, &#39;count&#39;: 3}
+{&#39;_id&#39;: 1917, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;2005è&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1896, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1923, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;2011è&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1911, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;2009è&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1915, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1916, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;1997è&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;2006è2012&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;2014è&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;1999è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1909, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2000è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1995è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1919, &#39;count&#39;: 1}
+{&#39;_id&#39;: 2016, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1986è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1994è1998&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1903, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2006è2007&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1988è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1987è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1981è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2002è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2006è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1996è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2003è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1918, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1913, &#39;count&#39;: 1}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grader</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;ex3&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-find-the-top-3-directors-with-the-most-movies">
+<h3>Exercise 4: Find the Top 3 Directors with the Most Movies<a class="headerlink" href="#exercise-4-find-the-top-3-directors-with-the-most-movies" title="Link to this heading">#</a></h3>
+<p>rubric: {accuracy = 4}</p>
+<p><strong>Task</strong>: Write an aggregation pipeline to find the top 3 directors who have directed the most movies.</p>
+<p><strong>Hint</strong>: Use the <code class="docutils literal notranslate"><span class="pre">$group</span></code> stage to group by director, the <code class="docutils literal notranslate"><span class="pre">$count</span></code> operator to count the number of movies, the <code class="docutils literal notranslate"><span class="pre">$sort</span></code> stage to sort by the count in descending order, and the <code class="docutils literal notranslate"><span class="pre">$limit</span></code> stage to limit the results to the top 3.</p>
+<p>You might need to <code class="docutils literal notranslate"><span class="pre">$unwind</span></code> the directors array.</p>
+<p>Expected output:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">...</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;movieCou</span><span class="kc">nt</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">...</span><span class="p">}</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">...</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;movieCou</span><span class="kc">nt</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">...</span><span class="p">}</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">...</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;movieCou</span><span class="kc">nt</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">...</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise 4: Find the Top 3 Directors with the Most Movies</span>
+
+<span class="n">pipeline4</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$unwind&quot;</span><span class="p">:</span> <span class="s2">&quot;$directors&quot;</span> <span class="c1"># unwind the directors array</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$directors&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;movieCount&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$sort&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;movieCount&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$limit&quot;</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="p">}</span>
+    <span class="c1"># END SOLUTION</span>
+<span class="p">]</span>
+
+<span class="c1"># Execute the pipeline</span>
+<span class="n">result4</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result4</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Woody Allen&#39;, &#39;movieCount&#39;: 40}
+{&#39;_id&#39;: &#39;Martin Scorsese&#39;, &#39;movieCount&#39;: 32}
+{&#39;_id&#39;: &#39;Takashi Miike&#39;, &#39;movieCount&#39;: 31}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grader</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;ex4&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-5-calculate-the-average-imdb-rating-and-number-of-movies-for-each-genre-rounded-to-2-decimals">
+<h3>Exercise 5: Calculate the Average IMDb Rating and Number of Movies for Each Genre (Rounded to 2 Decimals)<a class="headerlink" href="#exercise-5-calculate-the-average-imdb-rating-and-number-of-movies-for-each-genre-rounded-to-2-decimals" title="Link to this heading">#</a></h3>
+<p>rubric: {accuracy = 3}</p>
+<p><strong>Task</strong>: Write an aggregation pipeline to calculate the average IMDb rating (rounded to 2 decimals) and the number of movies for each genre.</p>
+<p><strong>Hint</strong>: Use the <code class="docutils literal notranslate"><span class="pre">$unwind</span></code> stage to deconstruct the genres array, the <code class="docutils literal notranslate"><span class="pre">$group</span></code> stage to group by genre, the <code class="docutils literal notranslate"><span class="pre">$avg</span></code> operator to calculate the average rating, and the <code class="docutils literal notranslate"><span class="pre">$project</span></code> stage to round the average rating to 2 decimal places.</p>
+<p>Expected output:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="err">...</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Crime&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;movieCou</span><span class="kc">nt</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">2457</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;averageRa</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.69</span><span class="p">}</span>
+<span class="p">{</span><span class="err">&#39;_id&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Sci</span><span class="mi">-</span><span class="err">Fi&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;movieCou</span><span class="kc">nt</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">958</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;averageRa</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.12</span><span class="p">}</span>
+<span class="err">...</span>
+</pre></div>
+</div>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise 5: Calculate the Average IMDb Rating and Number of Movies for Each Genre (Rounded to 2 Decimals)</span>
+
+<span class="n">pipeline5</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$unwind&quot;</span><span class="p">:</span> <span class="s2">&quot;$genres&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;$genres&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;averageRating&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$avg&quot;</span><span class="p">:</span> <span class="s2">&quot;$imdb.rating&quot;</span> <span class="p">},</span>
+            <span class="s2">&quot;movieCount&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;averageRating&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$round&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;$averageRating&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="p">},</span>
+            <span class="s2">&quot;movieCount&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1"># END SOLUTION</span>
+<span class="p">]</span>
+
+<span class="c1"># Execute the pipeline</span>
+<span class="n">result5</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">result5</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Documentary&#39;, &#39;movieCount&#39;: 1834, &#39;averageRating&#39;: 7.37}
+{&#39;_id&#39;: &#39;Drama&#39;, &#39;movieCount&#39;: 12385, &#39;averageRating&#39;: 6.8}
+{&#39;_id&#39;: &#39;Comedy&#39;, &#39;movieCount&#39;: 6532, &#39;averageRating&#39;: 6.45}
+{&#39;_id&#39;: &#39;Family&#39;, &#39;movieCount&#39;: 1249, &#39;averageRating&#39;: 6.33}
+{&#39;_id&#39;: &#39;Action&#39;, &#39;movieCount&#39;: 2381, &#39;averageRating&#39;: 6.35}
+{&#39;_id&#39;: &#39;Sport&#39;, &#39;movieCount&#39;: 366, &#39;averageRating&#39;: 6.75}
+{&#39;_id&#39;: &#39;Horror&#39;, &#39;movieCount&#39;: 1470, &#39;averageRating&#39;: 5.78}
+{&#39;_id&#39;: &#39;Film-Noir&#39;, &#39;movieCount&#39;: 77, &#39;averageRating&#39;: 7.4}
+{&#39;_id&#39;: &#39;Talk-Show&#39;, &#39;movieCount&#39;: 1, &#39;averageRating&#39;: 7.0}
+{&#39;_id&#39;: &#39;Western&#39;, &#39;movieCount&#39;: 242, &#39;averageRating&#39;: 6.82}
+{&#39;_id&#39;: &#39;Short&#39;, &#39;movieCount&#39;: 442, &#39;averageRating&#39;: 7.38}
+{&#39;_id&#39;: &#39;Adventure&#39;, &#39;movieCount&#39;: 1900, &#39;averageRating&#39;: 6.49}
+{&#39;_id&#39;: &#39;Mystery&#39;, &#39;movieCount&#39;: 1139, &#39;averageRating&#39;: 6.53}
+{&#39;_id&#39;: &#39;Thriller&#39;, &#39;movieCount&#39;: 2454, &#39;averageRating&#39;: 6.3}
+{&#39;_id&#39;: &#39;Music&#39;, &#39;movieCount&#39;: 780, &#39;averageRating&#39;: 6.88}
+{&#39;_id&#39;: &#39;Fantasy&#39;, &#39;movieCount&#39;: 1055, &#39;averageRating&#39;: 6.38}
+{&#39;_id&#39;: &#39;Crime&#39;, &#39;movieCount&#39;: 2457, &#39;averageRating&#39;: 6.69}
+{&#39;_id&#39;: &#39;Sci-Fi&#39;, &#39;movieCount&#39;: 958, &#39;averageRating&#39;: 6.12}
+{&#39;_id&#39;: &#39;News&#39;, &#39;movieCount&#39;: 44, &#39;averageRating&#39;: 7.25}
+{&#39;_id&#39;: &#39;Musical&#39;, &#39;movieCount&#39;: 440, &#39;averageRating&#39;: 6.67}
+{&#39;_id&#39;: &#39;War&#39;, &#39;movieCount&#39;: 699, &#39;averageRating&#39;: 7.13}
+{&#39;_id&#39;: &#39;Romance&#39;, &#39;movieCount&#39;: 3318, &#39;averageRating&#39;: 6.66}
+{&#39;_id&#39;: &#39;Biography&#39;, &#39;movieCount&#39;: 1269, &#39;averageRating&#39;: 7.09}
+{&#39;_id&#39;: &#39;Animation&#39;, &#39;movieCount&#39;: 912, &#39;averageRating&#39;: 6.9}
+{&#39;_id&#39;: &#39;History&#39;, &#39;movieCount&#39;: 874, &#39;averageRating&#39;: 7.17}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grader</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;ex5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-6-implementing-acid-transactions-for-a-shopping-cart">
+<h3>Exercise 6: Implementing ACID Transactions for a Shopping Cart<a class="headerlink" href="#exercise-6-implementing-acid-transactions-for-a-shopping-cart" title="Link to this heading">#</a></h3>
+<p>rubric: {accuracy = 4}</p>
+<p>In this exercise, you will implement an ACID (Atomicity, Consistency, Isolation, Durability) transaction using MongoDB. The goal is to ensure that a series of operations either all succeed or all fail, maintaining the integrity of the database.</p>
+<section id="instructions">
+<h4>Instructions<a class="headerlink" href="#instructions" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>Setup MongoDB Client</strong>: Ensure you have the MongoDB client installed and connected to your database.</p></li>
+<li><p><strong>Create Collections</strong>: Create two collections in your MongoDB database: <code class="docutils literal notranslate"><span class="pre">inventory</span></code> and <code class="docutils literal notranslate"><span class="pre">carts</span></code>.</p></li>
+<li><p><strong>Insert Sample Data</strong>:</p>
+<ul class="simple">
+<li><p>Insert sample items into the <code class="docutils literal notranslate"><span class="pre">inventory</span></code> collection with fields <code class="docutils literal notranslate"><span class="pre">item_id</span></code> and <code class="docutils literal notranslate"><span class="pre">quantity</span></code>.</p></li>
+<li><p>Insert a sample user into the <code class="docutils literal notranslate"><span class="pre">carts</span></code> collection with fields <code class="docutils literal notranslate"><span class="pre">user_id</span></code> and <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Implement the Transaction</strong>:</p>
+<ul class="simple">
+<li><p>Write a function <code class="docutils literal notranslate"><span class="pre">add_to_cart</span></code> that performs the following operations within a transaction:</p>
+<ul>
+<li><p>Check if the inventory has enough quantity for the specified item.</p></li>
+<li><p>Deduct the quantity from the inventory.</p></li>
+<li><p>Add the item to the user’s shopping cart.</p></li>
+</ul>
+</li>
+<li><p>Ensure that if any operation fails, the transaction is aborted and no changes are made to the database.</p></li>
+</ul>
+</li>
+<li><p><strong>Run the Transaction</strong>: Execute the transaction and handle any errors that may occur.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymongo.errors</span> <span class="kn">import</span> <span class="n">ConnectionFailure</span><span class="p">,</span> <span class="n">OperationFailure</span>
+<span class="kn">from</span> <span class="nn">pymongo.write_concern</span> <span class="kn">import</span> <span class="n">WriteConcern</span>
+<span class="kn">from</span> <span class="nn">pymongo.read_concern</span> <span class="kn">import</span> <span class="n">ReadConcern</span>
+<span class="kn">from</span> <span class="nn">pymongo.read_preferences</span> <span class="kn">import</span> <span class="n">ReadPreference</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">drop_database</span><span class="p">(</span><span class="s1">&#39;shop&#39;</span><span class="p">)</span>  <span class="c1"># drop the shop database if it exists</span>
+
+<span class="c1"># Select the database and collections</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s1">&#39;shop&#39;</span><span class="p">]</span>
+<span class="n">inventory</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;inventory&#39;</span><span class="p">]</span>
+<span class="n">carts</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;carts&#39;</span><span class="p">]</span>
+
+<span class="c1"># Insert sample data into the inventory collection</span>
+<span class="n">inventory</span><span class="o">.</span><span class="n">insert_many</span><span class="p">([</span>
+    <span class="p">{</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="s1">&#39;item456&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="s1">&#39;item789&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="s1">&#39;item123&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span>
+<span class="p">])</span>
+
+<span class="c1"># Insert sample data into the carts collection</span>
+<span class="n">carts</span><span class="o">.</span><span class="n">insert_one</span><span class="p">({</span>
+    <span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="s1">&#39;user123&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertOneResult(ObjectId(&#39;66f27e1b16daf71a8f21da2b&#39;), acknowledged=True)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="write-a-function-to-check-if-the-inventory-has-enough-quantity-for-a-particular-item">
+<h4>6.1 Write a function to check if the inventory has enough quantity for a particular item<a class="headerlink" href="#write-a-function-to-check-if-the-inventory-has-enough-quantity-for-a-particular-item" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>raise ValueError if the order_quantity exceed the inventory quantity</p></li>
+<li><p>Print out a message <code class="docutils literal notranslate"><span class="pre">Item</span> <span class="pre">{item_id}</span> <span class="pre">has</span> <span class="pre">enough</span> <span class="pre">quantity</span></code> if the order_quantity &lt;= the inventory quantity</p></li>
+</ul>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check_quantity</span><span class="p">(</span><span class="n">item_id</span><span class="p">,</span> <span class="n">order_quantity</span><span class="p">):</span>
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="c1"># Find the item in the inventory collection</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">inventory</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">})</span>
+
+    <span class="c1"># Check if the item exists and has enough quantity</span>
+    <span class="k">if</span> <span class="n">item</span> <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;quantity&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">order_quantity</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not enough inventory for item_id </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2"> has enough quantity&quot;</span><span class="p">)</span>
+    <span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out the quantity of item123 from the inventory collection</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inventory</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="s1">&#39;item123&#39;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f27e1b16daf71a8f21da2a&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 20}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check_quantity</span><span class="p">(</span><span class="s1">&#39;item123&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># this should print out a message that item123 has enough quantity</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Item item123 has enough quantity
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check_quantity</span><span class="p">(</span><span class="s1">&#39;item123&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># this should raise a ValueError</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">144</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">check_quantity</span><span class="p">(</span><span class="s1">&#39;item123&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># this should raise a ValueError</span>
+
+<span class="nn">Cell In[135], line 8,</span> in <span class="ni">check_quantity</span><span class="nt">(item_id, order_quantity)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># Check if the item exists and has enough quantity</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;quantity&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">order_quantity</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">8</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not enough inventory for item_id </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2"> has enough quantity&quot;</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: Not enough inventory for item_id item123
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="write-a-function-to-update-the-quantity-from-the-inventory">
+<h4>6.2 Write a function to update the quantity from the inventory<a class="headerlink" href="#write-a-function-to-update-the-quantity-from-the-inventory" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">update_one</span></code> function to update the quantity of inventory</p></li>
+<li><p>You can use the <code class="docutils literal notranslate"><span class="pre">$inc</span></code> to increment the quantity of inventory based on the order quantity</p></li>
+</ul>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_quantity</span><span class="p">(</span><span class="n">order_quantity</span><span class="p">,</span> <span class="n">item_id</span><span class="p">):</span>
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="n">inventory</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;$inc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">order_quantity</span><span class="p">}}</span>
+    <span class="p">)</span>
+    <span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out the quantity of item_id &#39;item123&#39; before updating</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inventory</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="s1">&#39;item123&#39;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f2787f16daf71a8f21da22&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 20}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update the quantity for item_id &#39;item123&#39;</span>
+<span class="n">order_quantity</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">item_id</span> <span class="o">=</span> <span class="s1">&#39;item123&#39;</span>
+<span class="n">update_quantity</span><span class="p">(</span><span class="n">order_quantity</span><span class="p">,</span> <span class="n">item_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out the quantity of item_id &#39;item123&#39; after updating</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inventory</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="s1">&#39;item123&#39;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f2787f16daf71a8f21da22&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 10}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="write-a-function-to-update-user-s-shopping-cart">
+<h4>6.3 Write a function to update user’s shopping cart<a class="headerlink" href="#write-a-function-to-update-user-s-shopping-cart" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">update_one</span></code> function to update the shopping cart</p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">$push</span></code> operator to an element to an array. If the array does not exist, it will be created.</p></li>
+</ul>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out shopping cart before adding items</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">carts</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="s1">&#39;user123&#39;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f2787f16daf71a8f21da23&#39;), &#39;user_id&#39;: &#39;user123&#39;, &#39;items&#39;: []}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># write a function to add items to the shopping cart</span>
+<span class="k">def</span> <span class="nf">add_to_cart</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">item_id</span><span class="p">,</span> <span class="n">quantity</span><span class="p">):</span>
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="n">carts</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;$push&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="n">quantity</span><span class="p">}}}</span>
+    <span class="p">)</span>
+    <span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># test the function by adding items to the shopping cart</span>
+<span class="n">add_to_cart</span><span class="p">(</span><span class="s1">&#39;user123&#39;</span><span class="p">,</span> <span class="s1">&#39;item123&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print out shopping cart after adding items</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">carts</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="s1">&#39;user123&#39;</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f2787f16daf71a8f21da23&#39;), &#39;user_id&#39;: &#39;user123&#39;, &#39;items&#39;: [{&#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 5}, {&#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 5}]}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="combine-everything-into-a-transaction-function">
+<h4>6.4 Combine everything into a transaction function<a class="headerlink" href="#combine-everything-into-a-transaction-function" title="Link to this heading">#</a></h4>
+<p>Create a transaction function that:</p>
+<ul class="simple">
+<li><p>First check if the quantity is enough in the inventory, if not, it should raise a ValueError</p></li>
+<li><p>Update the quantity from the inventory by substracting the order_quantity</p></li>
+<li><p>Update user’s shopping cart with the item_id and the order_quantity</p></li>
+</ul>
+<p>Note: You need to add a line <code class="docutils literal notranslate"><span class="pre">session=session</span></code> in the update_one function for inventory and shopping carts</p>
+<div class="cell tag_otter_assign_solution_cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the transaction function</span>
+<span class="k">def</span> <span class="nf">add_to_cart</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">item_id</span><span class="p">,</span> <span class="n">quantity</span><span class="p">):</span>
+    <span class="c1"># Check if the inventory has enough quantity</span>
+    <span class="c1"># Deduct the quantity from the inventory </span>
+    <span class="c1"># Add the item to the user&#39;s shopping cart</span>
+          
+    <span class="c1"># BEGIN SOLUTION</span>
+    <span class="c1"># Check if the inventory has enough quantity</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">inventory</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">},</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;quantity&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">quantity</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not enough inventory for item_id </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Deduct the quantity from the inventory  </span>
+
+    <span class="n">inventory</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;$inc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">quantity</span><span class="p">}},</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">session</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># Add the item to the user&#39;s shopping cart</span>
+    <span class="n">carts</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;$push&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="n">quantity</span><span class="p">}}},</span>
+        <span class="n">upsert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">session</span>
+    <span class="p">)</span>
+    <span class="c1"># END SOLUTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start a session</span>
+<span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">start_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Start a transaction</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">start_transaction</span><span class="p">()</span>
+
+        <span class="c1"># Perform the add to cart operation</span>
+        <span class="n">add_to_cart</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;user123&#39;</span><span class="p">,</span> <span class="s1">&#39;item456&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Commit the transaction</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">commit_transaction</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transaction committed.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">ConnectionFailure</span><span class="p">,</span> <span class="n">OperationFailure</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Abort the transaction on error</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">abort_transaction</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transaction aborted due to error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transaction committed.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s test the constraint of the transaction. This should throws an error because order_quantity of 200 is exceeding the inventory quantity</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start a session</span>
+<span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">start_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Start a transaction</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">start_transaction</span><span class="p">()</span>
+
+        <span class="c1"># Perform the add to cart operation</span>
+        <span class="n">add_to_cart</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;user123&#39;</span><span class="p">,</span> <span class="s1">&#39;item456&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="c1"># Commit the transaction</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">commit_transaction</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transaction committed.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">ConnectionFailure</span><span class="p">,</span> <span class="n">OperationFailure</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Abort the transaction on error</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">abort_transaction</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transaction aborted due to error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transaction aborted due to error: Not enough inventory for item_id item456
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>There are no auto-tests for Q6, it will be graded manually</strong></p>
+</section>
+</section>
+</section>
+<section id="submission-instructions">
+<h2>Submission instructions<a class="headerlink" href="#submission-instructions" title="Link to this heading">#</a></h2>
+<p>{rubric: mechanics = 5}</p>
+<ul class="simple">
+<li><p>Make sure the notebook can run from top to bottom without any error. Restart the kernel and run all cells.</p></li>
+<li><p>Commit and push your notebook to the github repo</p></li>
+<li><p>Double check your notebook is rendered properly on Github and you can see all the outputs clearly</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./worksheets/release/worksheet4/autograder"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#establish-pymongo-connection">Establish Pymongo connection</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-calculate-the-average-rating-of-movies-by-genre">Exercise 1: Calculate the Average Rating of Movies by Genre</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-find-the-top-5-movies-with-the-highest-imdb-rating">Exercise 2: Find the Top 5 Movies with the Highest IMDb Rating</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-count-the-number-of-movies-by-year">Exercise 3: Count the Number of Movies by Year</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-4-find-the-top-3-directors-with-the-most-movies">Exercise 4: Find the Top 3 Directors with the Most Movies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-5-calculate-the-average-imdb-rating-and-number-of-movies-for-each-genre-rounded-to-2-decimals">Exercise 5: Calculate the Average IMDb Rating and Number of Movies for Each Genre (Rounded to 2 Decimals)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-6-implementing-acid-transactions-for-a-shopping-cart">Exercise 6: Implementing ACID Transactions for a Shopping Cart</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#instructions">Instructions</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#write-a-function-to-check-if-the-inventory-has-enough-quantity-for-a-particular-item">6.1 Write a function to check if the inventory has enough quantity for a particular item</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#write-a-function-to-update-the-quantity-from-the-inventory">6.2 Write a function to update the quantity from the inventory</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#write-a-function-to-update-user-s-shopping-cart">6.3 Write a function to update user’s shopping cart</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#combine-everything-into-a-transaction-function">6.4 Combine everything into a transaction function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission instructions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Quan Nguyen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
