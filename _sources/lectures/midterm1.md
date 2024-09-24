@@ -20,6 +20,9 @@ The quiz will have a mix of different types of questions:
 - You are not allowed to communicate with anyone else during the quiz.
 - Your answer should be your own. You are not allowed to copy & paste from sources on the Internet, or use AI-tools such as chatGPT, copilot, etc..
 
+All electronic devices (smartwatch, earphone, laptop, tablet, phone) are not allowed
+![](img/ban.jpg)
+
 ## Etiquette
 - You are expected to show up ON TIME, I am not responsible if you show up late and have less time during the quiz.
 - You are expected to be quite during the whole duration of the quiz, so you are not disturbing other students
