@@ -44,25 +44,19 @@ Please find the list of lecture, and the required readings below. This list will
 |        6 | Thu      | Oct 10 |  Introductin to DataFrames in Pyspark                                        |
 |        7 | Tue      | Oct 15 | Basic dataframe operations                                  |
 |        7 | Thu      | Oct 17 | Spark SQL                                                   |
-|        7 | Fri      | Oct 18 | Dataframe optimization techniques                           |
-|        8 | Tue      | Oct 22 | Working with structured streaming                           |
+|        8 | Tue      | Oct 22 | Dataframe optimization techniques , Working with structured streaming                           |
 |        8 | Thu      | Oct 24 | Machine learning with PySpark (MLlib)                       |
-|        8 | Fri      | Oct 25 | Clustering and recommendation                               |
-|        9 | Tue      | Oct 29 | PySpark best practices and case study                       |
-|        9 | Thu      | Oct 31 | Backup lecture                                              |
-|        9 | Fri      |  Nov 1 | MIDTERM 2: Cover materials from week 5 - 9                  |
+|        9 | Tue      | Oct 29 | Clustering and recommendation                        |
+|        9 | Thu      | Oct 31 | MIDTERM 2: Cover materials from week 5 - 9                                            |
 |       10 | Tue      |  Nov 5 | Introduction to data governance                             |
 |       10 | Thu      |  Nov 7 | MID-TERM BREAK                                              |
-|       10 | Fri      |  Nov 8 | MID-TERM BREAK                                              |
 |       11 | Tue      | Nov 12 | Data quality management                                     |
-|       11 | Thu      | Nov 14 | Data privacy                                                |
-|       11 | Fri      | Nov 15 | Data security fundamentals                                  |
+|       11 | Thu      | Nov 14 | Data privacy , Data security fundamentals                                                 |
 |       12 | Tue      | Nov 19 | Data ethics                                                 |
 |       12 | Thu      | Nov 21 | Legal and regulatory compliance                             |
-|       12 | Fri      | Nov 22 | AI and ethics                                               |
-|       13 | Tue      | Nov 26 | Data breaches and responses                                 |
-|       13 | Thu      | Nov 28 | Future trends in data governance, privacy, and security     |
-|       13 | Fri      | Nov 29 | Course conclusion                                           |
+|       13 | Tue      | Nov 26 | AI and ethics                                |
+|       13 | Thu      | Nov 28 | Course conclusion                          |
+
 
 ## Assessment overview
 

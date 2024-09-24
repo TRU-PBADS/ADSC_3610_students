@@ -205,6 +205,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../worksheets/source/worksheet1.html">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../worksheets/source/worksheet2.html">Worksheet 2: Data modelling with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../worksheets/source/worksheet3/worksheet3.html">Worksheet 3: CRUD operations in MongoDB</a></li>
 </ul>
 
     </div>
@@ -355,6 +356,10 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-acid-transactions">Introduction to ACID Transactions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atomicity">Atomicity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#consistency">Consistency</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isolation">Isolation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#durability">Durability</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodb-transactions">MongoDB Transactions</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a><ul class="nav section-nav flex-column">
@@ -404,6 +409,39 @@ document.write(`
 <li><p><strong>Isolation</strong>: Ensures that concurrently executing transactions do not affect each other.</p></li>
 <li><p><strong>Durability</strong>: Ensures that once a transaction is committed, it remains so, even in the event of a system failure.</p></li>
 </ul>
+<p><img alt="" src="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F826d6425-8401-4806-b801-5ff758d5c69f_1280x1664.gif" /></p>
+<section id="atomicity">
+<h3>Atomicity<a class="headerlink" href="#atomicity" title="Link to this heading">#</a></h3>
+<p><strong>Example</strong>: Transferring funds between two bank accounts.</p>
+<ul class="simple">
+<li><p><strong>Scenario</strong>: A customer wants to transfer $100 from their savings account to their checking account.</p></li>
+<li><p><strong>Atomicity</strong>: The transaction involves two operations: deducting <span class="math notranslate nohighlight">\(100 from the savings account and adding \)</span>100 to the checking account. If either operation fails (e.g., due to insufficient funds in the savings account), the entire transaction is rolled back, and no money is transferred. This ensures that partial updates do not occur.</p></li>
+</ul>
+</section>
+<section id="consistency">
+<h3>Consistency<a class="headerlink" href="#consistency" title="Link to this heading">#</a></h3>
+<p><strong>Example</strong>: Ensuring data integrity during a product purchase.</p>
+<ul class="simple">
+<li><p><strong>Scenario</strong>: A customer purchases a product from an online store.</p></li>
+<li><p><strong>Consistency</strong>: The transaction involves updating the inventory to reduce the product quantity and recording the sale in the sales ledger. The database must ensure that the inventory count and sales record are updated together. If the inventory update fails (e.g., items sold out), the sale should not be recorded, maintaining the consistency of the database.</p></li>
+</ul>
+</section>
+<section id="isolation">
+<h3>Isolation<a class="headerlink" href="#isolation" title="Link to this heading">#</a></h3>
+<p><strong>Example</strong>: Concurrent ticket booking for a concert.</p>
+<ul class="simple">
+<li><p><strong>Scenario</strong>: Two customers attempt to book the last available ticket for a concert at the same time.</p></li>
+<li><p><strong>Isolation</strong>: Each transaction should be isolated from the other, ensuring that only one customer can successfully book the last ticket. The database handles these concurrent transactions in such a way that one transaction completes before the other begins, preventing race conditions and ensuring data integrity.</p></li>
+</ul>
+</section>
+<section id="durability">
+<h3>Durability<a class="headerlink" href="#durability" title="Link to this heading">#</a></h3>
+<p><strong>Example</strong>: Recording a bank deposit.</p>
+<ul class="simple">
+<li><p><strong>Scenario</strong>: A customer deposits $500 into their bank account.</p></li>
+<li><p><strong>Durability</strong>: Once the transaction is committed, the deposit is guaranteed to be recorded in the database, even if there is a system failure immediately after the transaction. This ensures that the customer’s balance reflects the deposit accurately and reliably.</p></li>
+</ul>
+</section>
 <section id="mongodb-transactions">
 <h3>MongoDB Transactions<a class="headerlink" href="#mongodb-transactions" title="Link to this heading">#</a></h3>
 <p>MongoDB supports multi-document ACID transactions, which allow you to perform multiple operations across multiple documents and collections in a single transaction. Transactions in MongoDB are available for replica sets and sharded clusters.</p>
@@ -921,6 +959,10 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-acid-transactions">Introduction to ACID Transactions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atomicity">Atomicity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#consistency">Consistency</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isolation">Isolation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#durability">Durability</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodb-transactions">MongoDB Transactions</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a><ul class="nav section-nav flex-column">
