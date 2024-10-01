@@ -189,6 +189,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture6.html">Lecture 6: CRUD operations in MongoDB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture7.html">Lecture 7: Aggregation operations in MongoDB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../lectures/lecture8.html">Lecture 8: ACID transactions in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lectures/course_recap.html">Course recap MongoDB</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Midterms Information</span></p>
 <ul class="nav bd-sidenav">
@@ -443,7 +444,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;sample_airbnb&#39;,
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;banking&#39;,
+ &#39;sample_airbnb&#39;,
  &#39;sample_analytics&#39;,
  &#39;sample_geospatial&#39;,
  &#39;sample_guides&#39;,
@@ -452,6 +454,7 @@ document.write(`
  &#39;sample_supplies&#39;,
  &#39;sample_training&#39;,
  &#39;sample_weatherdata&#39;,
+ &#39;shop&#39;,
  &#39;admin&#39;,
  &#39;local&#39;]
 </pre></div>
@@ -550,31 +553,31 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;War&#39;, &#39;averageRating&#39;: 7.128591954022989}
-{&#39;_id&#39;: &#39;News&#39;, &#39;averageRating&#39;: 7.252272727272728}
-{&#39;_id&#39;: &#39;Romance&#39;, &#39;averageRating&#39;: 6.6564272782136396}
-{&#39;_id&#39;: &#39;Biography&#39;, &#39;averageRating&#39;: 7.087984189723319}
-{&#39;_id&#39;: &#39;Animation&#39;, &#39;averageRating&#39;: 6.89669603524229}
-{&#39;_id&#39;: &#39;History&#39;, &#39;averageRating&#39;: 7.1696100917431185}
-{&#39;_id&#39;: &#39;Documentary&#39;, &#39;averageRating&#39;: 7.365679824561403}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Documentary&#39;, &#39;averageRating&#39;: 7.365679824561403}
+{&#39;_id&#39;: &#39;Drama&#39;, &#39;averageRating&#39;: 6.803377338624768}
+{&#39;_id&#39;: &#39;Comedy&#39;, &#39;averageRating&#39;: 6.450214658080344}
+{&#39;_id&#39;: &#39;Family&#39;, &#39;averageRating&#39;: 6.3296712109061755}
 {&#39;_id&#39;: &#39;Action&#39;, &#39;averageRating&#39;: 6.347098402018503}
+{&#39;_id&#39;: &#39;Sport&#39;, &#39;averageRating&#39;: 6.749041095890411}
 {&#39;_id&#39;: &#39;Horror&#39;, &#39;averageRating&#39;: 5.784709897610922}
+{&#39;_id&#39;: &#39;Film-Noir&#39;, &#39;averageRating&#39;: 7.397402597402598}
 {&#39;_id&#39;: &#39;Talk-Show&#39;, &#39;averageRating&#39;: 7.0}
-{&#39;_id&#39;: &#39;Musical&#39;, &#39;averageRating&#39;: 6.665831435079727}
-{&#39;_id&#39;: &#39;Short&#39;, &#39;averageRating&#39;: 7.377574370709382}
 {&#39;_id&#39;: &#39;Western&#39;, &#39;averageRating&#39;: 6.823553719008264}
+{&#39;_id&#39;: &#39;Short&#39;, &#39;averageRating&#39;: 7.377574370709382}
 {&#39;_id&#39;: &#39;Adventure&#39;, &#39;averageRating&#39;: 6.493680884676145}
 {&#39;_id&#39;: &#39;Mystery&#39;, &#39;averageRating&#39;: 6.527425044091711}
 {&#39;_id&#39;: &#39;Thriller&#39;, &#39;averageRating&#39;: 6.304498977505112}
 {&#39;_id&#39;: &#39;Music&#39;, &#39;averageRating&#39;: 6.883333333333334}
 {&#39;_id&#39;: &#39;Fantasy&#39;, &#39;averageRating&#39;: 6.3829847908745245}
 {&#39;_id&#39;: &#39;Crime&#39;, &#39;averageRating&#39;: 6.688585405625764}
-{&#39;_id&#39;: &#39;Drama&#39;, &#39;averageRating&#39;: 6.803377338624768}
-{&#39;_id&#39;: &#39;Comedy&#39;, &#39;averageRating&#39;: 6.450214658080344}
-{&#39;_id&#39;: &#39;Family&#39;, &#39;averageRating&#39;: 6.3296712109061755}
-{&#39;_id&#39;: &#39;Sport&#39;, &#39;averageRating&#39;: 6.749041095890411}
 {&#39;_id&#39;: &#39;Sci-Fi&#39;, &#39;averageRating&#39;: 6.123609653725079}
-{&#39;_id&#39;: &#39;Film-Noir&#39;, &#39;averageRating&#39;: 7.397402597402598}
+{&#39;_id&#39;: &#39;News&#39;, &#39;averageRating&#39;: 7.252272727272728}
+{&#39;_id&#39;: &#39;Musical&#39;, &#39;averageRating&#39;: 6.665831435079727}
+{&#39;_id&#39;: &#39;War&#39;, &#39;averageRating&#39;: 7.128591954022989}
+{&#39;_id&#39;: &#39;Romance&#39;, &#39;averageRating&#39;: 6.6564272782136396}
+{&#39;_id&#39;: &#39;Biography&#39;, &#39;averageRating&#39;: 7.087984189723319}
+{&#39;_id&#39;: &#39;Animation&#39;, &#39;averageRating&#39;: 6.89669603524229}
+{&#39;_id&#39;: &#39;History&#39;, &#39;averageRating&#39;: 7.1696100917431185}
 </pre></div>
 </div>
 </div>
@@ -761,13 +764,13 @@ document.write(`
 {&#39;_id&#39;: 1965, &#39;count&#39;: 77}
 {&#39;_id&#39;: 1958, &#39;count&#39;: 75}
 {&#39;_id&#39;: 1960, &#39;count&#39;: 73}
-{&#39;_id&#39;: 1957, &#39;count&#39;: 71}
 {&#39;_id&#39;: 1959, &#39;count&#39;: 71}
+{&#39;_id&#39;: 1957, &#39;count&#39;: 71}
 {&#39;_id&#39;: 1962, &#39;count&#39;: 70}
 {&#39;_id&#39;: 1963, &#39;count&#39;: 69}
 {&#39;_id&#39;: 1961, &#39;count&#39;: 68}
-{&#39;_id&#39;: 1955, &#39;count&#39;: 67}
 {&#39;_id&#39;: 1956, &#39;count&#39;: 67}
+{&#39;_id&#39;: 1955, &#39;count&#39;: 67}
 {&#39;_id&#39;: 1953, &#39;count&#39;: 65}
 {&#39;_id&#39;: 1948, &#39;count&#39;: 56}
 {&#39;_id&#39;: 1950, &#39;count&#39;: 55}
@@ -780,17 +783,17 @@ document.write(`
 {&#39;_id&#39;: 1943, &#39;count&#39;: 32}
 {&#39;_id&#39;: 1937, &#39;count&#39;: 31}
 {&#39;_id&#39;: 1935, &#39;count&#39;: 31}
-{&#39;_id&#39;: 1936, &#39;count&#39;: 30}
 {&#39;_id&#39;: 1942, &#39;count&#39;: 30}
-{&#39;_id&#39;: 1947, &#39;count&#39;: 29}
+{&#39;_id&#39;: 1936, &#39;count&#39;: 30}
 {&#39;_id&#39;: 1945, &#39;count&#39;: 29}
-{&#39;_id&#39;: 1940, &#39;count&#39;: 24}
+{&#39;_id&#39;: 1947, &#39;count&#39;: 29}
 {&#39;_id&#39;: 1941, &#39;count&#39;: 24}
+{&#39;_id&#39;: 1940, &#39;count&#39;: 24}
 {&#39;_id&#39;: 1934, &#39;count&#39;: 23}
 {&#39;_id&#39;: 1944, &#39;count&#39;: 23}
-{&#39;_id&#39;: 1939, &#39;count&#39;: 20}
-{&#39;_id&#39;: 1933, &#39;count&#39;: 20}
 {&#39;_id&#39;: 1931, &#39;count&#39;: 20}
+{&#39;_id&#39;: 1933, &#39;count&#39;: 20}
+{&#39;_id&#39;: 1939, &#39;count&#39;: 20}
 {&#39;_id&#39;: 1932, &#39;count&#39;: 18}
 {&#39;_id&#39;: 1930, &#39;count&#39;: 10}
 {&#39;_id&#39;: 1928, &#39;count&#39;: 8}
@@ -798,45 +801,45 @@ document.write(`
 {&#39;_id&#39;: 1924, &#39;count&#39;: 6}
 {&#39;_id&#39;: 1926, &#39;count&#39;: 6}
 {&#39;_id&#39;: 1921, &#39;count&#39;: 5}
-{&#39;_id&#39;: 1920, &#39;count&#39;: 4}
 {&#39;_id&#39;: &#39;2010è&#39;, &#39;count&#39;: 4}
 {&#39;_id&#39;: 1927, &#39;count&#39;: 4}
-{&#39;_id&#39;: 1922, &#39;count&#39;: 3}
-{&#39;_id&#39;: &#39;2012è&#39;, &#39;count&#39;: 3}
+{&#39;_id&#39;: 1920, &#39;count&#39;: 4}
 {&#39;_id&#39;: &#39;2007è&#39;, &#39;count&#39;: 3}
 {&#39;_id&#39;: 1914, &#39;count&#39;: 3}
 {&#39;_id&#39;: 1925, &#39;count&#39;: 3}
-{&#39;_id&#39;: 1917, &#39;count&#39;: 2}
-{&#39;_id&#39;: &#39;2005è&#39;, &#39;count&#39;: 2}
-{&#39;_id&#39;: 1896, &#39;count&#39;: 2}
-{&#39;_id&#39;: 1923, &#39;count&#39;: 2}
-{&#39;_id&#39;: &#39;2011è&#39;, &#39;count&#39;: 2}
-{&#39;_id&#39;: 1911, &#39;count&#39;: 2}
-{&#39;_id&#39;: &#39;2009è&#39;, &#39;count&#39;: 2}
-{&#39;_id&#39;: 1915, &#39;count&#39;: 2}
-{&#39;_id&#39;: 1916, &#39;count&#39;: 2}
-{&#39;_id&#39;: &#39;1997è&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;2012è&#39;, &#39;count&#39;: 3}
+{&#39;_id&#39;: 1922, &#39;count&#39;: 3}
 {&#39;_id&#39;: &#39;2006è2012&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;1997è&#39;, &#39;count&#39;: 2}
 {&#39;_id&#39;: &#39;2014è&#39;, &#39;count&#39;: 2}
-{&#39;_id&#39;: &#39;1999è&#39;, &#39;count&#39;: 1}
-{&#39;_id&#39;: 1909, &#39;count&#39;: 1}
-{&#39;_id&#39;: &#39;2000è&#39;, &#39;count&#39;: 1}
-{&#39;_id&#39;: &#39;1995è&#39;, &#39;count&#39;: 1}
-{&#39;_id&#39;: 1919, &#39;count&#39;: 1}
-{&#39;_id&#39;: 2016, &#39;count&#39;: 1}
-{&#39;_id&#39;: &#39;1986è&#39;, &#39;count&#39;: 1}
-{&#39;_id&#39;: &#39;1994è1998&#39;, &#39;count&#39;: 1}
-{&#39;_id&#39;: 1903, &#39;count&#39;: 1}
-{&#39;_id&#39;: &#39;2006è2007&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2011è&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1923, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1911, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1917, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1896, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;2005è&#39;, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1916, &#39;count&#39;: 2}
+{&#39;_id&#39;: 1915, &#39;count&#39;: 2}
+{&#39;_id&#39;: &#39;2009è&#39;, &#39;count&#39;: 2}
 {&#39;_id&#39;: &#39;1988è&#39;, &#39;count&#39;: 1}
 {&#39;_id&#39;: &#39;1987è&#39;, &#39;count&#39;: 1}
 {&#39;_id&#39;: &#39;1981è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1903, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1986è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1994è1998&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2006è2007&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1918, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1913, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2003è&#39;, &#39;count&#39;: 1}
 {&#39;_id&#39;: &#39;2002è&#39;, &#39;count&#39;: 1}
 {&#39;_id&#39;: &#39;2006è&#39;, &#39;count&#39;: 1}
 {&#39;_id&#39;: &#39;1996è&#39;, &#39;count&#39;: 1}
-{&#39;_id&#39;: &#39;2003è&#39;, &#39;count&#39;: 1}
-{&#39;_id&#39;: 1918, &#39;count&#39;: 1}
-{&#39;_id&#39;: 1913, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;2000è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1909, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1999è&#39;, &#39;count&#39;: 1}
+{&#39;_id&#39;: 1919, &#39;count&#39;: 1}
+{&#39;_id&#39;: 2016, &#39;count&#39;: 1}
+{&#39;_id&#39;: &#39;1995è&#39;, &#39;count&#39;: 1}
 </pre></div>
 </div>
 </div>
@@ -956,31 +959,31 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Documentary&#39;, &#39;movieCount&#39;: 1834, &#39;averageRating&#39;: 7.37}
-{&#39;_id&#39;: &#39;Drama&#39;, &#39;movieCount&#39;: 12385, &#39;averageRating&#39;: 6.8}
-{&#39;_id&#39;: &#39;Comedy&#39;, &#39;movieCount&#39;: 6532, &#39;averageRating&#39;: 6.45}
-{&#39;_id&#39;: &#39;Family&#39;, &#39;movieCount&#39;: 1249, &#39;averageRating&#39;: 6.33}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: &#39;Drama&#39;, &#39;movieCount&#39;: 12385, &#39;averageRating&#39;: 6.8}
 {&#39;_id&#39;: &#39;Action&#39;, &#39;movieCount&#39;: 2381, &#39;averageRating&#39;: 6.35}
-{&#39;_id&#39;: &#39;Sport&#39;, &#39;movieCount&#39;: 366, &#39;averageRating&#39;: 6.75}
 {&#39;_id&#39;: &#39;Horror&#39;, &#39;movieCount&#39;: 1470, &#39;averageRating&#39;: 5.78}
+{&#39;_id&#39;: &#39;Animation&#39;, &#39;movieCount&#39;: 912, &#39;averageRating&#39;: 6.9}
+{&#39;_id&#39;: &#39;Romance&#39;, &#39;movieCount&#39;: 3318, &#39;averageRating&#39;: 6.66}
+{&#39;_id&#39;: &#39;History&#39;, &#39;movieCount&#39;: 874, &#39;averageRating&#39;: 7.17}
+{&#39;_id&#39;: &#39;War&#39;, &#39;movieCount&#39;: 699, &#39;averageRating&#39;: 7.13}
+{&#39;_id&#39;: &#39;Documentary&#39;, &#39;movieCount&#39;: 1834, &#39;averageRating&#39;: 7.37}
+{&#39;_id&#39;: &#39;Musical&#39;, &#39;movieCount&#39;: 440, &#39;averageRating&#39;: 6.67}
+{&#39;_id&#39;: &#39;Biography&#39;, &#39;movieCount&#39;: 1269, &#39;averageRating&#39;: 7.09}
 {&#39;_id&#39;: &#39;Film-Noir&#39;, &#39;movieCount&#39;: 77, &#39;averageRating&#39;: 7.4}
 {&#39;_id&#39;: &#39;Talk-Show&#39;, &#39;movieCount&#39;: 1, &#39;averageRating&#39;: 7.0}
+{&#39;_id&#39;: &#39;Fantasy&#39;, &#39;movieCount&#39;: 1055, &#39;averageRating&#39;: 6.38}
+{&#39;_id&#39;: &#39;Mystery&#39;, &#39;movieCount&#39;: 1139, &#39;averageRating&#39;: 6.53}
+{&#39;_id&#39;: &#39;Crime&#39;, &#39;movieCount&#39;: 2457, &#39;averageRating&#39;: 6.69}
+{&#39;_id&#39;: &#39;Thriller&#39;, &#39;movieCount&#39;: 2454, &#39;averageRating&#39;: 6.3}
+{&#39;_id&#39;: &#39;Adventure&#39;, &#39;movieCount&#39;: 1900, &#39;averageRating&#39;: 6.49}
+{&#39;_id&#39;: &#39;Music&#39;, &#39;movieCount&#39;: 780, &#39;averageRating&#39;: 6.88}
 {&#39;_id&#39;: &#39;Western&#39;, &#39;movieCount&#39;: 242, &#39;averageRating&#39;: 6.82}
 {&#39;_id&#39;: &#39;Short&#39;, &#39;movieCount&#39;: 442, &#39;averageRating&#39;: 7.38}
-{&#39;_id&#39;: &#39;Adventure&#39;, &#39;movieCount&#39;: 1900, &#39;averageRating&#39;: 6.49}
-{&#39;_id&#39;: &#39;Mystery&#39;, &#39;movieCount&#39;: 1139, &#39;averageRating&#39;: 6.53}
-{&#39;_id&#39;: &#39;Thriller&#39;, &#39;movieCount&#39;: 2454, &#39;averageRating&#39;: 6.3}
-{&#39;_id&#39;: &#39;Music&#39;, &#39;movieCount&#39;: 780, &#39;averageRating&#39;: 6.88}
-{&#39;_id&#39;: &#39;Fantasy&#39;, &#39;movieCount&#39;: 1055, &#39;averageRating&#39;: 6.38}
-{&#39;_id&#39;: &#39;Crime&#39;, &#39;movieCount&#39;: 2457, &#39;averageRating&#39;: 6.69}
 {&#39;_id&#39;: &#39;Sci-Fi&#39;, &#39;movieCount&#39;: 958, &#39;averageRating&#39;: 6.12}
 {&#39;_id&#39;: &#39;News&#39;, &#39;movieCount&#39;: 44, &#39;averageRating&#39;: 7.25}
-{&#39;_id&#39;: &#39;Musical&#39;, &#39;movieCount&#39;: 440, &#39;averageRating&#39;: 6.67}
-{&#39;_id&#39;: &#39;War&#39;, &#39;movieCount&#39;: 699, &#39;averageRating&#39;: 7.13}
-{&#39;_id&#39;: &#39;Romance&#39;, &#39;movieCount&#39;: 3318, &#39;averageRating&#39;: 6.66}
-{&#39;_id&#39;: &#39;Biography&#39;, &#39;movieCount&#39;: 1269, &#39;averageRating&#39;: 7.09}
-{&#39;_id&#39;: &#39;Animation&#39;, &#39;movieCount&#39;: 912, &#39;averageRating&#39;: 6.9}
-{&#39;_id&#39;: &#39;History&#39;, &#39;movieCount&#39;: 874, &#39;averageRating&#39;: 7.17}
+{&#39;_id&#39;: &#39;Family&#39;, &#39;movieCount&#39;: 1249, &#39;averageRating&#39;: 6.33}
+{&#39;_id&#39;: &#39;Comedy&#39;, &#39;movieCount&#39;: 6532, &#39;averageRating&#39;: 6.45}
+{&#39;_id&#39;: &#39;Sport&#39;, &#39;movieCount&#39;: 366, &#39;averageRating&#39;: 6.75}
 </pre></div>
 </div>
 </div>
@@ -1052,7 +1055,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertOneResult(ObjectId(&#39;66f27e1b16daf71a8f21da2b&#39;), acknowledged=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>InsertOneResult(ObjectId(&#39;66f43db2de4414a6c3e82b59&#39;), acknowledged=True)
 </pre></div>
 </div>
 </div>
@@ -1089,7 +1092,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f27e1b16daf71a8f21da2a&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 20}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f43db2de4414a6c3e82b58&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 20}
 </pre></div>
 </div>
 </div>
@@ -1115,10 +1118,10 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">144</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">check_quantity</span><span class="p">(</span><span class="s1">&#39;item123&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># this should raise a ValueError</span>
 
-<span class="nn">Cell In[135], line 8,</span> in <span class="ni">check_quantity</span><span class="nt">(item_id, order_quantity)</span>
+<span class="nn">Cell In[22], line 8,</span> in <span class="ni">check_quantity</span><span class="nt">(item_id, order_quantity)</span>
 <span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># Check if the item exists and has enough quantity</span>
 <span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;quantity&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">order_quantity</span><span class="p">:</span>
 <span class="ne">----&gt; </span><span class="mi">8</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not enough inventory for item_id </span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1158,7 +1161,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f2787f16daf71a8f21da22&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 20}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f43db2de4414a6c3e82b58&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 20}
 </pre></div>
 </div>
 </div>
@@ -1181,7 +1184,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f2787f16daf71a8f21da22&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 10}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f43db2de4414a6c3e82b58&#39;), &#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 10}
 </pre></div>
 </div>
 </div>
@@ -1201,7 +1204,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f2787f16daf71a8f21da23&#39;), &#39;user_id&#39;: &#39;user123&#39;, &#39;items&#39;: []}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f43db2de4414a6c3e82b59&#39;), &#39;user_id&#39;: &#39;user123&#39;, &#39;items&#39;: []}
 </pre></div>
 </div>
 </div>
@@ -1236,7 +1239,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f2787f16daf71a8f21da23&#39;), &#39;user_id&#39;: &#39;user123&#39;, &#39;items&#39;: [{&#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 5}, {&#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 5}]}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: ObjectId(&#39;66f43db2de4414a6c3e82b59&#39;), &#39;user_id&#39;: &#39;user123&#39;, &#39;items&#39;: [{&#39;item_id&#39;: &#39;item123&#39;, &#39;quantity&#39;: 5}]}
 </pre></div>
 </div>
 </div>
