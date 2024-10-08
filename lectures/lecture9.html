@@ -386,6 +386,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sign-up-for-databricks-community-edition">Sign up for Databricks Community edition</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started-with-pyspark-on-databricks">Getting started with PySpark on databricks</a></li>
 </ul>
             </nav>
         </div>
@@ -603,6 +604,95 @@ document.write(`
 </ol>
 <a class="reference internal image-reference" href="https://docs.databricks.com/en/_images/landing-aws-ce.png"><img alt="Databricks" src="https://docs.databricks.com/en/_images/landing-aws-ce.png" style="width: 600px;" /></a>
 </section>
+<section id="getting-started-with-pyspark-on-databricks">
+<h2>Getting started with PySpark on databricks<a class="headerlink" href="#getting-started-with-pyspark-on-databricks" title="Link to this heading">#</a></h2>
+<p><strong>Spark session</strong></p>
+<p>A Spark session is the entry point to programming with Spark. It allows you to create DataFrames, register DataFrames as tables, execute SQL queries, and read data from various sources</p>
+<p>You initialize a Spark session using <code class="docutils literal notranslate"><span class="pre">SparkSession.builder</span></code>. The <code class="docutils literal notranslate"><span class="pre">appName</span></code> method sets the name of your application, which can be useful for debugging and monitoring.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+
+<span class="c1"># Initialize Spark Session</span>
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;DataFrame Example&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+
+<span class="n">spark</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+            <div>
+                <p><b>SparkSession - hive</b></p>
+                
+        <div>
+            <p><b>SparkContext</b></p>
+
+            <p><a href="/?o=839460616079745#setting/sparkui/1008-013007-p8s54f28/driver-7474117560089113638">Spark UI</a></p>
+
+            <dl>
+              <dt>Version</dt>
+                <dd><code>v3.5.0</code></dd>
+              <dt>Master</dt>
+                <dd><code>local[*, 4]</code></dd>
+              <dt>AppName</dt>
+                <dd><code>Databricks Shell</code></dd>
+            </dl>
+        </div>
+        
+            </div>
+        </div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a DataFrame from a list of tuples</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Alice&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Bob&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Cathy&quot;</span><span class="p">)]</span>
+<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+
+<span class="c1"># show data using databrick display function</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style scoped>
+  .table-result-container {
+    max-height: 300px;
+    overflow: auto;
+  }
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+</style><div class='table-result-container'><table class='table-result'><thead style='background-color: white'><tr><th>id</th><th>name</th></tr></thead><tbody><tr><td>1</td><td>Alice</td></tr><tr><td>2</td><td>Bob</td></tr><tr><td>3</td><td>Cathy</td></tr></tbody></table></div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show data using pyspark show() function</span>
+<span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+---+-----+
+| id| name|
++---+-----+
+|  1|Alice|
+|  2|  Bob|
+|  3|Cathy|
++---+-----+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -701,6 +791,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sign-up-for-databricks-community-edition">Sign up for Databricks Community edition</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started-with-pyspark-on-databricks">Getting started with PySpark on databricks</a></li>
 </ul>
   </nav></div>
 
