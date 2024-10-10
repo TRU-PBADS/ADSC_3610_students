@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Lecture 10: Resilient Distributed Datasets (RDDs) in Spark &#8212; ADSC 3610 - Database Systems in Applied Data Science II</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture10';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Midterm 1 instruction" href="midterm1.html" />
+    <link rel="prev" title="Lecture 9: Introduction to PySpark" href="lecture9.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/TRU_Logo.png" class="logo__image only-light" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>
+    <script>document.write(`<img src="../_static/TRU_Logo.png" class="logo__image only-dark" alt="ADSC 3610 - Database Systems in Applied Data Science II - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../syllabus.html">
+                    ADSC 3610 - Database Systems in Applied Data Science II - Syllabus
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture4.html">Lecture 4: Data modelling in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture5.html">Lecture 5: Schema design patterns in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture6.html">Lecture 6: CRUD operations in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture7.html">Lecture 7: Aggregation operations in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture8.html">Lecture 8: ACID transactions in MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="course_recap.html">Course recap MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture9.html">Lecture 9: Introduction to PySpark</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 10: Resilient Distributed Datasets (RDDs) in Spark</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Midterms Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="midterm1.html">Midterm 1 instruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation_mac.html">Installation instruction for macOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation_windows.html">Installation instruction for Windows</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Worksheet solution</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../worksheets/source/worksheet1.html">Worksheet 1: Introduction to noSQL databases and document model with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../worksheets/source/worksheet2.html">Worksheet 2: Data modelling with MongoDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../worksheets/source/worksheet3/worksheet3.html">Worksheet 3: CRUD operations in MongoDB</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/lectures/lecture10.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 10: Resilient Distributed Datasets (RDDs) in Spark</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-rdds">Introduction to RDDs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features-of-rdds">Key Features of RDDs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#immutability">1. <strong>Immutability</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lazy-evaluation">2. <strong>Lazy Evaluation</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fault-tolerance">3. <strong>Fault Tolerance</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partitioning">4. <strong>Partitioning</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transformations-actions">Transformations &amp; Actions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-creating-rdds-from-a-csv-file">Example: Creating RDDs from a csv File</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rdd-transformations">RDD Transformations</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-using-map-and-filter">Example: Using <code class="docutils literal notranslate"><span class="pre">map()</span></code> and <code class="docutils literal notranslate"><span class="pre">filter()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-join">Example of <code class="docutils literal notranslate"><span class="pre">join</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rdd-actions">RDD Actions</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-using-reduce">Example: Using <code class="docutils literal notranslate"><span class="pre">reduce()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reasons-on-when-to-use-rdds">5 Reasons on When to use RDDs</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-10-resilient-distributed-datasets-rdds-in-spark">
+<h1>Lecture 10: Resilient Distributed Datasets (RDDs) in Spark<a class="headerlink" href="#lecture-10-resilient-distributed-datasets-rdds-in-spark" title="Link to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this lecture, students should be able to:</p>
+<ul class="simple">
+<li><p>Understand the concept of Resilient Distributed Datasets (RDDs) in Apache Spark.</p></li>
+<li><p>Explain the immutability and fault tolerance features of RDDs.</p></li>
+<li><p>Describe how RDDs enable parallel processing in a distributed computing environment.</p></li>
+<li><p>Identify the key features of RDDs, including lazy evaluation and partitioning.</p></li>
+</ul>
+</section>
+<section id="introduction-to-rdds">
+<h2>Introduction to RDDs<a class="headerlink" href="#introduction-to-rdds" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Resilient Distributed Datasets (RDDs)</strong> are a foundational component in Apache Spark. They represent a distributed collection of data, partitioned across a cluster, which allows for parallel processing. RDDs are the core abstraction that enables Spark to handle large datasets efficiently across multiple machines.</p></li>
+<li><p><strong>Immutability</strong>: Once created, RDDs cannot be modified. Instead of changing an existing RDD, transformations (like map, filter, etc.) generate a new RDD from the original one. This immutability helps ensure consistency across distributed systems, as different machines or processes are always working with the same, unchangeable data.</p></li>
+<li><p><strong>Parallel processing</strong>: Since RDDs are distributed across multiple nodes, operations on them can be performed in parallel, leveraging the full power of a distributed computing environment. This makes it possible to process vast amounts of data much faster than on a single machine.</p></li>
+<li><p><strong>Fault tolerance</strong>: One of the key features of RDDs is their ability to recover from failures without the need to replicate the entire dataset. This is achieved through lineage, a concept where RDDs keep track of how they were derived from other RDDs. If a node or partition fails, Spark can use this lineage information to recompute only the affected parts of the dataset, minimizing data loss and avoiding the overhead of redundant copies.</p></li>
+</ul>
+</section>
+<section id="key-features-of-rdds">
+<h2>Key Features of RDDs<a class="headerlink" href="#key-features-of-rdds" title="Link to this heading">#</a></h2>
+<section id="immutability">
+<h3>1. <strong>Immutability</strong><a class="headerlink" href="#immutability" title="Link to this heading">#</a></h3>
+<p>Once created, RDDs cannot be changed. Transformations on RDDs produce new RDDs.</p>
+<p>What is immutable object?</p>
+<p>In Python, immutability refers to objects whose state cannot be modified after they are created. For example, <code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">tuples</span></code> are immutable objects in Python.</p>
+<p>For example, when you try to overwrite the first letter of a string, it will give an error</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">string1</span> <span class="o">=</span> <span class="s1">&#39;Hello world&#39;</span>
+<span class="n">string1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">---------------------------------------------------------------------------</span>
+<span class=" -Color -Color-Red">TypeError</span>                                 Traceback (most recent call last)
+File <span class=" -Color -Color-Green">&lt;command-1503943367388992&gt;, line 2</span>
+<span class=" -Color -Color-Bold -Color-Bold-Green">      1</span> string1 <span class=" -Color -Color-C241">=</span> <span class=" -Color -Color-C124">&#39;Hello world&#39;</span>
+<span class=" -Color -Color-Green">----&gt; 2</span> string1[<span class=" -Color -Color-C241">0</span>] <span class=" -Color -Color-C241">=</span> <span class=" -Color -Color-C124">&#39;A&#39;</span>
+
+<span class=" -Color -Color-Red">TypeError</span>: &#39;str&#39; object does not support item assignment
+</pre></div>
+</div>
+</div>
+</div>
+<p>Same for tuple. You cannot overwrite the object</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tuple1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">tuple1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">---------------------------------------------------------------------------</span>
+<span class=" -Color -Color-Red">TypeError</span>                                 Traceback (most recent call last)
+File <span class=" -Color -Color-Green">&lt;command-1503943367389002&gt;, line 2</span>
+<span class=" -Color -Color-Bold -Color-Bold-Green">      1</span> tuple1 <span class=" -Color -Color-C241">=</span> (<span class=" -Color -Color-C241">1</span>, <span class=" -Color -Color-C241">2</span>, <span class=" -Color -Color-C241">3</span>)
+<span class=" -Color -Color-Green">----&gt; 2</span> tuple1[<span class=" -Color -Color-C241">0</span>] <span class=" -Color -Color-C241">=</span> <span class=" -Color -Color-C241">4</span>
+
+<span class=" -Color -Color-Red">TypeError</span>: &#39;tuple&#39; object does not support item assignment
+</pre></div>
+</div>
+</div>
+</div>
+<p>But with list you can, because list is mutable</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">list1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">list1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">list1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[4, 2, 3]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now come back to RDDs, what immutability means here is the fact that any transformation done on the data will create a new copy of the data, instead of overwriting it. This ensures that the original dataset remains unchanged, allowing for safer parallel processing and easier debugging.</p>
+</section>
+<section id="lazy-evaluation">
+<h3>2. <strong>Lazy Evaluation</strong><a class="headerlink" href="#lazy-evaluation" title="Link to this heading">#</a></h3>
+<p>Transformations on RDDs are not executed immediately. They are computed only when an <code class="docutils literal notranslate"><span class="pre">action</span></code> is called. This means that Spark builds up a plan of transformations to apply when an action is finally invoked, optimizing the execution process and reducing unnecessary computations.</p>
+<p>For example let’s take the following dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Spark DataFrame</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Alice&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Bob&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Cathy&#39;</span><span class="p">)]</span>
+<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style scoped>
+  .table-result-container {
+    max-height: 300px;
+    overflow: auto;
+  }
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+</style><div class='table-result-container'><table class='table-result'><thead style='background-color: white'><tr><th>id</th><th>name</th></tr></thead><tbody><tr><td>1</td><td>Alice</td></tr><tr><td>2</td><td>Bob</td></tr><tr><td>3</td><td>Cathy</td></tr></tbody></table></div></div></div>
+</div>
+<p>We want to filter the dataset based on <code class="docutils literal notranslate"><span class="pre">id</span></code> column. When you run the code cell below, actually nothing happen. PySpark will record the transformation but do not execute it yet. Think of it as PySpark writes down a recipe, but no food has been cooked yet</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a transformation (lazy evaluation)</span>
+<span class="n">filtered_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It will only execute the <code class="docutils literal notranslate"><span class="pre">transformations</span></code> when we trigger an <code class="docutils literal notranslate"><span class="pre">action</span></code>, such as <code class="docutils literal notranslate"><span class="pre">display</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Action to trigger the evaluation</span>
+<span class="n">display</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style scoped>
+  .table-result-container {
+    max-height: 300px;
+    overflow: auto;
+  }
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+</style><div class='table-result-container'><table class='table-result'><thead style='background-color: white'><tr><th>id</th><th>name</th></tr></thead><tbody><tr><td>2</td><td>Bob</td></tr><tr><td>3</td><td>Cathy</td></tr></tbody></table></div></div></div>
+</div>
+</section>
+<section id="fault-tolerance">
+<h3>3. <strong>Fault Tolerance</strong><a class="headerlink" href="#fault-tolerance" title="Link to this heading">#</a></h3>
+<p>RDDs track lineage information to rebuild lost data. For example, if a partition of an RDD is lost due to a node failure, the RDD can use its lineage information to recompute the lost partition from the original data source or from other RDDs.</p>
+</section>
+<section id="partitioning">
+<h3>4. <strong>Partitioning</strong><a class="headerlink" href="#partitioning" title="Link to this heading">#</a></h3>
+<p>RDDs are divided into partitions, which can be processed in parallel across the cluster.</p>
+<p><img alt="" src="https://miro.medium.com/v2/resize:fit:583/1*rtyvHjINsHF_5yHf8c0Z0Q.png" /></p>
+</section>
+</section>
+<section id="transformations-actions">
+<h2>Transformations &amp; Actions<a class="headerlink" href="#transformations-actions" title="Link to this heading">#</a></h2>
+<p>As we discussed above, RDDs is lazy-evaluated, which means it won’t execute the <code class="docutils literal notranslate"><span class="pre">transformations</span></code> until an <code class="docutils literal notranslate"><span class="pre">action</span></code> is triggered. Let’s have a closer look at this using some examples</p>
+<section id="example-creating-rdds-from-a-csv-file">
+<h3>Example: Creating RDDs from a csv File<a class="headerlink" href="#example-creating-rdds-from-a-csv-file" title="Link to this heading">#</a></h3>
+<p>First, let’s try to read in a data file from an URL</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import CSV from the given URL</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/selva86/datasets/raw/master/AirPassengers.csv&quot;</span>
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkFiles</span>
+
+<span class="c1"># Add the file to the SparkContext</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">addFile</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="c1"># Read the file</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="s2">&quot;file://&quot;</span><span class="o">+</span><span class="n">SparkFiles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AirPassengers.csv&quot;</span><span class="p">))</span>
+
+<span class="c1"># Extract header</span>
+<span class="n">header</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+<span class="c1"># Remove header and split by commas</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span> <span class="o">!=</span> <span class="n">header</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Can you guess where the data are being stored? They were actually partitioned and stored acrossed multiple servers. This is distributed computing! To see the number of partitions, we can run</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rdd</span><span class="o">.</span><span class="n">getNumPartitions</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s see what happens when we just try to display the dataframe by typing df. Typically, if this was a pandas.DataFrame, it woul display the first few rows.</p>
+<p>However, since Spark is lazy-evaluated, it doesn’t display the data yet</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rdd</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PythonRDD[58] at RDD at PythonRDD.scala:61
+</pre></div>
+</div>
+</div>
+</div>
+<p>To display the data, you need to trigger an <code class="docutils literal notranslate"><span class="pre">action</span></code>.</p>
+<p>Now let’s trigger an action called <code class="docutils literal notranslate"><span class="pre">collect()</span></code>. The <code class="docutils literal notranslate"><span class="pre">collect()</span></code> function in PySpark is used to retrieve the entire dataset from the distributed environment (i.e., the cluster) back to the driver program as a list.</p>
+<p>This method is often used for debugging or small datasets because it brings all the data into the driver’s memory, which can lead to memory issues if the dataset is large.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rdd</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[&#39;1949-01-01&#39;, &#39;112&#39;],
+ [&#39;1949-02-01&#39;, &#39;118&#39;],
+ [&#39;1949-03-01&#39;, &#39;132&#39;],
+ [&#39;1949-04-01&#39;, &#39;129&#39;],
+ [&#39;1949-05-01&#39;, &#39;121&#39;],
+ [&#39;1949-06-01&#39;, &#39;135&#39;],
+ [&#39;1949-07-01&#39;, &#39;148&#39;],
+ [&#39;1949-08-01&#39;, &#39;148&#39;],
+ [&#39;1949-09-01&#39;, &#39;136&#39;],
+ [&#39;1949-10-01&#39;, &#39;119&#39;],
+ [&#39;1949-11-01&#39;, &#39;104&#39;],
+ [&#39;1949-12-01&#39;, &#39;118&#39;],
+ [&#39;1950-01-01&#39;, &#39;115&#39;],
+ [&#39;1950-02-01&#39;, &#39;126&#39;],
+ [&#39;1950-03-01&#39;, &#39;141&#39;],
+ [&#39;1950-04-01&#39;, &#39;135&#39;],
+ [&#39;1950-05-01&#39;, &#39;125&#39;],
+ [&#39;1950-06-01&#39;, &#39;149&#39;],
+ [&#39;1950-07-01&#39;, &#39;170&#39;],
+ [&#39;1950-08-01&#39;, &#39;170&#39;],
+ [&#39;1950-09-01&#39;, &#39;158&#39;],
+ [&#39;1950-10-01&#39;, &#39;133&#39;],
+ [&#39;1950-11-01&#39;, &#39;114&#39;],
+ [&#39;1950-12-01&#39;, &#39;140&#39;],
+ [&#39;1951-01-01&#39;, &#39;145&#39;],
+ [&#39;1951-02-01&#39;, &#39;150&#39;],
+ [&#39;1951-03-01&#39;, &#39;178&#39;],
+ [&#39;1951-04-01&#39;, &#39;163&#39;],
+ [&#39;1951-05-01&#39;, &#39;172&#39;],
+ [&#39;1951-06-01&#39;, &#39;178&#39;],
+ [&#39;1951-07-01&#39;, &#39;199&#39;],
+ [&#39;1951-08-01&#39;, &#39;199&#39;],
+ [&#39;1951-09-01&#39;, &#39;184&#39;],
+ [&#39;1951-10-01&#39;, &#39;162&#39;],
+ [&#39;1951-11-01&#39;, &#39;146&#39;],
+ [&#39;1951-12-01&#39;, &#39;166&#39;],
+ [&#39;1952-01-01&#39;, &#39;171&#39;],
+ [&#39;1952-02-01&#39;, &#39;180&#39;],
+ [&#39;1952-03-01&#39;, &#39;193&#39;],
+ [&#39;1952-04-01&#39;, &#39;181&#39;],
+ [&#39;1952-05-01&#39;, &#39;183&#39;],
+ [&#39;1952-06-01&#39;, &#39;218&#39;],
+ [&#39;1952-07-01&#39;, &#39;230&#39;],
+ [&#39;1952-08-01&#39;, &#39;242&#39;],
+ [&#39;1952-09-01&#39;, &#39;209&#39;],
+ [&#39;1952-10-01&#39;, &#39;191&#39;],
+ [&#39;1952-11-01&#39;, &#39;172&#39;],
+ [&#39;1952-12-01&#39;, &#39;194&#39;],
+ [&#39;1953-01-01&#39;, &#39;196&#39;],
+ [&#39;1953-02-01&#39;, &#39;196&#39;],
+ [&#39;1953-03-01&#39;, &#39;236&#39;],
+ [&#39;1953-04-01&#39;, &#39;235&#39;],
+ [&#39;1953-05-01&#39;, &#39;229&#39;],
+ [&#39;1953-06-01&#39;, &#39;243&#39;],
+ [&#39;1953-07-01&#39;, &#39;264&#39;],
+ [&#39;1953-08-01&#39;, &#39;272&#39;],
+ [&#39;1953-09-01&#39;, &#39;237&#39;],
+ [&#39;1953-10-01&#39;, &#39;211&#39;],
+ [&#39;1953-11-01&#39;, &#39;180&#39;],
+ [&#39;1953-12-01&#39;, &#39;201&#39;],
+ [&#39;1954-01-01&#39;, &#39;204&#39;],
+ [&#39;1954-02-01&#39;, &#39;188&#39;],
+ [&#39;1954-03-01&#39;, &#39;235&#39;],
+ [&#39;1954-04-01&#39;, &#39;227&#39;],
+ [&#39;1954-05-01&#39;, &#39;234&#39;],
+ [&#39;1954-06-01&#39;, &#39;264&#39;],
+ [&#39;1954-07-01&#39;, &#39;302&#39;],
+ [&#39;1954-08-01&#39;, &#39;293&#39;],
+ [&#39;1954-09-01&#39;, &#39;259&#39;],
+ [&#39;1954-10-01&#39;, &#39;229&#39;],
+ [&#39;1954-11-01&#39;, &#39;203&#39;],
+ [&#39;1954-12-01&#39;, &#39;229&#39;],
+ [&#39;1955-01-01&#39;, &#39;242&#39;],
+ [&#39;1955-02-01&#39;, &#39;233&#39;],
+ [&#39;1955-03-01&#39;, &#39;267&#39;],
+ [&#39;1955-04-01&#39;, &#39;269&#39;],
+ [&#39;1955-05-01&#39;, &#39;270&#39;],
+ [&#39;1955-06-01&#39;, &#39;315&#39;],
+ [&#39;1955-07-01&#39;, &#39;364&#39;],
+ [&#39;1955-08-01&#39;, &#39;347&#39;],
+ [&#39;1955-09-01&#39;, &#39;312&#39;],
+ [&#39;1955-10-01&#39;, &#39;274&#39;],
+ [&#39;1955-11-01&#39;, &#39;237&#39;],
+ [&#39;1955-12-01&#39;, &#39;278&#39;],
+ [&#39;1956-01-01&#39;, &#39;284&#39;],
+ [&#39;1956-02-01&#39;, &#39;277&#39;],
+ [&#39;1956-03-01&#39;, &#39;317&#39;],
+ [&#39;1956-04-01&#39;, &#39;313&#39;],
+ [&#39;1956-05-01&#39;, &#39;318&#39;],
+ [&#39;1956-06-01&#39;, &#39;374&#39;],
+ [&#39;1956-07-01&#39;, &#39;413&#39;],
+ [&#39;1956-08-01&#39;, &#39;405&#39;],
+ [&#39;1956-09-01&#39;, &#39;355&#39;],
+ [&#39;1956-10-01&#39;, &#39;306&#39;],
+ [&#39;1956-11-01&#39;, &#39;271&#39;],
+ [&#39;1956-12-01&#39;, &#39;306&#39;],
+ [&#39;1957-01-01&#39;, &#39;315&#39;],
+ [&#39;1957-02-01&#39;, &#39;301&#39;],
+ [&#39;1957-03-01&#39;, &#39;356&#39;],
+ [&#39;1957-04-01&#39;, &#39;348&#39;],
+ [&#39;1957-05-01&#39;, &#39;355&#39;],
+ [&#39;1957-06-01&#39;, &#39;422&#39;],
+ [&#39;1957-07-01&#39;, &#39;465&#39;],
+ [&#39;1957-08-01&#39;, &#39;467&#39;],
+ [&#39;1957-09-01&#39;, &#39;404&#39;],
+ [&#39;1957-10-01&#39;, &#39;347&#39;],
+ [&#39;1957-11-01&#39;, &#39;305&#39;],
+ [&#39;1957-12-01&#39;, &#39;336&#39;],
+ [&#39;1958-01-01&#39;, &#39;340&#39;],
+ [&#39;1958-02-01&#39;, &#39;318&#39;],
+ [&#39;1958-03-01&#39;, &#39;362&#39;],
+ [&#39;1958-04-01&#39;, &#39;348&#39;],
+ [&#39;1958-05-01&#39;, &#39;363&#39;],
+ [&#39;1958-06-01&#39;, &#39;435&#39;],
+ [&#39;1958-07-01&#39;, &#39;491&#39;],
+ [&#39;1958-08-01&#39;, &#39;505&#39;],
+ [&#39;1958-09-01&#39;, &#39;404&#39;],
+ [&#39;1958-10-01&#39;, &#39;359&#39;],
+ [&#39;1958-11-01&#39;, &#39;310&#39;],
+ [&#39;1958-12-01&#39;, &#39;337&#39;],
+ [&#39;1959-01-01&#39;, &#39;360&#39;],
+ [&#39;1959-02-01&#39;, &#39;342&#39;],
+ [&#39;1959-03-01&#39;, &#39;406&#39;],
+ [&#39;1959-04-01&#39;, &#39;396&#39;],
+ [&#39;1959-05-01&#39;, &#39;420&#39;],
+ [&#39;1959-06-01&#39;, &#39;472&#39;],
+ [&#39;1959-07-01&#39;, &#39;548&#39;],
+ [&#39;1959-08-01&#39;, &#39;559&#39;],
+ [&#39;1959-09-01&#39;, &#39;463&#39;],
+ [&#39;1959-10-01&#39;, &#39;407&#39;],
+ [&#39;1959-11-01&#39;, &#39;362&#39;],
+ [&#39;1959-12-01&#39;, &#39;405&#39;],
+ [&#39;1960-01-01&#39;, &#39;417&#39;],
+ [&#39;1960-02-01&#39;, &#39;391&#39;],
+ [&#39;1960-03-01&#39;, &#39;419&#39;],
+ [&#39;1960-04-01&#39;, &#39;461&#39;],
+ [&#39;1960-05-01&#39;, &#39;472&#39;],
+ [&#39;1960-06-01&#39;, &#39;535&#39;],
+ [&#39;1960-07-01&#39;, &#39;622&#39;],
+ [&#39;1960-08-01&#39;, &#39;606&#39;],
+ [&#39;1960-09-01&#39;, &#39;508&#39;],
+ [&#39;1960-10-01&#39;, &#39;461&#39;],
+ [&#39;1960-11-01&#39;, &#39;390&#39;],
+ [&#39;1960-12-01&#39;, &#39;432&#39;]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">take()</span></code> function in PySpark is used to retrieve a specified number of elements from an RDD or DataFrame. It returns the first n elements as a list, where n is the number you specify.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rdd</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[&#39;1949-01-01&#39;, &#39;112&#39;],
+ [&#39;1949-02-01&#39;, &#39;118&#39;],
+ [&#39;1949-03-01&#39;, &#39;132&#39;],
+ [&#39;1949-04-01&#39;, &#39;129&#39;],
+ [&#39;1949-05-01&#39;, &#39;121&#39;],
+ [&#39;1949-06-01&#39;, &#39;135&#39;],
+ [&#39;1949-07-01&#39;, &#39;148&#39;],
+ [&#39;1949-08-01&#39;, &#39;148&#39;],
+ [&#39;1949-09-01&#39;, &#39;136&#39;],
+ [&#39;1949-10-01&#39;, &#39;119&#39;]]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="rdd-transformations">
+<h3>RDD Transformations<a class="headerlink" href="#rdd-transformations" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Transformations are operations on RDDs that return a new RDD.</p></li>
+<li><p>Examples include <code class="docutils literal notranslate"><span class="pre">map()</span></code>, <code class="docutils literal notranslate"><span class="pre">filter()</span></code>, <code class="docutils literal notranslate"><span class="pre">flatMap()</span></code>, <code class="docutils literal notranslate"><span class="pre">reduceByKey()</span></code>, and <code class="docutils literal notranslate"><span class="pre">join()</span></code>.</p></li>
+</ul>
+<section id="example-using-map-and-filter">
+<h4>Example: Using <code class="docutils literal notranslate"><span class="pre">map()</span></code> and <code class="docutils literal notranslate"><span class="pre">filter()</span></code><a class="headerlink" href="#example-using-map-and-filter" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an RDD from a list</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">))</span>
+
+<span class="c1"># Use map to square each element</span>
+<span class="n">squared_rdd</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Apply a filter transformation to keep only even numbers</span>
+<span class="n">even_rdd</span> <span class="o">=</span> <span class="n">squared_rdd</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">squared_rdd</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PythonRDD[67] at RDD at PythonRDD.scala:61
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that when we try to print out squared_rdd, nothing happens, because we have not trigger an action</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Collect and print the results</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">even_rdd</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[4, 16, 36, 64, 100, 144, 196, 256, 324, 400, 484, 576, 676, 784, 900, 1024, 1156, 1296, 1444, 1600, 1764, 1936, 2116, 2304, 2500, 2704, 2916, 3136, 3364, 3600, 3844, 4096, 4356, 4624, 4900, 5184, 5476, 5776, 6084, 6400, 6724, 7056, 7396, 7744, 8100, 8464, 8836, 9216, 9604, 10000]
+</pre></div>
+</div>
+</div>
+</div>
+<p>A better way would be using the <code class="docutils literal notranslate"><span class="pre">take()</span></code> function, since it won’t bring the whole dataset into memory</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">even_rdd</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[4, 16, 36]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="example-of-join">
+<h4>Example of <code class="docutils literal notranslate"><span class="pre">join</span></code><a class="headerlink" href="#example-of-join" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create two RDDs with key-value pairs</span>
+<span class="n">rdd1</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;apple&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;banana&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;cherry&quot;</span><span class="p">)])</span>
+<span class="n">rdd2</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;yellow&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">)])</span>
+
+<span class="c1"># Perform a join operation on the two RDDs</span>
+<span class="n">joined_rdd</span> <span class="o">=</span> <span class="n">rdd1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rdd2</span><span class="p">)</span>
+
+<span class="c1"># Collect and print the results</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">joined_rdd</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(1, (&#39;apple&#39;, &#39;red&#39;)), (2, (&#39;banana&#39;, &#39;yellow&#39;)), (3, (&#39;cherry&#39;, &#39;red&#39;))]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="rdd-actions">
+<h3>RDD Actions<a class="headerlink" href="#rdd-actions" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Actions are operations that trigger the execution of transformations and return a result.</p></li>
+<li><p>Examples include <code class="docutils literal notranslate"><span class="pre">collect()</span></code>, <code class="docutils literal notranslate"><span class="pre">count()</span></code>, <code class="docutils literal notranslate"><span class="pre">take()</span></code>, and <code class="docutils literal notranslate"><span class="pre">reduce()</span></code>.</p></li>
+</ul>
+<section id="example-using-reduce">
+<h4>Example: Using <code class="docutils literal notranslate"><span class="pre">reduce()</span></code><a class="headerlink" href="#example-using-reduce" title="Link to this heading">#</a></h4>
+<p>The reduce() function in PySpark is an action that aggregates the elements of an RDD using a specified binary operator. It takes a function that operates on two elements of the RDD and returns a single element.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use reduce to sum all elements</span>
+<span class="n">sum_result</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Print the result</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sum_result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5050
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="reasons-on-when-to-use-rdds">
+<h2>5 Reasons on When to use RDDs<a class="headerlink" href="#reasons-on-when-to-use-rdds" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>You want low-level transformation and actions and control on your dataset;</p></li>
+<li><p>Your data is unstructured, such as media streams or streams of text;</p></li>
+<li><p>You want to manipulate your data with functional programming constructs than domain specific expressions;</p></li>
+<li><p>You don’t care about imposing a schema, such as columnar format while processing or accessing data attributes by name or column; and</p></li>
+<li><p>You can forgo some optimization and performance benefits available with DataFrames and Datasets for structured and semi-structured data.</p></li>
+</ul>
+<p>References</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.databricks.com/glossary/what-is-rdd">Apache Spark Documentation</a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./lectures"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lecture9.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 9: Introduction to PySpark</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="midterm1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Midterm 1 instruction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-rdds">Introduction to RDDs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features-of-rdds">Key Features of RDDs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#immutability">1. <strong>Immutability</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lazy-evaluation">2. <strong>Lazy Evaluation</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fault-tolerance">3. <strong>Fault Tolerance</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partitioning">4. <strong>Partitioning</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transformations-actions">Transformations &amp; Actions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-creating-rdds-from-a-csv-file">Example: Creating RDDs from a csv File</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rdd-transformations">RDD Transformations</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-using-map-and-filter">Example: Using <code class="docutils literal notranslate"><span class="pre">map()</span></code> and <code class="docutils literal notranslate"><span class="pre">filter()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-join">Example of <code class="docutils literal notranslate"><span class="pre">join</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rdd-actions">RDD Actions</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-using-reduce">Example: Using <code class="docutils literal notranslate"><span class="pre">reduce()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reasons-on-when-to-use-rdds">5 Reasons on When to use RDDs</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Quan Nguyen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
