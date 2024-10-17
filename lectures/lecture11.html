@@ -60,7 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'lectures/lecture11';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Midterm 1 instruction" href="midterm1.html" />
+    <link rel="next" title="Lecture 12: Spark DataFrame transformations" href="lecture12.html" />
     <link rel="prev" title="Lecture 10: Resilient Distributed Datasets (RDDs) in Spark" href="lecture10.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -193,6 +193,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lecture9.html">Lecture 9: Introduction to PySpark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lecture10.html">Lecture 10: Resilient Distributed Datasets (RDDs) in Spark</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 11: Spark Dataframes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lecture12.html">Lecture 12: Spark DataFrame transformations</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Midterms Information</span></p>
 <ul class="nav bd-sidenav">
@@ -439,27 +440,15 @@ document.write(`
 <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Age&quot;</span><span class="p">]</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><style scoped>
-  .table-result-container {
-    max-height: 300px;
-    overflow: auto;
-  }
-  table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-  }
-  th, td {
-    padding: 5px;
-  }
-  th {
-    text-align: left;
-  }
-</style><div class='table-result-container'><table class='table-result'><thead style='background-color: white'><tr><th>Name</th><th>Age</th></tr></thead><tbody><tr><td>Alice</td><td>34</td></tr><tr><td>Bob</td><td>45</td></tr><tr><td>Cathy</td><td>29</td></tr></tbody></table></div></div></div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DataFrame[Name: string, Age: bigint]
+</pre></div>
+</div>
+</div>
 </div>
 <p>Remember that a Spark DataFrame in python is a object of class pyspark.sql.dataframe.DataFrame as you can see below:</p>
 <div class="cell docutils container">
@@ -491,7 +480,7 @@ document.write(`
 <p>To actually see the Spark DataFrame, you need to use the <code class="docutils literal notranslate"><span class="pre">show()</span></code> method.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -501,8 +490,8 @@ document.write(`
 +-----+---+
 |Alice| 34|
 |  Bob| 45|
-|Cathy| 29|
 +-----+---+
+only showing top 2 rows
 </pre></div>
 </div>
 </div>
@@ -766,12 +755,17 @@ only showing top 2 rows
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">df</span>\
     <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Age</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span>\
     <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)</span>
-<span class="n">df2</span>
+<span class="n">df2</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DataFrame[Name: string]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+-----+
+| Name|
++-----+
+|Alice|
+|  Bob|
++-----+
 </pre></div>
 </div>
 </div>
@@ -851,6 +845,41 @@ only showing top 2 rows
 </ul>
 </li>
 </ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+-----+---+
+| Name|Age|
++-----+---+
+|Alice| 34|
+|  Bob| 45|
+|Cathy| 29|
++-----+---+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+-----+---+
+| Name|Age|
++-----+---+
+|  Bob| 45|
+|Cathy| 29|
++-----+---+
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 </section>
@@ -895,11 +924,11 @@ only showing top 2 rows
       </div>
     </a>
     <a class="right-next"
-       href="midterm1.html"
+       href="lecture12.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Midterm 1 instruction</p>
+        <p class="prev-next-title">Lecture 12: Spark DataFrame transformations</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
