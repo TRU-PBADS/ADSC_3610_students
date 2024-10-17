@@ -179,8 +179,8 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures Notes</span></p>
-<ul class="current nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - MongoDB</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="lecture1.html">Lecture 1: Introduction to Non-Relational Databases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lecture2.html">Lecture 2: Introduction to MongoDB and the document model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lecture3.html">Lecture 3: MongoDB Atlas and connecting to MongoDB database</a></li>
@@ -190,6 +190,9 @@
 <li class="toctree-l1"><a class="reference internal" href="lecture7.html">Lecture 7: Aggregation operations in MongoDB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lecture8.html">Lecture 8: ACID transactions in MongoDB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="course_recap.html">Course recap MongoDB</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - PySpark on DataBricks</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="lecture9.html">Lecture 9: Introduction to PySpark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lecture10.html">Lecture 10: Resilient Distributed Datasets (RDDs) in Spark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lecture11.html">Lecture 11: Spark Dataframes</a></li>
@@ -399,6 +402,27 @@ document.write(`
 </section>
 <section id="import-sample-data-from-mongodb">
 <h2>Import sample data from MongoDB<a class="headerlink" href="#import-sample-data-from-mongodb" title="Link to this heading">#</a></h2>
+<p>To connect MongoDB cluster to databricks you need to:</p>
+<ol class="arabic simple">
+<li><p>Change Network Access IP on MongoDB cluster to <code class="docutils literal notranslate"><span class="pre">0.0.0.0/0</span></code></p></li>
+</ol>
+<ul class="simple">
+<li><p>Open MongoDB cluster</p></li>
+<li><p>Navgivate to the Network Access tab on the left</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">IP</span> <span class="pre">address</span></code></p></li>
+<li><p>Add the following IP <code class="docutils literal notranslate"><span class="pre">0.0.0.0/0</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Install the Spark MongoDB connector via Maven: <code class="docutils literal notranslate"><span class="pre">org.mongodb.spark:mongo-spark-connector_2.13:10.4.0</span></code></p></li>
+</ol>
+<ul class="simple">
+<li><p>Open databricks</p></li>
+<li><p>Navigate to your workspace, click <code class="docutils literal notranslate"><span class="pre">Compute</span></code> tab on the left</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Libraries</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Install</span> <span class="pre">New</span></code></p></li>
+<li><p>Choose <code class="docutils literal notranslate"><span class="pre">Maven</span></code></p></li>
+<li><p>Paste the following under the <code class="docutils literal notranslate"><span class="pre">Coordinates</span></code>: <code class="docutils literal notranslate"><span class="pre">org.mongodb.spark:mongo-spark-connector_2.13:10.4.0</span></code></p></li>
+</ul>
 <p>First, let’s import our MongoDB credentials information.</p>
 <blockquote>
 <div><p>Note: When you run the notebook on databricks, you might need to re-create the <code class="docutils literal notranslate"><span class="pre">credentials_mongodb.json</span></code> file. This file will only exist in your databricks workspace, but never push it to GitHub.</p>
